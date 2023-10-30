@@ -1,9 +1,13 @@
 #include "GameLoop.hpp"
-
+#include "Path.hpp"
 #include <iostream>
-GameLoop::GameLoop() : _window(), _hero("asset/hero.png"), _labyrinth("asset/map.txt") {
-    _hero.setPosition(1000, 700);
+
+GameLoop::GameLoop() : _window(), _hero("asset/hero.png"), _labyrinth("asset/map.txt"), _monster("asset/ghost.png") {
+    _hero.setPosition(Wall::HEIGHT * Wall::SIZE + (Wall::HEIGHT * Wall::SIZE) / 3, Wall::HEIGHT * Wall::SIZE + (Wall::HEIGHT * Wall::SIZE) / 3);
+
     _hero.setSize(2.2f, 2.2f);
+    _monster.setPosition(1000, 300);
+    _monster.setSize(0.06f, 0.06f);
 }
 
 void GameLoop::run() {
@@ -19,65 +23,32 @@ void GameLoop::run() {
         processEvents();
         update(deltaTime);
         render();
-        
+
     }
 }
 
-void GameLoop::processEvents() {
+void GameLoop::processEvents() 
+{
     sf::Event event;
     while (_window.pollEvent(event)) {
         if (event.type == sf::Event::Closed) {
             _window.close();
         }
-        if (event.type == sf::Event::KeyPressed) {
 
-            sf::Vector2f futurePosition = _hero.getPosition();
-
-    
-            switch (event.key.code) {
-                case sf::Keyboard::Up:
-                    _hero.setDirection(0); // direction animation
-                    futurePosition.y -= 10;
-                    if(!_labyrinth.isCollidingWithWalls(_hero.getFeetBoundsAtPosition(futurePosition.x, futurePosition.y))) {
-                        _hero.setPosition(futurePosition.x, futurePosition.y);
-                    }
-                    break;
-                case sf::Keyboard::Down:
-                    _hero.setDirection(2);
-                    futurePosition.y += 10;
-                    if(!_labyrinth.isCollidingWithWalls(_hero.getFeetBoundsAtPosition(futurePosition.x, futurePosition.y))) {
-                        _hero.setPosition(futurePosition.x, futurePosition.y);
-                    }
-                    break;
-                case sf::Keyboard::Left:
-                    _hero.setDirection(1);
-                    futurePosition.x -= 10;
-                    if(!_labyrinth.isCollidingWithWalls(_hero.getFeetBoundsAtPosition(futurePosition.x, futurePosition.y))) {
-                        _hero.setPosition(futurePosition.x, futurePosition.y);
-                    }
-                    break;
-                case sf::Keyboard::Right:
-                    _hero.setDirection(3);
-                    futurePosition.x += 10;
-                    if(!_labyrinth.isCollidingWithWalls(_hero.getFeetBoundsAtPosition(futurePosition.x, futurePosition.y))) {
-                        _hero.setPosition(futurePosition.x, futurePosition.y);
-                    }
-                    break;
-                default:
-                    _hero.stop();
-                    break;
-            }
-        }
+        _hero.move(event, _labyrinth);
     }
 }
 
 
+
 void GameLoop::update(float deltaTime) {
     _hero.update(deltaTime);
+    //_monster.update(deltaTime);
 }
 
 void GameLoop::render() {
     _window.clear();
+    _monster.draw(_window);
     _hero.draw(_window);
     _window.renderLayers();
     _window.display();

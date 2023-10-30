@@ -21,6 +21,6 @@ public:
     }
 
 private:
-    std::map<int, std::vector<const sf::Drawable*>> _renderLayers; // layer 1 = path, layer 2 = wall, layer 3 = hero
+    std::map<int, std::vector<const sf::Drawable*>> _renderLayers; // layer 1 = path, layer 2 = wall, layer 3 = hero, layer 4 = monster
     sf::RenderWindow window;
 };

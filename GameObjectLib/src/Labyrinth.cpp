@@ -40,3 +40,16 @@ void Labyrinth::LoadMap(Window_s &window) {
     }
 
 }
+
+bool Labyrinth::isCollidingWithWalls(const sf::FloatRect& characterBounds) const {
+    for (const auto& wall : _walls) {
+        if (wall.getBounds().intersects(characterBounds)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+std::vector<std::vector<bool>> Labyrinth::getMatrice() {
+    return _mapGrid;
+}

@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.hpp"
 #include <SFML/Graphics.hpp>
+#include "Labyrinth.hpp"
 
 class Character : public GameObject {
 public:
@@ -16,23 +17,8 @@ public:
     sf::Vector2f getPosition() const;
 
 
-    sf::FloatRect getFeetBoundsAtPosition(float x, float y) const {
-        sf::FloatRect globalBounds = _sprite.getGlobalBounds();
-
-
-        float feetHeight = globalBounds.height * 0.25f; 
-
-        // Réduire la largeur de la hitbox par un certain pourcentage
-        float adjustedWidth = globalBounds.width * 0.30f;
-        float widthOffset = (globalBounds.width - adjustedWidth) / 2;
-
-        widthOffset -= globalBounds.width * 0.15f;
-
-        float heightOffset = globalBounds.height * 0.1f;
-        return sf::FloatRect(x + widthOffset, y + globalBounds.height - feetHeight - heightOffset, adjustedWidth, feetHeight);
-
-    }
-
+    sf::FloatRect getFeetBoundsAtPosition(float x, float y) const;
+    void move(const sf::Event& event, const Labyrinth& labyrinth);
 
 
 

@@ -12,14 +12,11 @@ public:
     Labyrinth(const std::string& mapFilePath) : _mapFilePath(mapFilePath) {}
     void LoadMap(Window_s& window);
     
-    bool isCollidingWithWalls(const sf::FloatRect& characterBounds) const {
-        for(const auto& wall : _walls) {
-            if(wall.getBounds().intersects(characterBounds)) {
-                return true;
-            }
-        }
-        return false;
-    }
+
+
+    bool isCollidingWithWalls(const sf::FloatRect& characterBounds) const;
+
+    std::vector<std::vector<bool>> getMatrice();
 
 private:
     std::vector<std::vector<bool>> _mapGrid;

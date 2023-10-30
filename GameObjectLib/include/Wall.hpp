@@ -6,6 +6,7 @@ public:
     Wall(float x, float y);
     void draw(Window_s &window);
 
+    static constexpr float SIZE = 2.5f;
     static const int WIDTH = 100;
     static const int HEIGHT = 100;
 
