@@ -3,6 +3,8 @@
 Enemy::Enemy(const std::string& texturePath) {
     _texture.loadFromFile(texturePath);
     _sprite.setTexture(_texture);
+    sf::Vector2u textureSize = _sprite.getTexture()->getSize();
+    _sprite.setOrigin(textureSize.x / 2.0f, textureSize.y / 2.0f);
     _currentFrame = 0;
     _elapsedTime = 0.0f;
     _direction = 0;
@@ -45,7 +47,16 @@ void Enemy::setSize(float x, float y) {
     _sprite.setScale(x, y);
 }
 
-void Enemy::move(std::vector<std::vector<bool>> matrice)
+void Enemy::move(const std::vector<std::vector<bool>> matrice, Character &hero)
 {
-    
+    sf::Vector2f heroPosition = hero.getPosition();
+    sf::Vector2f enemyPosition = _sprite.getPosition();
+    sf::Vector2i Position;
+    sf::Vector2i TargetPosition;
+
+    TargetPosition.x = static_cast<int>(heroPosition.x / (Wall::WIDTH * Wall::SIZE));
+    TargetPosition.y = static_cast<int>(heroPosition.y / (Wall::HEIGHT * Wall::SIZE));
+
+    Position.x = static_cast<int>(enemyPosition.x / (Wall::WIDTH * Wall::SIZE));
+    Position.y = static_cast<int>(enemyPosition.y / (Wall::HEIGHT * Wall::SIZE));
 }

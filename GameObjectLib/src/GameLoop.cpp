@@ -18,7 +18,7 @@ void GameLoop::run() {
     _labyrinth.LoadMap(_window);
     while (_window.isOpen()) {
         float deltaTime = clock.restart().asSeconds();
-        cameraView.setCenter(_hero.getPosition().x + 50, _hero.getPosition().y + 50);
+        cameraView.setCenter(_monster.getPosition().x + 50, _monster.getPosition().y + 50);
         _window.getWindow().setView(cameraView);
         processEvents();
         update(deltaTime);
@@ -34,7 +34,7 @@ void GameLoop::processEvents()
         if (event.type == sf::Event::Closed) {
             _window.close();
         }
-
+        _monster.move(_labyrinth.getMatrice());
         _hero.move(event, _labyrinth);
     }
 }

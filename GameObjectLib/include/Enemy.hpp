@@ -4,6 +4,8 @@
 #include <SFML/Graphics.hpp>
 #include "Window.hpp"
 #include "GameObject.hpp"
+#include "Character.hpp"
+#include <vector>
 class Window_s;
 
 class Enemy : public GameObject {
@@ -17,7 +19,7 @@ public:
     sf::Vector2f getPosition() const;
     void setDirection(int dir);
     void setSize(float x, float y);
-    void move(std::vector<std::vector<bool>> matrice);
+    void move(const std::vector<std::vector<bool>> matrice, Character &hero);
 private:
     sf::Texture _texture;
     sf::Sprite _sprite;
