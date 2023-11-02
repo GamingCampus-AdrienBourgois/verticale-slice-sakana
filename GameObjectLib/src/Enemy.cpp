@@ -7,6 +7,7 @@ Enemy::Enemy(const std::string& texturePath) : node(sf::Vector2i(0, 0)) {
     //_sprite.setOrigin(textureSize.x / 2.0f, textureSize.y / 2.0f);
     _currentFrame = 0;
     _elapsedTime = 0.0f;
+    _elapsed = 0.0f;
     _direction = 0;
     _animate = true;
 
@@ -50,7 +51,7 @@ void Enemy::setSize(float x, float y) {
 
 #include <iostream>
 
-void Enemy::move(const std::vector<std::vector<bool>> matrice, Character &hero)
+void Enemy::move(const std::vector<std::vector<bool>> matrice, Character &hero, float deltaTime)
 {
     sf::Vector2f heroPosition = hero.getPosition();
     sf::Vector2f enemyPosition = _sprite.getPosition();
@@ -68,10 +69,23 @@ void Enemy::move(const std::vector<std::vector<bool>> matrice, Character &hero)
 
 
 
-    std::cout << TargetPosition.x << " - " << TargetPosition.y << std::endl;
+    for (auto it = path.begin(); it != path.end(); ++it) {
+        std::cout << "X: " << it->x << ", Y: " << it->y << std::endl;
+    }
+    std::cout << "///////" << std::endl;
+
+    //std::cout << TargetPosition.x << " - " << TargetPosition.y << std::endl;
     // Move the enemy along the path
-    if (!path.empty()) {
-        // For simplicity, moving to the next position on the path
-        _sprite.setPosition(path[0].x * Wall::WIDTH * Wall::SIZE, path[0].y * Wall::HEIGHT * Wall::SIZE);
+
+    _elapsed += deltaTime;
+
+    if (_elapsed >= 0.1f) {
+
+
+        if (!path.empty()) {
+            // For simplicity, moving to the next position on the path
+            _sprite.setPosition(path[1].x * Wall::WIDTH * Wall::SIZE, path[1].y * Wall::HEIGHT * Wall::SIZE);
+        }
+        _elapsed -= 0.1f;
     }
 }

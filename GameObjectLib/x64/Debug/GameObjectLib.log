@@ -1,14 +1,13 @@
 ﻿  Enemy.cpp
-C:\Users\sgalland\source\repos\i\GameObjectLib\src\Enemy.cpp(22,100): warning C4244: 'argument' : conversion de 'const float' en 'T', perte possible de données
+C:\Users\sgalland\source\repos\i\GameObjectLib\include\Node.hpp(59,22): warning C4267: 'initialisation' : conversion de 'size_t' en 'int', perte possible de données
+C:\Users\sgalland\source\repos\i\GameObjectLib\src\Enemy.cpp(24,100): warning C4244: 'argument' : conversion de 'const float' en 'T', perte possible de données
           with
           [
               T=int
           ]
-C:\Users\sgalland\source\repos\i\GameObjectLib\src\Enemy.cpp(22,58): warning C4244: 'argument' : conversion de 'float' en 'T', perte possible de données
+C:\Users\sgalland\source\repos\i\GameObjectLib\src\Enemy.cpp(24,58): warning C4244: 'argument' : conversion de 'float' en 'T', perte possible de données
           with
           [
               T=int
           ]
-  GameLoop.cpp
-  Génération de code en cours...
   GameObjectLib.vcxproj -> C:\Users\sgalland\source\repos\i\x64\Debug\GameObjectLib.lib

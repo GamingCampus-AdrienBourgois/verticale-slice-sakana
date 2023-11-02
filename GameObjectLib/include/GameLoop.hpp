@@ -17,7 +17,9 @@ private:
     Character _hero;
     Labyrinth _labyrinth;
 
-    void processEvents();
+    float _elapsedTime;
+
+    void processEvents(float deltaTime, sf::View cameraView);
     void update(float deltaTime);
     void render();
 };

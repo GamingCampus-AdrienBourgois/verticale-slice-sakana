@@ -20,12 +20,13 @@ public:
     sf::Vector2f getPosition() const;
     void setDirection(int dir);
     void setSize(float x, float y);
-    void move(const std::vector<std::vector<bool>> matrice, Character &hero);
+    void move(const std::vector<std::vector<bool>> matrice, Character &hero, float deltaTime);
 private:
     sf::Texture _texture;
     sf::Sprite _sprite;
     int _currentFrame;
     float _elapsedTime;
+    float _elapsed;
     int _direction;
     bool _animate;
 

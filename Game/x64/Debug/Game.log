@@ -1,3 +1,1 @@
-﻿  main.cpp
-C:\Users\sgalland\source\repos\i\Game\main.cpp(7,15): warning C4244: 'argument' : conversion de 'time_t' en 'unsigned int', perte possible de données
-  Game.vcxproj -> C:\Users\sgalland\source\repos\i\x64\Debug\Game.exe
+﻿  Game.vcxproj -> C:\Users\sgalland\source\repos\i\x64\Debug\Game.exe
