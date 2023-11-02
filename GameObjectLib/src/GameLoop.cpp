@@ -34,7 +34,7 @@ void GameLoop::processEvents()
         if (event.type == sf::Event::Closed) {
             _window.close();
         }
-        _monster.move(_labyrinth.getMatrice());
+        _monster.move(_labyrinth.getMatrice(), _hero);
         _hero.move(event, _labyrinth);
     }
 }

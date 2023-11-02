@@ -3,6 +3,7 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 #include "Window.hpp"
+#include "Node.hpp"
 #include "GameObject.hpp"
 #include "Character.hpp"
 #include <vector>
@@ -27,6 +28,8 @@ private:
     float _elapsedTime;
     int _direction;
     bool _animate;
+
+    Node node;
 
     static constexpr float FRAME_WIDTH = 89.1f;
     static const int FRAME_HEIGHT = 105;
