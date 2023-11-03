@@ -29,13 +29,17 @@ void GameLoop::run() {
 void GameLoop::processEvents(float deltaTime, sf::View cameraView) 
 {
     sf::Event event;
+
+
+    _monster.move(_labyrinth.getMatrice(), _hero, deltaTime);
+
     while (_window.pollEvent(event)) {
         if (event.type == sf::Event::Closed) {
             _window.close();
         }
 
 
-        _monster.move(_labyrinth.getMatrice(), _hero, deltaTime);
+
         _hero.move(event, _labyrinth);
 
 

@@ -78,7 +78,6 @@ void Enemy::move(const std::vector<std::vector<bool>> matrice, Character &hero, 
     // Move the enemy along the path
 
     _elapsed += deltaTime;
-
     if (_elapsed >= 0.1f) {
 
 
