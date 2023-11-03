@@ -2,15 +2,15 @@
 #include<map>
 #include<vector>
 #include<string>
-#include"Bouton.h"
+#include"Bouton.hpp"
 
 
 class Menu {
 	std::string nameMenu;
 	sf::Texture* texture;
 	sf::Sprite* background;
-	std::vector<Bouton*> vect_boutons;
-	std::map<std::string, std::vector<Bouton*>> lesboutons ; //= std::map<std::string, std::vector<Bouton*>>();
+	std::vector<Bouton*>* vect_boutons;
+	std::map<std::string, std::vector<Bouton*>* > lesboutons;//= std::map<std::string, std::vector<Bouton*>>();
 
 public:
 	Menu() = default;

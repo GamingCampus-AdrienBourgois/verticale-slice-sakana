@@ -1,6 +1,6 @@
 #include<iostream>
 #include"SFML/Window.hpp"
-#include"Bouton.h"
+#include"Bouton.hpp"
 
 Bouton::Bouton(std::string etiquette, float x, float y) {
 
@@ -21,6 +21,8 @@ Bouton::Bouton(std::string etiquette, float x, float y) {
 	textBouton->setString(intitule);
 	textBouton->setCharacterSize(24);
 	textBouton->setPosition(x, y);
+	click = false;
+
 	/*taille du cadre*/
 	//cadre->setSize(sf::Vector2f(120.f, 80.f));
 
@@ -35,7 +37,7 @@ Bouton::Bouton(std::string etiquette, float x, float y) {
 	/*on met le point d'origine du texte au centre de celui-ci*/
 	//origin_text = textBouton.getOrigin();
 	//textBouton.setOrigin(origin_text + textBouton.getL)
-	click = false;
+	
 }
 
 Bouton::~Bouton() {

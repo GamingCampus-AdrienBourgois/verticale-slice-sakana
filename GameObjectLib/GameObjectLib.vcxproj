@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Bouton.h" />
+    <ClInclude Include="include\Bouton.hpp" />
     <ClInclude Include="include\Character.hpp" />
     <ClInclude Include="include\Enemy.hpp" />
     <ClInclude Include="include\GameLoop.hpp" />
