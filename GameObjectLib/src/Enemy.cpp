@@ -78,13 +78,13 @@ void Enemy::move(const std::vector<std::vector<bool>> matrice, Character &hero, 
     // Move the enemy along the path
 
     _elapsed += deltaTime;
-    if (_elapsed >= 0.1f) {
+    if (_elapsed >= 0.5f) {
 
 
-        if (!path.empty()) {
+        if (!path.empty() && path.size() > 1) {
             // For simplicity, moving to the next position on the path
             _sprite.setPosition(path[1].x * Wall::WIDTH * Wall::SIZE, path[1].y * Wall::HEIGHT * Wall::SIZE);
         }
-        _elapsed -= 0.1f;
+        _elapsed -= 0.5f;
     }
 }

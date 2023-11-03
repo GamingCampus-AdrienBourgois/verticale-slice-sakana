@@ -7,6 +7,9 @@ Character::Character(const std::string& texturePath) {
     _elapsedTime = 0.0f;
     _direction = 0;
     _animate = true;
+
+    _sprite.setOrigin(FRAME_WIDTH / 2, FRAME_HEIGHT);
+
 }
 
 void Character::update(float deltaTime) {
@@ -27,6 +30,7 @@ void Character::stop() {
 }
 
 void Character::draw(Window_s& window) {
+
     window.addToRenderLayer(3, _sprite);
 }
 
@@ -48,19 +52,23 @@ void Character::setSize(float x, float y) {
 }
 
 sf::FloatRect Character::getFeetBoundsAtPosition(float x, float y) const {
-    sf::FloatRect globalBounds = _sprite.getGlobalBounds();
+    sf::IntRect textureRect = _sprite.getTextureRect();
 
-    float feetHeight = globalBounds.height * 0.25f;
+    float feetHeight = textureRect.height * 0.40f; // 40% de la hauteur du personnage
 
     // Réduire la largeur de la hitbox par un certain pourcentage
-    float adjustedWidth = globalBounds.width * 0.30f;
-    float widthOffset = (globalBounds.width - adjustedWidth) / 2;
+    float adjustedWidth = textureRect.width * 0.50f;
+    float widthOffset = (textureRect.width - adjustedWidth) / 2; // Pour centrer la hitbox
+    widthOffset += textureRect.width * 0.005f; // Décale la hitbox de 5% de la largeur vers la droite
 
-    widthOffset -= globalBounds.width * 0.15f;
 
-    float heightOffset = globalBounds.height * 0.1f;
-    return sf::FloatRect(x + widthOffset, y + globalBounds.height - feetHeight - heightOffset, adjustedWidth, feetHeight);
+
+    float adjustedY = y - textureRect.height + feetHeight;
+
+    return sf::FloatRect(x + widthOffset, adjustedY, adjustedWidth, feetHeight);
 }
+
+
 
 void Character::move(const sf::Event& event, const Labyrinth& labyrinth) {
     if (event.type == sf::Event::KeyPressed) {

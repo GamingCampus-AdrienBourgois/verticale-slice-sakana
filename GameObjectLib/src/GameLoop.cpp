@@ -3,7 +3,7 @@
 #include <iostream>
 
 GameLoop::GameLoop() : _window(), _hero("asset/hero.png"), _labyrinth("asset/map.txt"), _monster("asset/ghost.png") {
-    _hero.setPosition(Wall::HEIGHT * Wall::SIZE + (Wall::HEIGHT * Wall::SIZE) / 3, Wall::HEIGHT * Wall::SIZE + (Wall::HEIGHT * Wall::SIZE) / 3);
+    _hero.setPosition(Wall::HEIGHT * Wall::SIZE + (Wall::HEIGHT * Wall::SIZE) / 2, Wall::HEIGHT * Wall::SIZE + (Wall::HEIGHT * Wall::SIZE) / 2);
     _hero.setSize(2.2f, 2.2f);
     _monster.setPosition(1000, 300);
     _monster.setSize(0.06f, 0.06f);

@@ -7,7 +7,7 @@ Menu::Menu(std::string name_m,std::string texturepath) {
 	texture = new sf::Texture();
 	background = new sf::Sprite();
 	vect_boutons = new std::vector<Bouton*>();
-	lesboutons = std::vector<std::string, std::vector<Bouton*>*>();
+	lesboutons = std::map<std::string, std::vector<Bouton*>*>();
 
 	if (!texture->loadFromFile(texturepath)) {
 		std::cout << "Erreur chargement texture\n";
