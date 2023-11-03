@@ -1,38 +1,38 @@
-﻿  Character.cpp
-C:\Users\sgalland\source\repos\e\GameObjectLib\src\Character.cpp(19,100): warning C4244: 'argument' : conversion de 'const float' en 'T', perte possible de données
+﻿  Enemy.cpp
+C:\Users\mlabady\source\repos\week-3-sfml-game-los-pollos-hermanos\GameObjectLib\include\Node.hpp(59,22): warning C4267: 'initialisation' : conversion de 'size_t' en 'int', perte possible de données
+C:\Users\mlabady\source\repos\week-3-sfml-game-los-pollos-hermanos\GameObjectLib\src\Enemy.cpp(23,100): warning C4244: 'argument' : conversion de 'const float' en 'T', perte possible de données
           with
           [
               T=int
           ]
-C:\Users\sgalland\source\repos\e\GameObjectLib\src\Character.cpp(19,58): warning C4244: 'argument' : conversion de 'float' en 'T', perte possible de données
+C:\Users\mlabady\source\repos\week-3-sfml-game-los-pollos-hermanos\GameObjectLib\src\Enemy.cpp(23,58): warning C4244: 'argument' : conversion de 'float' en 'T', perte possible de données
           with
           [
               T=int
           ]
-C:\Users\sgalland\source\repos\e\GameObjectLib\src\Character.cpp(26,96): warning C4244: 'argument' : conversion de 'const float' en 'T', perte possible de données
+  Character.cpp
+C:\Users\mlabady\source\repos\week-3-sfml-game-los-pollos-hermanos\GameObjectLib\src\Character.cpp(19,100): warning C4244: 'argument' : conversion de 'const float' en 'T', perte possible de données
           with
           [
               T=int
           ]
-C:\Users\sgalland\source\repos\e\GameObjectLib\src\Character.cpp(26,54): warning C4244: 'argument' : conversion de 'float' en 'T', perte possible de données
+C:\Users\mlabady\source\repos\week-3-sfml-game-los-pollos-hermanos\GameObjectLib\src\Character.cpp(19,58): warning C4244: 'argument' : conversion de 'float' en 'T', perte possible de données
           with
           [
               T=int
           ]
-  Enemy.cpp
-C:\Users\sgalland\source\repos\e\GameObjectLib\include\Node.hpp(59,22): warning C4267: 'initialisation' : conversion de 'size_t' en 'int', perte possible de données
-C:\Users\sgalland\source\repos\e\GameObjectLib\src\Enemy.cpp(23,100): warning C4244: 'argument' : conversion de 'const float' en 'T', perte possible de données
+C:\Users\mlabady\source\repos\week-3-sfml-game-los-pollos-hermanos\GameObjectLib\src\Character.cpp(26,96): warning C4244: 'argument' : conversion de 'const float' en 'T', perte possible de données
           with
           [
               T=int
           ]
-C:\Users\sgalland\source\repos\e\GameObjectLib\src\Enemy.cpp(23,58): warning C4244: 'argument' : conversion de 'float' en 'T', perte possible de données
+C:\Users\mlabady\source\repos\week-3-sfml-game-los-pollos-hermanos\GameObjectLib\src\Character.cpp(26,54): warning C4244: 'argument' : conversion de 'float' en 'T', perte possible de données
           with
           [
               T=int
           ]
   GameLoop.cpp
-C:\Users\sgalland\source\repos\e\GameObjectLib\include\Node.hpp(59,22): warning C4267: 'initialisation' : conversion de 'size_t' en 'int', perte possible de données
+C:\Users\mlabady\source\repos\week-3-sfml-game-los-pollos-hermanos\GameObjectLib\include\Node.hpp(59,22): warning C4267: 'initialisation' : conversion de 'size_t' en 'int', perte possible de données
   Labyrinth.cpp
 C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.37.32822\include\xmemory(719,103): warning C4244: 'argument' : conversion de '_Ty' en 'float', perte possible de données
           with
@@ -56,11 +56,13 @@ C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.37.3282
           [
               _Ty=Wall
           ]
-C:\Users\sgalland\source\repos\e\GameObjectLib\src\Labyrinth.cpp(33,23): message : voir la référence à l'instanciation de la fonction modèle '_Ty &std::vector<_Ty,std::allocator<_Ty>>::emplace_back<size_t,size_t>(size_t &&,size_t &&)' en cours de compilation
+C:\Users\mlabady\source\repos\week-3-sfml-game-los-pollos-hermanos\GameObjectLib\src\Labyrinth.cpp(33,23): message : voir la référence à l'instanciation de la fonction modèle '_Ty &std::vector<_Ty,std::allocator<_Ty>>::emplace_back<size_t,size_t>(size_t &&,size_t &&)' en cours de compilation
           with
           [
               _Ty=Wall
           ]
   Path.cpp
+  Wall.cpp
+  Window.cpp
   Génération de code en cours...
-  GameObjectLib.vcxproj -> C:\Users\sgalland\source\repos\e\x64\Debug\GameObjectLib.lib
+  GameObjectLib.vcxproj -> C:\Users\mlabady\source\repos\week-3-sfml-game-los-pollos-hermanos\x64\Debug\GameObjectLib.lib
