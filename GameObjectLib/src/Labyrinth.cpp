@@ -40,10 +40,11 @@ void Labyrinth::LoadMap(Window_s &window) {
     }
 
 }
-
+//#include <iostream>
 bool Labyrinth::isCollidingWithWalls(const sf::FloatRect& characterBounds) const {
     for (const auto& wall : _walls) {
         if (wall.getBounds().intersects(characterBounds)) {
+            //std::cout << "trigered\n";
             return true;
         }
     }

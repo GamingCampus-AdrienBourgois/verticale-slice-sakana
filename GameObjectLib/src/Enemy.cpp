@@ -68,12 +68,12 @@ void Enemy::move(const std::vector<std::vector<bool>> matrice, Character &hero, 
     std::vector<sf::Vector2i> path = node.findPath(matrice, Position, TargetPosition);
 
 
-
+    /*
     for (auto it = path.begin(); it != path.end(); ++it) {
         std::cout << "X: " << it->x << ", Y: " << it->y << std::endl;
     }
     std::cout << "///////" << std::endl;
-
+    */
     //std::cout << TargetPosition.x << " - " << TargetPosition.y << std::endl;
     // Move the enemy along the path
 
