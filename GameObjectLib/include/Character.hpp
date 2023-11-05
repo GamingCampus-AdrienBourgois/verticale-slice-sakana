@@ -5,8 +5,6 @@
 
 class Character : public GameObject {
 public:
-
-
     enum Directions
     {
         UP,
@@ -28,20 +26,28 @@ public:
 
 
     sf::FloatRect getFeetBoundsAtPosition(float x, float y) const;
-    void move(const sf::Event& event, const Labyrinth& labyrinth);
+    void move(float deltaTime, const Labyrinth& labyrinth);
+
+    bool offGrid(Labyrinth& labyrinth);
 
 
 
 
 
+private:
+    //sf::RectangleShape _hitboxRect; for hitbox checks
 
+    //sf::Vector2f _movementDirection;
+
+
+    // Animation
     static constexpr float FRAME_WIDTH = 63.6f;
     static const int FRAME_HEIGHT = 61;
     static const int ANIMATION_FRAMES = 9;
     static constexpr float FRAME_DURATION = 0.1f;
 
-private:
-    sf::RectangleShape _hitboxRect;
+    // Speed
+    static constexpr float SPEED = 500.0f;
 
     sf::Texture _texture;
     sf::Sprite _sprite;

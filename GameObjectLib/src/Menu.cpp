@@ -25,6 +25,7 @@ Menu::~Menu() {
 	delete texture;
 	delete background;
 	//delete vect_boutons;
+	//delete vect_boutons;
 	//delete les elements de la 2e partie du map
 }
 

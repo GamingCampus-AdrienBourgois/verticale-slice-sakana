@@ -50,6 +50,14 @@ bool Labyrinth::isCollidingWithWalls(const sf::FloatRect& characterBounds) const
     }
     return false;
 }
+bool Labyrinth::isCollidingWithPaths(const sf::FloatRect& characterBounds) const {
+    for (const auto& path : _paths) {
+        if (path.getBounds().intersects(characterBounds)) {
+            return true;
+        }
+    }
+    return false;
+}
 
 std::vector<std::vector<bool>> Labyrinth::getMatrice() {
     return _mapGrid;

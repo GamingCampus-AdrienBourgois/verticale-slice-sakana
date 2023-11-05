@@ -77,50 +77,46 @@ sf::FloatRect Character::getFeetBoundsAtPosition(float x, float y) const {
 
 
 
-void Character::move(const sf::Event& event, const Labyrinth& labyrinth) {
-    if (event.type == sf::Event::KeyPressed) {
-        sf::Vector2f futurePosition = getPosition();
+void Character::move(float deltaTime, const Labyrinth& labyrinth) {
+    sf::Vector2f movement(0.0f, 0.0f);
+    bool moved = false; // Flag to track if the character has moved
 
-        switch (event.key.code) {
-        case sf::Keyboard::Up:
-            setDirection(Directions::UP);
-            futurePosition.y -= 50;
-            if (!labyrinth.isCollidingWithWalls(getFeetBoundsAtPosition(futurePosition.x, futurePosition.y))) {
-                setPosition(futurePosition.x, futurePosition.y);
-            }
-            break;
-        case sf::Keyboard::Down:
-            setDirection(Directions::DOWN);
-            futurePosition.y += 50;
-            if (!labyrinth.isCollidingWithWalls(getFeetBoundsAtPosition(futurePosition.x, futurePosition.y))) {
-                setPosition(futurePosition.x, futurePosition.y);
-            }
-            break;
-        case sf::Keyboard::Left:
-            setDirection(Directions::LEFT);
-            futurePosition.x -= 50;
-            if (!labyrinth.isCollidingWithWalls(getFeetBoundsAtPosition(futurePosition.x, futurePosition.y))) {
-                setPosition(futurePosition.x, futurePosition.y);
-            }
-            break;
-        case sf::Keyboard::Right:
-            setDirection(Directions::RIGHT);
-            futurePosition.x += 50;
-            if (!labyrinth.isCollidingWithWalls(getFeetBoundsAtPosition(futurePosition.x, futurePosition.y))) {
-                setPosition(futurePosition.x, futurePosition.y);
-            }
-            break;
-        default:
-            stop();
-            break;
-        }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+        setDirection(Directions::UP);
+        movement.y -= SPEED * deltaTime;
+        moved = true;
     }
-    else if (event.type == sf::Event::KeyReleased) {
-        if (event.key.code == sf::Keyboard::Up ||
-            event.key.code == sf::Keyboard::Down ||
-            event.key.code == sf::Keyboard::Left ||
-            event.key.code == sf::Keyboard::Right) {
-            stop();
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+        setDirection(Directions::DOWN);
+        movement.y += SPEED * deltaTime;
+        moved = true;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+        setDirection(Directions::LEFT);
+        movement.x -= SPEED * deltaTime;
+        moved = true;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+        setDirection(Directions::RIGHT);
+        movement.x += SPEED * deltaTime;
+        moved = true;
+    }
+
+
+    if (!moved) {
+        stop();
+    }
+    else {
+        sf::Vector2f newPosition = getPosition() + movement;
+        if (!labyrinth.isCollidingWithWalls(getFeetBoundsAtPosition(newPosition.x, newPosition.y))) {
+            _sprite.setPosition(newPosition);
         }
     }
 }
+
+bool Character::offGrid(Labyrinth& labyrinth) {
+    if (labyrinth.isCollidingWithPaths(static_cast<sf::FloatRect>(_sprite.getTextureRect())))
+        return false;
+    return true;
+}
+

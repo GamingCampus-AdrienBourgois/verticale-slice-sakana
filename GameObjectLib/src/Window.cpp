@@ -2,6 +2,7 @@
 
 Window_s::Window_s(unsigned int width, unsigned int height, const std::string& title) 
     : window(sf::VideoMode(width, height), title) {
+    window.setFramerateLimit(60);
 }
 
 bool Window_s::isOpen() const {

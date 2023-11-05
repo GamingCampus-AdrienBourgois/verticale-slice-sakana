@@ -1,15 +1,18 @@
 #include "Enemy.hpp"
 
-Enemy::Enemy(const std::string& texturePath) : node(sf::Vector2i(0, 0)) {
+Enemy::Enemy(const std::string& texturePath) : node(sf::Vector2i(0, 0)), oldPos(0, 0), oldTargetPos(0, 0) {
     _texture.loadFromFile(texturePath);
     _sprite.setTexture(_texture);
     sf::Vector2u textureSize = _sprite.getTexture()->getSize();
-    //_sprite.setOrigin(textureSize.x / 2.0f, textureSize.y / 2.0f);
+    _sprite.setOrigin(textureSize.x /2.0f, textureSize.y / 2.0f);
     _currentFrame = 0;
     _elapsedTime = 0.0f;
     _elapsed = 0.0f;
     _direction = 0;
     _animate = true;
+
+
+
 
 }
 
@@ -49,7 +52,6 @@ void Enemy::setSize(float x, float y) {
     _sprite.setScale(x, y);
 }
 
-#include <iostream>
 
 void Enemy::move(const std::vector<std::vector<bool>> matrice, Character &hero, float deltaTime)
 {
@@ -64,8 +66,9 @@ void Enemy::move(const std::vector<std::vector<bool>> matrice, Character &hero, 
     Position.x = static_cast<int>(enemyPosition.x / (Wall::WIDTH * Wall::SIZE));
     Position.y = static_cast<int>(enemyPosition.y / (Wall::HEIGHT * Wall::SIZE));
 
+    
+    path = node.findPath(matrice, Position, TargetPosition);
 
-    std::vector<sf::Vector2i> path = node.findPath(matrice, Position, TargetPosition);
 
 
     /*
@@ -77,14 +80,19 @@ void Enemy::move(const std::vector<std::vector<bool>> matrice, Character &hero, 
     //std::cout << TargetPosition.x << " - " << TargetPosition.y << std::endl;
     // Move the enemy along the path
 
-    _elapsed += deltaTime;
-    if (_elapsed >= 0.5f) {
 
+    if (path.size() > 1) {
+        sf::Vector2f direction(
+            static_cast<float>(path[1].x - Position.x),
+            static_cast<float>(path[1].y - Position.y)
+        );
 
-        if (!path.empty() && path.size() > 1) {
-            // For simplicity, moving to the next position on the path
-            _sprite.setPosition(path[1].x * Wall::WIDTH * Wall::SIZE, path[1].y * Wall::HEIGHT * Wall::SIZE);
+        float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+        if (length != 0) {
+            direction.x /= length;
+            direction.y /= length;
         }
-        _elapsed -= 0.5f;
+
+        _sprite.move(direction * SPEED * deltaTime);
     }
 }

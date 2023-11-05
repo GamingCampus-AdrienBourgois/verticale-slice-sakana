@@ -15,6 +15,7 @@ public:
 
 
     bool isCollidingWithWalls(const sf::FloatRect& characterBounds) const;
+    bool isCollidingWithPaths(const sf::FloatRect& characterBounds) const;
 
     std::vector<std::vector<bool>> getMatrice();
 
