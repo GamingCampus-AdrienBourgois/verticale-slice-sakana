@@ -1,10 +1,10 @@
 #include "Enemy.hpp"
 
-Enemy::Enemy(const std::string& texturePath) : node(sf::Vector2i(0, 0)), oldPos(0, 0), oldTargetPos(0, 0) {
+Enemy::Enemy(const std::string& texturePath) : node(sf::Vector2i(0, 0)) {
     _texture.loadFromFile(texturePath);
     _sprite.setTexture(_texture);
     sf::Vector2u textureSize = _sprite.getTexture()->getSize();
-    _sprite.setOrigin(textureSize.x /2.0f, textureSize.y / 2.0f);
+    _sprite.setOrigin((textureSize.x * 1.4f) / 2.0f, (textureSize.y * 1.4f) / 2.0f);
     _currentFrame = 0;
     _elapsedTime = 0.0f;
     _elapsed = 0.0f;
@@ -53,6 +53,9 @@ void Enemy::setSize(float x, float y) {
 }
 
 
+
+#include <iostream>
+
 void Enemy::move(const std::vector<std::vector<bool>> matrice, Character &hero, float deltaTime)
 {
     sf::Vector2f heroPosition = hero.getPosition();
@@ -67,16 +70,18 @@ void Enemy::move(const std::vector<std::vector<bool>> matrice, Character &hero, 
     Position.y = static_cast<int>(enemyPosition.y / (Wall::HEIGHT * Wall::SIZE));
 
     
-    path = node.findPath(matrice, Position, TargetPosition);
+
+    std::vector<sf::Vector2i> path = node.findPath(matrice, Position, TargetPosition);
 
 
 
+
+    
     /*
     for (auto it = path.begin(); it != path.end(); ++it) {
         std::cout << "X: " << it->x << ", Y: " << it->y << std::endl;
     }
-    std::cout << "///////" << std::endl;
-    */
+    std::cout << "///////" << std::endl;*/
     //std::cout << TargetPosition.x << " - " << TargetPosition.y << std::endl;
     // Move the enemy along the path
 

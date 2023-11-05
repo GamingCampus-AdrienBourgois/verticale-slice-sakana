@@ -1,7 +1,7 @@
 #include "Wall.hpp"
 
 Wall::Wall(float x, float y) {
-    _texture.loadFromFile("asset/wall.jpg");
+    _texture.loadFromFile("asset/wall.png");
     _sprite.setTexture(_texture);
     _sprite.setPosition(x * SIZE, y * SIZE);
     _sprite.setScale(SIZE, SIZE);

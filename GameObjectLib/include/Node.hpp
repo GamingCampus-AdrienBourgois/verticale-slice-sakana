@@ -81,12 +81,10 @@ public:
         std::vector<sf::Vector2i> vec;
 
         // Ajouter des éléments au vecteur (exemple)
-        vec.push_back(sf::Vector2i(1, 2));
-        vec.push_back(sf::Vector2i(3, 4));
+        vec.push_back(sf::Vector2i(0, 0));
+        vec.push_back(sf::Vector2i(0, 0));
         // No path found
-        return vec ;
+        return vec;
     }
 
 };
-
-

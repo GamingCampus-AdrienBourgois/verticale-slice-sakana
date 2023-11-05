@@ -33,10 +33,9 @@ private:
     int _direction;
     bool _animate;
 
-    sf::Vector2i oldPos;
-    sf::Vector2i oldTargetPos;
 
-    std::vector<sf::Vector2i> path;
+
+
 
     Node node;
 

@@ -113,9 +113,10 @@ void Character::move(float deltaTime, const Labyrinth& labyrinth) {
         }
     }
 }
+#include <iostream>
 
 bool Character::offGrid(Labyrinth& labyrinth) {
-    if (labyrinth.isCollidingWithPaths(static_cast<sf::FloatRect>(_sprite.getTextureRect())))
+    if (labyrinth.isCollidingWithPaths(getFeetBoundsAtPosition(_sprite.getPosition().x, _sprite.getPosition().y)))
         return false;
     return true;
 }

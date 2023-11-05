@@ -50,13 +50,19 @@ bool Labyrinth::isCollidingWithWalls(const sf::FloatRect& characterBounds) const
     }
     return false;
 }
+
+#include <iostream>
 bool Labyrinth::isCollidingWithPaths(const sf::FloatRect& characterBounds) const {
     for (const auto& path : _paths) {
         if (path.getBounds().intersects(characterBounds)) {
+            //std::cout << "prok";
+
             return true;
         }
     }
+
     return false;
+    
 }
 
 std::vector<std::vector<bool>> Labyrinth::getMatrice() {

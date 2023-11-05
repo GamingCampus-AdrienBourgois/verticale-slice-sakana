@@ -2,7 +2,7 @@
 
 
 Path::Path(float x, float y) {
-    _texture.loadFromFile("asset/path.jpg");
+    _texture.loadFromFile("asset/path.png");
     _sprite.setTexture(_texture);
     _sprite.setPosition(x * SIZE, y * SIZE);
     _sprite.setScale(SIZE, SIZE);

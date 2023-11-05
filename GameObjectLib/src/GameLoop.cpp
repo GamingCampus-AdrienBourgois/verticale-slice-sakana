@@ -5,24 +5,33 @@
 
 GameLoop::GameLoop() : _window(), _hero("asset/hero.png"), _monster("asset/ghost.png") {
 
-    // Sprite init
-    _hero.setPosition((Wall::HEIGHT * Wall::SIZE * 1) + (Wall::HEIGHT * Wall::SIZE) / 2, (Wall::HEIGHT * Wall::SIZE * 1) + (Wall::HEIGHT * Wall::SIZE) / 2);
-    _hero.setSize(2.2f, 2.2f);
-    _monster.setPosition((Wall::HEIGHT * Wall::SIZE * 12) + (Wall::HEIGHT * Wall::SIZE) / 2, (Wall::HEIGHT * Wall::SIZE * 8) + (Wall::HEIGHT * Wall::SIZE) / 2);
-    _monster.setSize(1.4f, 1.4f);
-    
     // Set level to first
     level = 0;
 
+
+
+
+
+    
+
+
     // Set map for  5 levels
+    //_labyrinth.resize(5);
     _labyrinth.push_back(new Labyrinth("asset/map.txt"));
-    _labyrinth.push_back(new Labyrinth("asset/map.txt"));
-    _labyrinth.push_back(new Labyrinth("asset/map.txt"));
-    _labyrinth.push_back(new Labyrinth("asset/map.txt"));
-    _labyrinth.push_back(new Labyrinth("asset/map.txt"));
+    _labyrinth.push_back(new Labyrinth("asset/map1.txt"));
+    _labyrinth.push_back(new Labyrinth("asset/map2.txt"));
+    _labyrinth.push_back(new Labyrinth("asset/map3.txt"));
+    _labyrinth.push_back(new Labyrinth("asset/map4.txt"));
 
 
-    _music.resize(5); // 5 level
+
+    // Sprite init
+    _hero.setPosition((Wall::HEIGHT * Wall::SIZE * 1) + (Wall::HEIGHT * Wall::SIZE) / 2, (Wall::HEIGHT * Wall::SIZE * 1) + (Wall::HEIGHT * Wall::SIZE) / 2);
+    _hero.setSize(2.2f, 2.2f);
+
+
+
+    //_music.resize(5); // 5 level
     _music.push_back(std::make_unique<sf::Music>());
     if (!_music.back()->openFromFile("asset/music/1.mp3")) {
         std::cout << "Error loading music" << std::endl;
@@ -46,7 +55,7 @@ GameLoop::GameLoop() : _window(), _hero("asset/hero.png"), _monster("asset/ghost
 
 
     _music[level]->play();
-    _music[level]->setVolume(50);
+    _music[level]->setVolume(100);
     _music[level]->setLoop(true);
 
 
@@ -71,6 +80,18 @@ void GameLoop::run() {
 
 
     _labyrinth[level]->LoadMap(_window);
+
+
+    // Sprite init here because load map needed
+    int monsterSety = _labyrinth[level]->getMatrice().size(); // Pos the enemie at the 2nd last cell
+    int monsterSetx = _labyrinth[level]->getMatrice()[_labyrinth[level]->getMatrice().size() - 1].size();
+
+    //std::cout << monsterSetx << " - " << monsterSety << std::endl;
+    _monster.setPosition(((Wall::HEIGHT * Wall::SIZE) * (monsterSetx - 2)) + ((Wall::HEIGHT * Wall::SIZE) / 2), ((Wall::HEIGHT * Wall::SIZE) * (monsterSety - 2)) + ((Wall::HEIGHT * Wall::SIZE) / 2));
+    _monster.setSize(1.4f, 1.4f);
+
+
+
     while (_window.isOpen()) {
         float deltaTime = clock.restart().asSeconds();
 
@@ -108,14 +129,27 @@ void GameLoop::processEvents(float deltaTime, sf::View cameraView)
 }
 
 void GameLoop::nextLevel() {
-    if (_hero.offGrid(*(_labyrinth[level]))) {
+
+
+
+    if (_hero.offGrid(*(_labyrinth[level])) ) {
         _music[level]->stop();
         if (level < _labyrinth.size() - 1) {
-            //level += 1;
+            level += 1;
+
+            _labyrinth[level]->LoadMap(_window);
+
             _music[level]->play();
 
-            std::cout << "prok";
+
             _hero.setPosition((Wall::HEIGHT * Wall::SIZE * 1) + (Wall::HEIGHT * Wall::SIZE) / 2, (Wall::HEIGHT * Wall::SIZE * 1) + (Wall::HEIGHT * Wall::SIZE) / 2);
+
+
+            int monsterSety = _labyrinth[level]->getMatrice().size(); // Pos the enemie at the 2nd last cell
+            int monsterSetx = _labyrinth[level]->getMatrice()[_labyrinth[level]->getMatrice().size() - 1].size();
+
+            //std::cout << monsterSetx << " - " << monsterSety << std::endl;
+            _monster.setPosition(((Wall::HEIGHT * Wall::SIZE) * (monsterSetx - 2)) + ((Wall::HEIGHT * Wall::SIZE) / 2), ((Wall::HEIGHT * Wall::SIZE) * (monsterSety - 2)) + ((Wall::HEIGHT * Wall::SIZE) / 2));
         }
         else {
             level = 0;
@@ -124,6 +158,7 @@ void GameLoop::nextLevel() {
         }
 
     }
+    //std::cout << _labyrinth[level]->getMatrice().size() - 1 << " - " << _labyrinth[level]->getMatrice()[_labyrinth[level]->getMatrice().size() - 2].size();
 }
 
 void GameLoop::update(float deltaTime) {

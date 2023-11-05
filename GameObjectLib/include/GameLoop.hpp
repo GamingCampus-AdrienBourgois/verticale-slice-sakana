@@ -25,6 +25,7 @@ private:
     Window_s _window;
     Character _hero;
 
+
     std::vector<std::unique_ptr<sf::Music>> _music;
 
     std::vector<Labyrinth*> _labyrinth;
