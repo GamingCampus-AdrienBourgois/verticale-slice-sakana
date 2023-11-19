@@ -30,6 +30,10 @@ void Window_s::addToRenderLayer(int layer, const sf::Drawable& drawable)
     _renderLayers[layer].push_back(&drawable);
 }
 
+sf::RenderWindow& Window_s::getWindow() {
+    return window;
+}
+
 void Window_s::removeFromRenderLayer(int layer, const sf::Drawable& drawable)
 {
     auto& drawables = _renderLayers[layer];

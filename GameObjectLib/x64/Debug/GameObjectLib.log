@@ -1,20 +1,2 @@
-﻿  Enemy.cpp
-C:\Users\cacag\OneDrive\Desktop\3cEv\GameObjectLib\include\Node.hpp(59,22): warning C4267: 'initialisation' : conversion de 'size_t' en 'int', perte possible de données
-C:\Users\cacag\OneDrive\Desktop\3cEv\GameObjectLib\src\Enemy.cpp(26,100): warning C4244: 'argument' : conversion de 'const float' en 'T', perte possible de données
-          with
-          [
-              T=int
-          ]
-C:\Users\cacag\OneDrive\Desktop\3cEv\GameObjectLib\src\Enemy.cpp(26,58): warning C4244: 'argument' : conversion de 'float' en 'T', perte possible de données
-          with
-          [
-              T=int
-          ]
-  GameLoop.cpp
-C:\Users\cacag\OneDrive\Desktop\3cEv\GameObjectLib\include\Node.hpp(59,22): warning C4267: 'initialisation' : conversion de 'size_t' en 'int', perte possible de données
-C:\Users\cacag\OneDrive\Desktop\3cEv\GameObjectLib\src\GameLoop.cpp(86,21): warning C4267: 'initialisation' : conversion de 'size_t' en 'int', perte possible de données
-C:\Users\cacag\OneDrive\Desktop\3cEv\GameObjectLib\src\GameLoop.cpp(87,21): warning C4267: 'initialisation' : conversion de 'size_t' en 'int', perte possible de données
-C:\Users\cacag\OneDrive\Desktop\3cEv\GameObjectLib\src\GameLoop.cpp(148,29): warning C4267: 'initialisation' : conversion de 'size_t' en 'int', perte possible de données
-C:\Users\cacag\OneDrive\Desktop\3cEv\GameObjectLib\src\GameLoop.cpp(149,29): warning C4267: 'initialisation' : conversion de 'size_t' en 'int', perte possible de données
-  Génération de code en cours...
-  GameObjectLib.vcxproj -> C:\Users\cacag\OneDrive\Desktop\3cEv\x64\Debug\GameObjectLib.lib
+﻿  GameLoop.cpp
+  GameObjectLib.vcxproj -> C:\Users\cacag\OneDrive\Desktop\AllProjects\MENU\x64\Debug\GameObjectLib.lib
