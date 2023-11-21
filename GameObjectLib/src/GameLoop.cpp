@@ -1,42 +1,22 @@
 #include "GameLoop.hpp"
 #include <iostream>
 
-GameLoop::GameLoop() : _window(), _menu()
+GameLoop::GameLoop() : _window(), _menu(), _music()
 {
     // Set level to first
     level = 0;
+    
 
-
-    _menu.filMapButton(_window);
+    // Load menu
+    _menu.LoadMenuButton(_window);
+    // Base Menu draw
+    _menu.draw(_window);
 
 
     // Load music for each level
-    _music.push_back(std::make_unique<sf::Music>());
-    if (!_music.back()->openFromFile("asset/music/1.mp3")) {
-        std::cout << "Error loading music" << std::endl;
-    }
-    _music.push_back(std::make_unique<sf::Music>());
-    if (!_music.back()->openFromFile("asset/music/2.mp3")) {
-        std::cout << "Error loading music" << std::endl;
-    }
-    _music.push_back(std::make_unique<sf::Music>());
-    if (!_music.back()->openFromFile("asset/music/3.mp3")) {
-        std::cout << "Error loading music" << std::endl;
-    }
-    _music.push_back(std::make_unique<sf::Music>());
-    if (!_music.back()->openFromFile("asset/music/4.mp3")) {
-        std::cout << "Error loading music" << std::endl;
-    }
-    _music.push_back(std::make_unique<sf::Music>());
-    if (!_music.back()->openFromFile("asset/music/5.mp3")) {
-        std::cout << "Error loading music" << std::endl;
-    }
-
-    // Start
-    _music[level]->setVolume(100);
-    _music[level]->setLoop(true);
-    // level 0 = menu
-    _music[level]->play();
+    _music.LoadMusic();
+    // Music player and level 0 = menu music
+    _music.playMusic(level);
 }
 
 GameLoop::~GameLoop()
@@ -48,10 +28,6 @@ void GameLoop::run()
 {
     sf::Clock clock;
     sf::View cameraView;
-    //cameraView.setSize();
-    // Set it to default view to hero
-    //cameraView.setCenter();
-
 
     while (_window.isOpen()) {
         float deltaTime = clock.restart().asSeconds();
@@ -63,36 +39,50 @@ void GameLoop::run()
     }
 }
 
-void GameLoop::processEvents(float deltaTime, sf::View cameraView) 
+void GameLoop::processEvents(float deltaTime, sf::View cameraView)
 {
     sf::Event event;
-    sf::Mouse mouse;
-
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-        mouse.getPosition();
-    }
 
     while (_window.pollEvent(event)) {
-        if (event.type == sf::Event::Closed) {
+        switch (event.type) {
+        case sf::Event::Closed:
             _window.close();
+            break;
+        case sf::Event::KeyPressed:
+            if (event.key.code == sf::Keyboard::Escape) {
+                _window.close();
+            }
+            if (event.key.code == sf::Keyboard::Return) {
+                _menu.resetValues(_window);
+                _menu.LoadMenuButton(_window);
+                _menu.draw(_window);
+            }
+            break;
+        case sf::Event::MouseButtonPressed:
+            if (event.mouseButton.button == sf::Mouse::Left) {
+                _menu.handleButtonClick(_window, _music);
+            }
+            break;
+        case sf::Event::Resized:
+            _menu.resetValues(_window);
+            _menu.LoadMenuButton(_window);
+            _menu.draw(_window);
         }
-
-
-
     }
 }
+
 
 void GameLoop::nextLevel() 
 {
     if (/*next level cond*/true != true) {
-        _music[level]->stop();
+        _music.stopMusic(level);
         if (/*level not max*/true != true) {
             level += 1;
-            _music[level]->play();
+            _music.playMusic(level);
         }
         else {
             level = 0;
-            _music[level]->play();
+            _music.playMusic(level);
 
         }
     }

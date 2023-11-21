@@ -2,76 +2,52 @@
 #include <SFML/Graphics.hpp>
 #include <map>
 #include <vector>
+#include <string>
+#include <iostream>
 
 #include "Window.hpp"
+#include "Music.hpp"
+#include "Settings.hpp"
+
 
 class Menu {
 public:
-	Menu() : _isMenu(true), _MenuState(BASE)
-	{
+    Menu();
+    ~Menu();
 
-	}
-	~Menu() = default;
+    enum MenuStates {
+        BASE,
+        PLAY,
+        SETTINGS,
+        HELP,
+        SUCCESS,
+        CREDIT,
+        QUIT
+    };
 
+    void draw(Window_s& window);
+    void LoadMenuButton(Window_s& window);
+    void handleButtonClick(Window_s& window, Music &music);
+    void resetValues(Window_s& window);
 
-	enum MenuStates
-	{
-		BASE,
-		SETTINGS,
-		HELP,
-		PLAY,
-		SUCCESS,
-		CREDIT,
-		QUIT
-	};
+    const MenuStates getMenuState() const;
+    void setMenuState(MenuStates MenuState);
+    const bool getIsMenu() const;
+    void setIsMenu(bool isMenu);
+    sf::Text setTextOnButton(const std::string& text, sf::RectangleShape& button);
 
-
-
-	void filMapButton(Window_s &window) {
-		sf::RectangleShape button;
-
-		sf::Color col(255, 0, 0);
-		button.setSize(sf::Vector2f(100, 50)); // Taille du bouton
-		button.setPosition(100, 100); // Position du bouton
-		button.setFillColor(col); // Couleur du bouton
-
-
-		// Ajoutez ce bouton au map pour l'état BASE
-		mapButton[BASE].push_back(button);
-
-
-		for (auto& BaseButton : mapButton[BASE]) {
-			window.addToRenderLayer(1, BaseButton);
-		}
-
-
-	}
-
-	void statesGestion() 
-	{
-
-	}
-
-
-
-
-
-	const MenuStates getMenuState() const {
-		return _MenuState;
-	}
-	void setMenuState(MenuStates MenuState) {
-		_MenuState = MenuState;
-	}
-
-	const bool getIsMenu() const {
-		return _isMenu;
-	}
-	void setIsMenu(bool isMenu) {
-		_isMenu = isMenu;
-	}
 private:
-	bool _isMenu;
-	MenuStates _MenuState;
+    // Menu
+    bool _isMenu;
+    MenuStates _MenuState;
 
-	std::map<MenuStates, std::vector<sf::RectangleShape>> mapButton;
+    // Buttons gestion
+    sf::Font _font;
+    unsigned int buttonCount;
+    std::vector<sf::Text> buttonTexts;
+    std::map<MenuStates, std::vector<sf::RectangleShape>> mapButton;
+
+    // Menu states
+
+
 };

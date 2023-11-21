@@ -5,6 +5,7 @@
 
 #include "Menu.hpp"
 #include "Window.hpp"
+#include "Music.hpp"
 
 class GameLoop {
 public:
@@ -19,8 +20,9 @@ public:
 private:
     unsigned int level;
 
+    Music _music;
     Menu _menu;
     Window_s _window;
 
-    std::vector<std::unique_ptr<sf::Music>> _music;
+
 };

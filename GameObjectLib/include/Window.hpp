@@ -12,7 +12,7 @@ public:
     void addToRenderLayer(int layer, const sf::Drawable& drawable);
     void removeFromRenderLayer(int layer, const sf::Drawable& drawable);
     void renderLayers();
-
+    void clearLayer(int layer);
 
     bool isOpen() const;
     void close();

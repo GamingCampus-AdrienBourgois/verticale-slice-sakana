@@ -25,13 +25,20 @@ bool Window_s::pollEvent(sf::Event& event) {
     return window.pollEvent(event);
 }
 
+sf::RenderWindow& Window_s::getWindow() {
+    return window;
+}
+
+void Window_s::clearLayer(int layer) {
+    if (_renderLayers.find(layer) != _renderLayers.end()) {
+        _renderLayers[layer].clear();
+    }
+}
+
+
 void Window_s::addToRenderLayer(int layer, const sf::Drawable& drawable)
 {
     _renderLayers[layer].push_back(&drawable);
-}
-
-sf::RenderWindow& Window_s::getWindow() {
-    return window;
 }
 
 void Window_s::removeFromRenderLayer(int layer, const sf::Drawable& drawable)
