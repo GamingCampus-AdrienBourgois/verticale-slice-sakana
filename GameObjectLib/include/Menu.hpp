@@ -7,47 +7,26 @@
 
 #include "Window.hpp"
 #include "Music.hpp"
+#include "MenuObject.hpp"
 #include "Settings.hpp"
 
 
-class Menu {
+//Cette class est le menu de base elle prend les instaces de class de chauqun de ces states.
+class Menu : public MenuObject 
+{
+    Settings _settings;
+
+
+    // Les autres variables utiles sont dans MenuObject en access protected
+
 public:
     Menu();
     ~Menu();
 
-    enum MenuStates {
-        BASE,
-        PLAY,
-        SETTINGS,
-        HELP,
-        SUCCESS,
-        CREDIT,
-        QUIT
-    };
-
-    void draw(Window_s& window);
-    void LoadMenuButton(Window_s& window);
+    void loadMenuButton(Window_s& window);
     void handleButtonClick(Window_s& window, Music &music);
-    void resetValues(Window_s& window);
+    void update(Window_s& window);
 
     const MenuStates getMenuState() const;
     void setMenuState(MenuStates MenuState);
-    const bool getIsMenu() const;
-    void setIsMenu(bool isMenu);
-    sf::Text setTextOnButton(const std::string& text, sf::RectangleShape& button);
-
-private:
-    // Menu
-    bool _isMenu;
-    MenuStates _MenuState;
-
-    // Buttons gestion
-    sf::Font _font;
-    unsigned int buttonCount;
-    std::vector<sf::Text> buttonTexts;
-    std::map<MenuStates, std::vector<sf::RectangleShape>> mapButton;
-
-    // Menu states
-
-
 };

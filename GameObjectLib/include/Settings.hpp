@@ -1,10 +1,11 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 #include "Window.hpp"
-#include "Menu.hpp"
+#include "MenuObject.hpp"
 
-class Settings {
+class Settings : public MenuObject {
 public:
     Settings();
     ~Settings() = default;
@@ -19,12 +20,11 @@ public:
     void setResolution(const sf::Vector2u& resolution);
     sf::Vector2u getResolution() const;
 
-    void loadSettings(Window_s &window) {
 
-    }
+
+    void loadSettings(Window_s& window);
 
 private:
-    //Menu _menu;
 
     float _volume;
     unsigned int _fpsLimit;

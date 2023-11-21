@@ -28,6 +28,12 @@ void Music::LoadMusic()
     }
 }
 
+void Music::setAllVolume(float volume) {
+    for (auto& musics : _music) {
+        musics->setVolume(volume);
+    }
+}
+
 void Music::playMusic(int level) {
     if (level >= 0 && level < _music.size()) {
         _music[level]->setVolume(100);

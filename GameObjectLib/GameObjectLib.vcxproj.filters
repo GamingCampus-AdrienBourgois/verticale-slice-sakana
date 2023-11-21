@@ -30,7 +30,7 @@
     <ClInclude Include="include\Settings.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\MenuBase.hpp">
+    <ClInclude Include="include\MenuObject.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -48,6 +48,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Settings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MenuObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

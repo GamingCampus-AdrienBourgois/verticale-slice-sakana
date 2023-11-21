@@ -1,20 +1,17 @@
 #include "Menu.hpp"
 
-Menu::Menu() : _isMenu(true), _MenuState(BASE), buttonCount(0)//, _settings()
+Menu::Menu() : _settings()
 {
+	_isMenu = true;
+	_MenuState = BASE;
+	buttonCount = 0;
 	_font.loadFromFile("asset/font/Beyonders.ttf");
 }
 
 Menu::~Menu() = default;
 
-void Menu::draw(Window_s& window) {
-	for (unsigned int i = 0; i < buttonCount; i++) {
-		window.addToRenderLayer(2, buttonTexts[i]); // Add text on buttons
-		window.addToRenderLayer(1, mapButton[_MenuState][i]); // Add buttons
-	}
-}
 
-void Menu::LoadMenuButton(Window_s& window)
+void Menu::loadMenuButton(Window_s& window)
 {
 	setMenuState(BASE);
 	sf::Vector2f buttonSize(200, 50);
@@ -36,16 +33,6 @@ void Menu::LoadMenuButton(Window_s& window)
 	}
 }
 
-sf::Text Menu::setTextOnButton(const std::string& text, sf::RectangleShape& button) {
-	sf::Color color(0, 255, 0);
-	sf::Text buttonText(text, _font, 20); // Taille de texte 20
-	buttonText.setFillColor(color);
-	sf::FloatRect textRect = buttonText.getLocalBounds();
-	buttonText.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
-	buttonText.setPosition(button.getPosition());
-	return buttonText;
-}
-
 void Menu::handleButtonClick(Window_s& window, Music &music) {
 	sf::Vector2i mousePos = sf::Mouse::getPosition(window.getWindow());
 	sf::Vector2f mousePosF = window.getWindow().mapPixelToCoords(mousePos);
@@ -61,6 +48,9 @@ void Menu::handleButtonClick(Window_s& window, Music &music) {
 			}
 			else if (buttonText == "SETTINGS") {
 				resetValues(window);
+				_settings.resetValues(window);
+				_settings.loadSettings(window); // Charger les boutons de Settings
+				_settings.draw(window);
 				setMenuState(SETTINGS);
 			}
 			else if (buttonText == "HELP") {
@@ -83,14 +73,10 @@ void Menu::handleButtonClick(Window_s& window, Music &music) {
 	}
 }
 
-void Menu::resetValues(Window_s& window) {
-	buttonTexts.clear();
-	for (auto& stateButtons : mapButton) {
-		stateButtons.second.clear();
-	}
-	buttonCount = 0;
-	window.clearLayer(1);
-	window.clearLayer(2);
+void Menu::update(Window_s& window) {
+	changeOnMouse(window);
+	_settings.changeOnMouse(window);
+
 }
 
 const Menu::MenuStates Menu::getMenuState() const {
@@ -99,12 +85,4 @@ const Menu::MenuStates Menu::getMenuState() const {
 
 void Menu::setMenuState(MenuStates MenuState) {
 	_MenuState = MenuState;
-}
-
-const bool Menu::getIsMenu() const {
-	return _isMenu;
-}
-
-void Menu::setIsMenu(bool isMenu) {
-	_isMenu = isMenu;
 }

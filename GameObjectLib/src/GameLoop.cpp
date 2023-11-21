@@ -8,7 +8,7 @@ GameLoop::GameLoop() : _window(), _menu(), _music()
     
 
     // Load menu
-    _menu.LoadMenuButton(_window);
+    _menu.loadMenuButton(_window);
     // Base Menu draw
     _menu.draw(_window);
 
@@ -54,7 +54,7 @@ void GameLoop::processEvents(float deltaTime, sf::View cameraView)
             }
             if (event.key.code == sf::Keyboard::Return) {
                 _menu.resetValues(_window);
-                _menu.LoadMenuButton(_window);
+                _menu.loadMenuButton(_window);
                 _menu.draw(_window);
             }
             break;
@@ -65,7 +65,7 @@ void GameLoop::processEvents(float deltaTime, sf::View cameraView)
             break;
         case sf::Event::Resized:
             _menu.resetValues(_window);
-            _menu.LoadMenuButton(_window);
+            _menu.loadMenuButton(_window);
             _menu.draw(_window);
         }
     }
@@ -90,12 +90,15 @@ void GameLoop::nextLevel()
 
 void GameLoop::update(float deltaTime) 
 {
-
+    // Render color on buttons
+    _menu.update(_window);
 }
 
 void GameLoop::render() 
 {
     _window.clear();
+
+
     _window.renderLayers();
     _window.display();
 }
