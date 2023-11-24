@@ -36,6 +36,9 @@
     <ClInclude Include="include\Slider.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\Credit.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\GameLoop.cpp">
@@ -56,7 +59,10 @@
     <ClCompile Include="src\MenuObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Slider.cpp">
+    <ClCompile Include="src\Slider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Credit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

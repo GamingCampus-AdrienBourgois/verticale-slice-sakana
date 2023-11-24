@@ -66,11 +66,8 @@ sf::Text MenuObject::createText(const std::string& text, const sf::Vector2f& pos
     return textObject;
 }
 
-
-const MenuObject::MenuStates MenuObject::getMenuState() const {
-    return _MenuState;
-}
-
-void MenuObject::setMenuState(MenuStates MenuState) {
-    _MenuState = MenuState;
+void MenuObject::reloding(Window_s& window) {
+    resetValues(window); // Detruit tout ce quil y a dans les layers et toute les valeurs (les valeurs seront remplacer par les loaders)
+    load(window); // Load les bouttons de settings
+    draw(window); // Draw les boutons chargé
 }

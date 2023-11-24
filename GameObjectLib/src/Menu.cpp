@@ -1,19 +1,18 @@
 #include "Menu.hpp"
 
-Menu::Menu(Window_s& window, Music& music) : _settings(window, music)
+Menu::Menu(Window_s& window, Music& music) : _settings(window, music), _credit()
 {
 	_isMenu = true;
 	_MenuState = BASE;
+	_PreviousMenuState = BASE;
 	buttonCount = 0;
 	_fontButton.loadFromFile("asset/font/Beyonders.ttf");
-
-
 }
 
 Menu::~Menu() = default;
 
 
-void Menu::loadMenuButton(Window_s& window)
+void Menu::load(Window_s& window)
 {
 	sf::Vector2f buttonSize(200, 50);
 	std::vector<std::string> states = { "PLAY", "SETTINGS", "HELP", "SUCCESS", "CREDIT", "QUIT" };
@@ -34,7 +33,7 @@ void Menu::loadMenuButton(Window_s& window)
 	}
 }
 
-void Menu::update(Window_s& window, Music& music) {
+void Menu::update(Window_s& window, Music& music, float deltaTime) {
 	switch (_MenuState)
 	{
 	case BASE:
@@ -51,6 +50,7 @@ void Menu::update(Window_s& window, Music& music) {
 	case SUCCESS:
 		break;
 	case CREDIT:
+		_credit.scroller(deltaTime, music);
 		break;
 	case QUIT:
 		break;
@@ -67,13 +67,58 @@ void Menu::handleEvent(const sf::Event& event, Window_s &window, Music &music)
 	// State switcher
 	if (event.type == sf::Event::KeyPressed) {
 		if (event.key.code == sf::Keyboard::Return) {
-			resetValues(window);
-			loadMenuButton(window);
-			draw(window);
-			_MenuState = BASE;
+			
+			switch (_MenuState)
+			{
+			case BASE:
+
+				_MenuState = BASE;
+				_PreviousMenuState = BASE;
+				break;
+			case PLAY:
+				reloding(window);
+
+				_MenuState = BASE;
+				_PreviousMenuState = PLAY;
+				break;
+			case SETTINGS:
+				// reloaders
+				reloding(window);
+
+				// the state before settings is BASE (globale menu)
+				_MenuState = BASE;
+				// set this, usefull if there are more states in the states for exemple if they is another state in settings
+				_PreviousMenuState = SETTINGS;
+				break;
+			case HELP:
+				reloding(window);
+
+				_MenuState = BASE;
+				_PreviousMenuState = HELP;
+				break;
+			case SUCCESS:
+				reloding(window);
+
+				_MenuState = BASE;
+				_PreviousMenuState = SUCCESS;
+				break;
+			case CREDIT:
+				reloding(window);
+
+				_MenuState = BASE;
+				_PreviousMenuState = CREDIT;
+				break;
+			case QUIT:
+				// nothing there
+				break;
+			default:
+				break;
+			}
+
 		}
 	}
 
+	// Methode that require event
 	switch (_MenuState)
 	{
 	case BASE:
@@ -83,6 +128,7 @@ void Menu::handleEvent(const sf::Event& event, Window_s &window, Music &music)
 		break;
 	case SETTINGS:
 		_settings.handleMouseDrag(event, window);
+		_settings.handleButtonClick(event, window, music);
 		break;
 	case HELP:
 		break;
@@ -99,13 +145,9 @@ void Menu::handleEvent(const sf::Event& event, Window_s &window, Music &music)
 }
 
 void Menu::handleButtonClick(const sf::Event& event, Window_s& window, Music &music) {
-	if (event.type != sf::Event::MouseButtonPressed) {
+	if (event.type != sf::Event::MouseButtonPressed || event.mouseButton.button != sf::Mouse::Left) {
 		return;
-		if (event.mouseButton.button != sf::Mouse::Left) {
-			return;
-		}
 	}
-
 
 
 	sf::Vector2i mousePos = sf::Mouse::getPosition(window.getWindow());
@@ -115,7 +157,6 @@ void Menu::handleButtonClick(const sf::Event& event, Window_s& window, Music &mu
 		if (mapButton[i].getGlobalBounds().contains(mousePosF)) {
 			std::string buttonText = buttonTexts[i].getString(); // Get the text of the button
 
-
 			if (buttonText == "PLAY") {
 				resetValues(window);
 				setMenuState(PLAY);
@@ -123,9 +164,8 @@ void Menu::handleButtonClick(const sf::Event& event, Window_s& window, Music &mu
 			else if (buttonText == "SETTINGS") {
 				resetValues(window);
 
-				_settings.resetValues(window); // Detruit tout ce quil y a dans les layers et toute les valeurs (les valeurs seront remplacer par les loaders)
-				_settings.loadSettings(window); // Load les bouttons de settings
-				_settings.draw(window); // Draw les boutons chargé
+				_settings.reloding(window);
+				// or reload range
 				_settings.drawSliders(window); // Draw les bouton chargé dans Slider.cpp (creer dans le constructeur et modulé dans HandleEvent) 
 				setMenuState(SETTINGS); // Set state for handleEvent
 			}
@@ -139,6 +179,8 @@ void Menu::handleButtonClick(const sf::Event& event, Window_s& window, Music &mu
 			}
 			else if (buttonText == "CREDIT") {
 				resetValues(window);
+				_credit.reloding(window);
+
 				setMenuState(CREDIT);
 			}
 			else if (buttonText == "QUIT") {

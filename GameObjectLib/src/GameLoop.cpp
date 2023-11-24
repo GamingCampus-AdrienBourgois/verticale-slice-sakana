@@ -1,14 +1,14 @@
 #include "GameLoop.hpp"
 #include <iostream>
 
-GameLoop::GameLoop() : _window(), _music(), _menu(_window, _music)
+GameLoop::GameLoop() : _window(static_cast<std::string>("game")), _music(), _menu(_window, _music)
 {
     // Set level to first
     level = 0;
     
 
     // Load menu
-    _menu.loadMenuButton(_window);
+    _menu.load(_window);
     // Base Menu draw
     _menu.draw(_window);
 
@@ -56,7 +56,7 @@ void GameLoop::processEvents(float deltaTime, sf::View cameraView)
         case sf::Event::MouseButtonPressed:
             break;
         case sf::Event::Resized:
-            sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
+            sf::FloatRect visibleArea(0, 0, static_cast<float>(event.size.width), static_cast<float>(event.size.height));
             _window.getWindow().setView(sf::View(visibleArea));
         }
         
@@ -83,7 +83,7 @@ void GameLoop::nextLevel()
 
 void GameLoop::update(float deltaTime) 
 {
-    _menu.update(_window, _music);
+    _menu.update(_window, _music, deltaTime);
 }
 
 void GameLoop::render() 

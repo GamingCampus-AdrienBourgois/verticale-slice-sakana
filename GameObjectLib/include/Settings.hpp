@@ -13,13 +13,18 @@ public:
     ~Settings() = default;
 
     void valueChanger(Window_s& window, Music& music);
-    void loadSettings(Window_s& window);
-
+    void load(Window_s& window);
     void drawSliders(Window_s& window);
     void handleMouseDrag(const sf::Event& event, Window_s& window);
-
+    void handleButtonClick(const sf::Event& event, Window_s& window, Music& music);
 
 private:
+    sf::Vector2u _resolution;
+    bool resolutionChanged;
+
+    bool isVsync;
+    bool vsyncChanged;
+
     Slider volumeSlider;
     Slider fpsSlider;
 };

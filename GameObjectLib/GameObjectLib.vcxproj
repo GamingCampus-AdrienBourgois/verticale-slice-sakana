@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\Credit.hpp" />
     <ClInclude Include="include\GameLoop.hpp" />
     <ClInclude Include="include\Window.hpp" />
     <ClInclude Include="include\Menu.hpp" />
@@ -28,7 +29,8 @@
     <ClInclude Include="include\Slider.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Slider.cpp" />
+    <ClCompile Include="src\Credit.cpp" />
+    <ClCompile Include="src\Slider.cpp" />
     <ClCompile Include="src\MenuObject.cpp" />
     <ClCompile Include="src\Menu.cpp" />
     <ClCompile Include="src\Settings.cpp" />

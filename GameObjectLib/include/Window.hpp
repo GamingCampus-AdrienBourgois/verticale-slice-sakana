@@ -5,7 +5,7 @@
 
 class Window_s {
 public:
-    Window_s(unsigned int width = 1600, unsigned int height = 1000, const std::string& title = "SFML Window");
+    Window_s(const std::string& title);
     ~Window_s() = default;
 
     // Layers functions
@@ -22,6 +22,7 @@ public:
     void display();
 
 
+    const std::string &getTitle() const;
     void setFps(unsigned int fps);
     const float getFps() const;
 
@@ -36,4 +37,5 @@ private:
     // 6 random text in menu (destroyed after switch betwin states)
     sf::RenderWindow window;
     unsigned int _fps;
+    std::string _title;
 };

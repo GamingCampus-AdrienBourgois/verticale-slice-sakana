@@ -1,7 +1,7 @@
 #include "Window.hpp"
 
-Window_s::Window_s(unsigned int width, unsigned int height, const std::string& title) 
-    : window(sf::VideoMode(width, height), title), _fps(60) {
+Window_s::Window_s(const std::string& title) 
+    : window(sf::VideoMode(1600, 900), title), _fps(60), _title(title) {
     window.setFramerateLimit(_fps);
 }
 
@@ -37,6 +37,11 @@ void Window_s::setFps(unsigned int fps) {
 const float Window_s::getFps() const {
     return _fps;
 }
+
+const std::string& Window_s::getTitle() const {
+    return _title;
+}
+
 
 void Window_s::clearLayer(int layer) {
     if (_renderLayers.find(layer) != _renderLayers.end()) {

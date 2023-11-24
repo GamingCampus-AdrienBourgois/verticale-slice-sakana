@@ -12,7 +12,7 @@ public:
     bool handleMouseDrag(const sf::Event& event, sf::RenderWindow& window);
     float getValue() const;
     const sf::RectangleShape getBar() const;
-
+    const bool getisDragging() const;
 private:
     sf::RectangleShape bar; // The bar of the slider
     sf::RectangleShape handle; // The draggable handle of the slider

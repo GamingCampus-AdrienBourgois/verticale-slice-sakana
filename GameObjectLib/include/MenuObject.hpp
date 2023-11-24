@@ -19,6 +19,9 @@ public:
     virtual sf::Text setTextOnButton(const std::string& text, sf::RectangleShape& button, unsigned int size);
     virtual void changeOnMouse(Window_s& window);
     virtual sf::Text createText(const std::string& text, const sf::Vector2f& position, unsigned int size);
+    virtual void reloding(Window_s& window);
+
+    virtual void load(Window_s& window) = 0;
 
     enum MenuStates {
         BASE,
@@ -30,9 +33,6 @@ public:
         QUIT
     };
 
-    virtual const MenuStates getMenuState() const;
-    virtual void setMenuState(MenuStates MenuState);
-
 protected:
     sf::Font _fontButton;
     sf::Font _fontAny;
@@ -43,6 +43,5 @@ protected:
 
     std::vector<sf::Text> basicTexts; // texts for anything
 
-    MenuStates _MenuState;
 
 };
