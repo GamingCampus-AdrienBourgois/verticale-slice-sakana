@@ -25,8 +25,10 @@
     <ClInclude Include="include\Music.hpp" />
     <ClInclude Include="include\Settings.hpp" />
     <ClInclude Include="include\MenuObject.hpp" />
+    <ClInclude Include="include\Slider.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Slider.cpp" />
     <ClCompile Include="src\MenuObject.cpp" />
     <ClCompile Include="src\Menu.cpp" />
     <ClCompile Include="src\Settings.cpp" />

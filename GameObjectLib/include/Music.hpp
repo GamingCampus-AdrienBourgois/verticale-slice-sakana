@@ -7,15 +7,16 @@
 
 class Music {
     std::vector<std::unique_ptr<sf::Music>> _music;
-    float volume;
+    float _volume;
 public:
     Music();
     ~Music();
 
     void LoadMusic();
     void playMusic(int level);
-    void setVolume(int level, float volume);
     void stopMusic(int level);
-    void setAllVolume(float volume);
     const std::vector<std::unique_ptr<sf::Music>>& getMusic() const;
+
+    void setVolume(float volume);
+    const float getVolume() const;
 };

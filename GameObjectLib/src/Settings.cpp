@@ -1,56 +1,62 @@
 #include "Settings.hpp"
+#include <iostream>
 
-Settings::Settings() : _volume(100.0f), _fpsLimit(60), _resolution(1920, 1080)//, _menu() 
+
+Settings::Settings(Window_s& window, Music& music) : 
+volumeSlider(200, 100, 200, 0, 100, music.getVolume()), // param : pos x, pos y, longueur, valeur min, valeur max, valeur actuelle
+fpsSlider(200, 300, 200, 30, 244, window.getFps())
 {
-    _isMenu = true;
     _MenuState = SETTINGS;
     buttonCount = 0;
-    _font.loadFromFile("asset/font/Beyonders.ttf");
+    _fontButton.loadFromFile("asset/font/Beyonders.ttf");
+	_fontAny.loadFromFile("asset/font/Dragon Slayer.ttf");
 }
 
 void Settings::loadSettings(Window_s& window) {
-	sf::Vector2f buttonSize(200, 50);
-	std::vector<std::string> states = { "VOLUME", "RESOLTUION", "FPS LIMIT" };
+	// Slider creation for fps and volume
+	sf::FloatRect boundfps = fpsSlider.getBar().getLocalBounds();
+	sf::FloatRect boundvolume = volumeSlider.getBar().getLocalBounds();
+	// Text for resolutions button
+	sf::Text resolutionCaller = createText("Resolution :", sf::Vector2f(200, 450 - (boundvolume.height * 5)), 20);
+	// Text for sliders
+	sf::Text fpsCaller = createText("Frame rate :", sf::Vector2f(fpsSlider.getBar().getPosition().x , fpsSlider.getBar().getPosition().y - (boundfps.height * 5)), 20);
+	sf::Text volumeCaller = createText("Volume rate :", sf::Vector2f(volumeSlider.getBar().getPosition().x, volumeSlider.getBar().getPosition().y - (boundvolume.height * 5)), 20);
+
+	basicTexts.push_back(fpsCaller);
+	basicTexts.push_back(volumeCaller);
+	basicTexts.push_back(resolutionCaller);
+
+	// Buttons for resolution
+	sf::Vector2f buttonSize(180, 30);
+	std::vector<std::string> states = { "Full screen", "1920 x 1080", "1600 x 900", "1536 x 864", "1440 x 900", "1366 x 768", "1280 x 720" };
 	buttonCount = static_cast<unsigned int>(states.size());
 
-
-
-	// Calcule de mise en page dynamique des boutons
-	float spacing = 50;
-	float centerX = window.getWindow().getSize().x / 2.0f;
-	float firstButtonY = (window.getWindow().getSize().y - (buttonSize.y * buttonCount + spacing * (buttonCount - 1))) / 2.0f; // Dynamique set of buttons
+	float spacing = 175;
 
 	for (unsigned int i = 0; i < buttonCount; ++i) {
 		sf::RectangleShape button(buttonSize);
 		button.setFillColor(sf::Color(255, 0, 0)); // Set RGB color
 		button.setOrigin(buttonSize.x / 2.0f, buttonSize.y / 2.0f);
-		button.setPosition(centerX, firstButtonY + i * (buttonSize.y + spacing));
-		mapButton[SETTINGS].push_back(button);
-		buttonTexts.push_back(setTextOnButton(states[i], mapButton[SETTINGS][i]));
+		button.setPosition(200 + i * (buttonSize.y + spacing), 450);
+		mapButton.push_back(button);
+		buttonTexts.push_back(setTextOnButton(states[i], mapButton[i], 15));
 	}
-
 }
 
-void Settings::setVolume(float volume) {
-    _volume = volume;
+void Settings::drawSliders(Window_s& window) {
+    volumeSlider.draw(window);
+    fpsSlider.draw(window);
 }
 
-float Settings::getVolume() const {
-    return _volume;
+
+
+void Settings::handleMouseDrag(const sf::Event& event, Window_s& window) {
+    volumeSlider.handleMouseDrag(event, window.getWindow());
+    fpsSlider.handleMouseDrag(event, window.getWindow());
 }
 
-void Settings::setFpsLimit(unsigned int fps) {
-    _fpsLimit = fps;
-}
+void Settings::valueChanger(Window_s& window, Music& music) {
+	window.setFps(fpsSlider.getValue());
+	music.setVolume(volumeSlider.getValue());
 
-unsigned int Settings::getFpsLimit() const {
-    return _fpsLimit;
-}
-
-void Settings::setResolution(const sf::Vector2u& resolution) {
-    _resolution = resolution;
-}
-
-sf::Vector2u Settings::getResolution() const {
-    return _resolution;
 }

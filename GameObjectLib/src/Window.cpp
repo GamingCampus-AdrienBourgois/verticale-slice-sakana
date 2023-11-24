@@ -1,8 +1,8 @@
 #include "Window.hpp"
 
 Window_s::Window_s(unsigned int width, unsigned int height, const std::string& title) 
-    : window(sf::VideoMode(width, height), title) {
-    window.setFramerateLimit(60);
+    : window(sf::VideoMode(width, height), title), _fps(60) {
+    window.setFramerateLimit(_fps);
 }
 
 bool Window_s::isOpen() const {
@@ -27,6 +27,15 @@ bool Window_s::pollEvent(sf::Event& event) {
 
 sf::RenderWindow& Window_s::getWindow() {
     return window;
+}
+
+void Window_s::setFps(unsigned int fps) {
+    window.setFramerateLimit(fps);
+    _fps = fps;
+}
+
+const float Window_s::getFps() const {
+    return _fps;
 }
 
 void Window_s::clearLayer(int layer) {

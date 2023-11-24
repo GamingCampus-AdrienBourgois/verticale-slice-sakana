@@ -1,6 +1,19 @@
-﻿  MenuObject.cpp
+﻿  Slider.cpp
   Menu.cpp
   Settings.cpp
+C:\Users\cacag\OneDrive\Desktop\AllProjects\MENU\GameObjectLib\src\Settings.cpp(59,34): warning C4244: 'argument' : conversion de 'float' en 'unsigned int', perte possible de données
   GameLoop.cpp
+C:\Users\cacag\OneDrive\Desktop\AllProjects\MENU\GameObjectLib\src\GameLoop.cpp(59,73): warning C4244: 'argument' : conversion de 'unsigned int' en 'T', perte possible de données
+          with
+          [
+              T=float
+          ]
+C:\Users\cacag\OneDrive\Desktop\AllProjects\MENU\GameObjectLib\src\GameLoop.cpp(59,55): warning C4244: 'argument' : conversion de 'unsigned int' en 'T', perte possible de données
+          with
+          [
+              T=float
+          ]
+  Window.cpp
+C:\Users\cacag\OneDrive\Desktop\AllProjects\MENU\GameObjectLib\src\Window.cpp(38,12): warning C4244: 'return' : conversion de 'const unsigned int' en 'const float', perte possible de données
   Génération de code en cours...
   GameObjectLib.vcxproj -> C:\Users\cacag\OneDrive\Desktop\AllProjects\MENU\x64\Debug\GameObjectLib.lib

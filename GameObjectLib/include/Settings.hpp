@@ -4,29 +4,22 @@
 
 #include "Window.hpp"
 #include "MenuObject.hpp"
+#include "Slider.hpp"
+#include "Music.hpp"
 
 class Settings : public MenuObject {
 public:
-    Settings();
+    Settings(Window_s& window, Music& music);
     ~Settings() = default;
 
-    void setVolume(float volume);
-    float getVolume() const;
-
-    void setFpsLimit(unsigned int fps);
-    unsigned int getFpsLimit() const;
-
- 
-    void setResolution(const sf::Vector2u& resolution);
-    sf::Vector2u getResolution() const;
-
-
-
+    void valueChanger(Window_s& window, Music& music);
     void loadSettings(Window_s& window);
 
-private:
+    void drawSliders(Window_s& window);
+    void handleMouseDrag(const sf::Event& event, Window_s& window);
 
-    float _volume;
-    unsigned int _fpsLimit;
-    sf::Vector2u _resolution;
+
+private:
+    Slider volumeSlider;
+    Slider fpsSlider;
 };

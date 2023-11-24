@@ -1,7 +1,7 @@
 #include "GameLoop.hpp"
 #include <iostream>
 
-GameLoop::GameLoop() : _window(), _menu(), _music()
+GameLoop::GameLoop() : _window(), _music(), _menu(_window, _music)
 {
     // Set level to first
     level = 0;
@@ -52,22 +52,15 @@ void GameLoop::processEvents(float deltaTime, sf::View cameraView)
             if (event.key.code == sf::Keyboard::Escape) {
                 _window.close();
             }
-            if (event.key.code == sf::Keyboard::Return) {
-                _menu.resetValues(_window);
-                _menu.loadMenuButton(_window);
-                _menu.draw(_window);
-            }
             break;
         case sf::Event::MouseButtonPressed:
-            if (event.mouseButton.button == sf::Mouse::Left) {
-                _menu.handleButtonClick(_window, _music);
-            }
             break;
         case sf::Event::Resized:
-            _menu.resetValues(_window);
-            _menu.loadMenuButton(_window);
-            _menu.draw(_window);
+            sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
+            _window.getWindow().setView(sf::View(visibleArea));
         }
+        
+        _menu.handleEvent(event, _window, _music);
     }
 }
 
@@ -90,15 +83,12 @@ void GameLoop::nextLevel()
 
 void GameLoop::update(float deltaTime) 
 {
-    // Render color on buttons
-    _menu.update(_window);
+    _menu.update(_window, _music);
 }
 
 void GameLoop::render() 
 {
     _window.clear();
-
-
     _window.renderLayers();
     _window.display();
 }

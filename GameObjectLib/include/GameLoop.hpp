@@ -6,6 +6,7 @@
 #include "Menu.hpp"
 #include "Window.hpp"
 #include "Music.hpp"
+#include "MenuObject.hpp"
 
 class GameLoop {
 public:
@@ -20,9 +21,13 @@ public:
 private:
     unsigned int level;
 
+ 
+    // Ordre de declaration importante car si _window et _music sont pas declare avant _menu alors 
+    // il ne seront pas initilalié lorsquon les met en parametre de _menu
+    Window_s _window;
     Music _music;
     Menu _menu;
-    Window_s _window;
+
 
 
 };
