@@ -1,26 +1,36 @@
 #include "Settings.hpp"
-#include <iostream>
 
-
-Settings::Settings(Window_s& window, Music& music) :
-_resolution(window.getWindow().getSize()), resolutionChanged(false), isVsync(false), vsyncChanged(false),
-volumeSlider(200, 100, 200, 0, 100, music.getVolume()), // param : pos x, pos y, longueur, valeur min, valeur max, valeur actuelle
-fpsSlider(200, 300, 200, 30, 244, window.getFps())
+Settings::Settings(Window_s& window, Music& music)
+	: _resolution(window.getWindow().getSize()),
+	resolutionChanged(false),
+	isVsync(false),
+	vsyncChanged(false),
+	settingsFile("Save/saveSettings.txt")
 {
-    buttonCount = 0;
-    _fontButton.loadFromFile("asset/font/Beyonders.ttf");
+
+	// Appliquer tous les paramètres modifiés
+	valueSetter(window, music);
+
+	// Initialisez maintenant les sliders avec les valeurs potentiellement mises à jour
+	volumeSlider = std::make_unique<Slider>(200, 100, 200, 0, 100, music.getVolume());
+	fpsSlider = std::make_unique<Slider>(200, 300, 200, 30, 244, window.getFps());
+
+
+	buttonCount = 0;
+	_fontButton.loadFromFile("asset/font/Beyonders.ttf");
 	_fontAny.loadFromFile("asset/font/Dragon Slayer.ttf");
 }
 
+
 void Settings::load(Window_s& window) {
 	// Slider creation for fps and volume
-	sf::FloatRect boundfps = fpsSlider.getBar().getLocalBounds();
-	sf::FloatRect boundvolume = volumeSlider.getBar().getLocalBounds();
+	sf::FloatRect boundfps = fpsSlider->getBar().getLocalBounds();
+	sf::FloatRect boundvolume = volumeSlider->getBar().getLocalBounds();
 	// Text for resolutions button
 	sf::Text resolutionCaller = createText("Resolution :", sf::Vector2f(200, 400), 20);
 	// Text for sliders
-	sf::Text fpsCaller = createText("Frame rate :", sf::Vector2f(fpsSlider.getBar().getPosition().x , fpsSlider.getBar().getPosition().y - (boundfps.height * 5)), 20);
-	sf::Text volumeCaller = createText("Volume rate :", sf::Vector2f(volumeSlider.getBar().getPosition().x, volumeSlider.getBar().getPosition().y - (boundvolume.height * 5)), 20);
+	sf::Text fpsCaller = createText("Frame rate :", sf::Vector2f(fpsSlider->getBar().getPosition().x , fpsSlider->getBar().getPosition().y - (boundfps.height * 5)), 20);
+	sf::Text volumeCaller = createText("Volume rate :", sf::Vector2f(volumeSlider->getBar().getPosition().x, volumeSlider->getBar().getPosition().y - (boundvolume.height * 5)), 20);
 	// Text for vsync
 	sf::Text vsyncCaller = createText("Vsync :", sf::Vector2f(175, 525), 20);
 
@@ -109,58 +119,165 @@ void Settings::handleButtonClick(const sf::Event& event, Window_s& window, Music
 			}
 			break;
 		}
-		std::cout << isVsync;
 	}
 }
 
 void Settings::drawSliders(Window_s& window) {
-    volumeSlider.draw(window);
-    fpsSlider.draw(window);
+    volumeSlider->draw(window);
+    fpsSlider->draw(window);
 }
 
 void Settings::handleMouseDrag(const sf::Event& event, Window_s& window) {
-    volumeSlider.handleMouseDrag(event, window.getWindow());
-    fpsSlider.handleMouseDrag(event, window.getWindow());
+    volumeSlider->handleMouseDrag(event, window.getWindow());
+    fpsSlider->handleMouseDrag(event, window.getWindow());
 }
 
 void Settings::valueChanger(Window_s& window, Music& music) {
-	// Fps 
-	if (fpsSlider.getisDragging()) {
-		window.setFps(static_cast<unsigned int>(fpsSlider.getValue()));
+	// Fps
+	if (fpsSlider->getisDragging()) {
+		unsigned int fpsValue = static_cast<unsigned int>(fpsSlider->getValue());
+		window.setFps(fpsValue);
+		saveSettingsValue("FramePerSecond", settingsFile, std::to_string(fpsValue));
 	}
+
 	// Volume
-	if (volumeSlider.getisDragging()) {
-		music.setVolume(volumeSlider.getValue());
+	if (volumeSlider->getisDragging()) {
+		float volumeValue = volumeSlider->getValue();
+		music.setVolume(volumeValue);
+		saveSettingsValue("Volume", settingsFile, std::to_string(volumeValue));
 	}
 
 	// Resolution
 	if (resolutionChanged) {
 		sf::RenderWindow& rw = window.getWindow();
+		std::string resolutionValue;
 		if (_resolution == sf::Vector2u(0, 0)) {
 			rw.create(sf::VideoMode::getDesktopMode(), window.getTitle(), sf::Style::Fullscreen);
+			resolutionValue = "0x0"; // Full screen
 		}
 		else {
 			rw.create(sf::VideoMode(_resolution.x, _resolution.y), window.getTitle(), sf::Style::Default);
+			resolutionValue = std::to_string(_resolution.x) + "x" + std::to_string(_resolution.y);
 		}
-		rw.setPosition(sf::Vector2i(sf::VideoMode::getDesktopMode().width / 2 - rw.getSize().x / 2, sf::VideoMode::getDesktopMode().height / 2 - rw.getSize().y / 2));
+		rw.setPosition(sf::Vector2i(sf::VideoMode::getDesktopMode().width / 2 - rw.getSize().x / 2,
+			sf::VideoMode::getDesktopMode().height / 2 - rw.getSize().y / 2));
+		saveSettingsValue("Resolution", settingsFile, resolutionValue);
 		resolutionChanged = false;
 	}
 
 	// Vsync
 	if (vsyncChanged) {
-		std::string Off = "Off";
-		std::string On = "On";
+		std::string vsyncValue = isVsync ? "On" : "Off";
 		for (int i = 0; i < buttonTexts.size(); ++i) {
-			if (buttonTexts[i].getString() == Off) {
-				buttonTexts[i].setString(On);
-				break;
-			}
-			if (buttonTexts[i].getString() == On) {
-				buttonTexts[i].setString(Off);
+			if (buttonTexts[i].getString() == "Off" || buttonTexts[i].getString() == "On") {
+				buttonTexts[i].setString(vsyncValue);
 				break;
 			}
 		}
 		window.getWindow().setVerticalSyncEnabled(isVsync);
+		saveSettingsValue("Vsync", settingsFile, vsyncValue);
 		vsyncChanged = false;
 	}
+}
+
+void Settings::valueSetter(Window_s& window, Music& music) {
+	std::string fpsStr = getParamFromString("FramePerSecond", settingsFile);
+	std::string volumeStr = getParamFromString("Volume", settingsFile);
+	std::string resolutionStr = getParamFromString("Resolution", settingsFile);
+	std::string vsyncStr = getParamFromString("Vsync", settingsFile);
+
+	try {
+		if (!fpsStr.empty()) {
+			unsigned int fps = static_cast<unsigned int>(std::stoi(fpsStr));
+			window.setFps(fps);
+		}
+
+		if (!volumeStr.empty()) {
+			float volume = std::stof(volumeStr);
+			music.setVolume(volume);
+		}
+
+		if (!resolutionStr.empty()) {
+			size_t xIndex = resolutionStr.find('x');
+			if (xIndex != std::string::npos) {
+				unsigned int width = std::stoi(resolutionStr.substr(0, xIndex));
+				unsigned int height = std::stoi(resolutionStr.substr(xIndex + 1));
+				_resolution = sf::Vector2u(width, height);
+				// set the screen res
+				sf::RenderWindow& rw = window.getWindow();
+				if (_resolution == sf::Vector2u(0, 0)) {
+					rw.create(sf::VideoMode::getDesktopMode(), window.getTitle(), sf::Style::Fullscreen);
+				}
+				else {
+					rw.create(sf::VideoMode(_resolution.x, _resolution.y), window.getTitle(), sf::Style::Default);
+				}
+				rw.setPosition(sf::Vector2i(sf::VideoMode::getDesktopMode().width / 2 - rw.getSize().x / 2, sf::VideoMode::getDesktopMode().height / 2 - rw.getSize().y / 2));
+			}
+		}
+
+		if (!vsyncStr.empty()) {
+			isVsync = (vsyncStr == "On");
+			window.getWindow().setVerticalSyncEnabled(isVsync);
+		}
+	}
+	catch (const std::exception& e) {
+		std::cerr << "Erreur lors de la conversion des paramètres: " << e.what() << std::endl;
+	}
+}
+
+
+std::string Settings::getParamFromString(std::string param, const std::string& file) {
+	std::fstream fileStream(file);
+	std::string line;
+	std::string emptyStr("");
+
+	if (!fileStream) {
+		std::cerr << "Can't open input file" << std::endl;
+		return emptyStr;
+	}
+	while (std::getline(fileStream, line)) {
+		if (line.find(param) != line.npos) {
+
+			size_t pos = line.find(param + "=");
+			if (pos != std::string::npos) {
+				return line.substr(pos + param.length() + 1);
+			}
+
+		}
+	}
+	return emptyStr;
+}
+
+void Settings::saveSettingsValue(const std::string& param, const std::string& file, const std::string& newValue) {
+	std::ifstream fileStream(file);
+	std::string line;
+	std::vector<std::string> lines;
+	bool found = false;
+
+	if (!fileStream) {
+		std::cerr << "Cannot open file for reading: " << file << std::endl;
+		return;
+	}
+	while (std::getline(fileStream, line)) {
+		size_t pos = line.find(param + "=");
+		if (pos != std::string::npos) {
+			line = param + "=" + newValue; // Replace the entire line
+			found = true;
+		}
+		lines.push_back(line);
+	}
+	fileStream.close();
+	if (!found)
+		std::cerr << "Parameter not found in file: " << param << std::endl;
+
+	// Rewrite the file
+	std::ofstream outFile(file);
+	for (const auto& outLine : lines) {
+		outFile << outLine << std::endl;
+	}
+	return;
+}
+
+const std::string Settings::getSettingsFile() const {
+	return settingsFile;
 }

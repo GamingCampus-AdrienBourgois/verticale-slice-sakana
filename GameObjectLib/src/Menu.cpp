@@ -1,7 +1,8 @@
 #include "Menu.hpp"
 
-Menu::Menu(Window_s& window, Music& music) : _settings(window, music), _credit()
+Menu::Menu(Window_s& window, Music& music) : _settings(window, music), _credit(), _help()
 {
+	// set values
 	_isMenu = true;
 	_MenuState = BASE;
 	_PreviousMenuState = BASE;
@@ -46,6 +47,7 @@ void Menu::update(Window_s& window, Music& music, float deltaTime) {
 		_settings.changeOnMouse(window);
 		break;
 	case HELP:
+		// none
 		break;
 	case SUCCESS:
 		break;
@@ -53,6 +55,7 @@ void Menu::update(Window_s& window, Music& music, float deltaTime) {
 		_credit.scroller(deltaTime, music);
 		break;
 	case QUIT:
+		// none
 		break;
 	default:
 		break;
@@ -104,6 +107,9 @@ void Menu::handleEvent(const sf::Event& event, Window_s &window, Music &music)
 				break;
 			case CREDIT:
 				reloding(window);
+
+				music.stopMusic(MCREDIT);
+				music.playMusic(MBASE);
 
 				_MenuState = BASE;
 				_PreviousMenuState = CREDIT;
@@ -162,7 +168,7 @@ void Menu::handleButtonClick(const sf::Event& event, Window_s& window, Music &mu
 				setMenuState(PLAY);
 			}
 			else if (buttonText == "SETTINGS") {
-				resetValues(window);
+				resetValues(window); // reset value for menu only but destroy every layers for drawing
 
 				_settings.reloding(window);
 				// or reload range
@@ -171,6 +177,7 @@ void Menu::handleButtonClick(const sf::Event& event, Window_s& window, Music &mu
 			}
 			else if (buttonText == "HELP") {
 				resetValues(window);
+				_help.reloding(window);
 				setMenuState(HELP);
 			}
 			else if (buttonText == "SUCCESS") {
@@ -179,8 +186,10 @@ void Menu::handleButtonClick(const sf::Event& event, Window_s& window, Music &mu
 			}
 			else if (buttonText == "CREDIT") {
 				resetValues(window);
-				_credit.reloding(window);
 
+				music.stopMusic(MBASE);
+				music.playMusic(MCREDIT);
+				_credit.reloding(window);
 				setMenuState(CREDIT);
 			}
 			else if (buttonText == "QUIT") {

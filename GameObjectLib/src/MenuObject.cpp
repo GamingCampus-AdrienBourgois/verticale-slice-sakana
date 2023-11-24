@@ -3,28 +3,26 @@
 
 void MenuObject::draw(Window_s& window) {
     for (unsigned int i = 0; i < buttonCount; i++) {
-        window.addToRenderLayer(2, buttonTexts[i]); // Add text on buttons
-        window.addToRenderLayer(1, mapButton[i]); // Add buttons
+        window.addToRenderLayer(static_cast<int>(Layer::TEXTBUTTON), buttonTexts[i]); // Add text on buttons
+        window.addToRenderLayer(static_cast<int>(Layer::MENUB), mapButton[i]); // Add buttons
     }
     for (size_t i = 0; i < basicTexts.size(); i++) {
-        window.addToRenderLayer(6, basicTexts[i]);
+        window.addToRenderLayer(static_cast<int>(Layer::TEXTRANDOM), basicTexts[i]);
     }
 }
 
 void MenuObject::resetValues(Window_s& window) {
     buttonTexts.clear();
     mapButton.clear();
+    basicTexts.clear();
     buttonCount = 0;
-    window.clearLayer(1);
-    window.clearLayer(2);
-    window.clearLayer(3);
-    window.clearLayer(4);
-    window.clearLayer(5);
-    window.clearLayer(6);
-    window.clearLayer(7);
-    window.clearLayer(8);
-    window.clearLayer(9);
-    window.clearLayer(10);
+    window.clearLayer(static_cast<int>(Layer::MENUB));
+    window.clearLayer(static_cast<int>(Layer::TEXTBUTTON));
+    window.clearLayer(static_cast<int>(Layer::BAR));
+    window.clearLayer(static_cast<int>(Layer::HANDLE));
+    window.clearLayer(static_cast<int>(Layer::TEXTSLIDER));
+    window.clearLayer(static_cast<int>(Layer::TEXTRANDOM));
+
 }
 
 sf::Text MenuObject::setTextOnButton(const std::string& text, sf::RectangleShape& button, unsigned int size) {
@@ -68,6 +66,6 @@ sf::Text MenuObject::createText(const std::string& text, const sf::Vector2f& pos
 
 void MenuObject::reloding(Window_s& window) {
     resetValues(window); // Detruit tout ce quil y a dans les layers et toute les valeurs (les valeurs seront remplacer par les loaders)
-    load(window); // Load les bouttons de settings
+    load(window); // Load les bouttons
     draw(window); // Draw les boutons chargé
 }

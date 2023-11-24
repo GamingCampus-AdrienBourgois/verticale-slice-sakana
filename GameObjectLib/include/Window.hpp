@@ -28,7 +28,7 @@ public:
 
 private:
     std::map<int, std::vector<const sf::Drawable*>> _renderLayers; 
-    // Layer assigment : 
+    // Layer assigment (menu): 
     // 1 menu buttons (destroyed after switch betwin states)
     // 2 text for buttons (destroyed after switch betwin states)
     // 3 bar for settings slider (destroyed after switch betwin states)

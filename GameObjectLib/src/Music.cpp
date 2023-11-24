@@ -37,7 +37,7 @@ void Music::LoadMusic()
 
 void Music::playMusic(int level) {
     if (level >= 0 && level < _music.size()) {
-        _music[level]->setVolume(100);
+        _music[level]->setVolume(_volume);
         _music[level]->setLoop(true);
         _music[level]->play();
     }

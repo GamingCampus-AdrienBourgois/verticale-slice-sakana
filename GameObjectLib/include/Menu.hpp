@@ -9,6 +9,7 @@
 #include "Music.hpp"
 #include "MenuObject.hpp"
 #include "Settings.hpp"
+#include "Help.hpp"
 #include "Credit.hpp"
 
 //Cette class est le menu de base elle prend les instaces de class de chauqun de ces states.
@@ -16,7 +17,7 @@ class Menu : public MenuObject
 {
     Settings _settings;
     Credit _credit;
- 
+    Help _help;
 
     // Les autres variables utiles sont dans MenuObject en access protected
 

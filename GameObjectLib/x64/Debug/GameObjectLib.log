@@ -1,11 +1,4 @@
-﻿  Credit.cpp
-C:\Users\cacag\OneDrive\Desktop\AllProjects\MENU\GameObjectLib\src\Credit.cpp(35,97): warning C4244: 'argument' : conversion de 'T' en 'T', perte possible de données
-          with
-          [
-              T=unsigned int
-          ]
-          and
-          [
-              T=float
-          ]
+﻿  Menu.cpp
+  MenuObject.cpp
+  Génération de code en cours...
   GameObjectLib.vcxproj -> C:\Users\cacag\OneDrive\Desktop\AllProjects\MENU\x64\Debug\GameObjectLib.lib

@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\Help.hpp" />
     <ClInclude Include="include\Credit.hpp" />
     <ClInclude Include="include\GameLoop.hpp" />
     <ClInclude Include="include\Window.hpp" />
@@ -27,8 +28,10 @@
     <ClInclude Include="include\Settings.hpp" />
     <ClInclude Include="include\MenuObject.hpp" />
     <ClInclude Include="include\Slider.hpp" />
+    <ClInclude Include="include\Success.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Help.cpp" />
     <ClCompile Include="src\Credit.cpp" />
     <ClCompile Include="src\Slider.cpp" />
     <ClCompile Include="src\MenuObject.cpp" />

@@ -24,9 +24,9 @@ Slider::Slider(float x, float y, float width, float min, float max, float curren
 }
 
 void Slider::draw(Window_s& window) {
-    window.addToRenderLayer(3, bar);
-    window.addToRenderLayer(4, handle);
-    window.addToRenderLayer(5, valueText);
+    window.addToRenderLayer(static_cast<int>(Layer::BAR), bar);
+    window.addToRenderLayer(static_cast<int>(Layer::HANDLE), handle);
+    window.addToRenderLayer(static_cast<int>(Layer::TEXTSLIDER), valueText);
 }
 
 bool Slider::handleMouseDrag(const sf::Event& event, sf::RenderWindow& window) {
@@ -64,6 +64,10 @@ bool Slider::handleMouseDrag(const sf::Event& event, sf::RenderWindow& window) {
 float Slider::getValue() const {
     return value;
 }
+void Slider::setValue(float _value) {
+    value = _value;
+}
+
 const sf::RectangleShape Slider::getBar() const {
     return bar;
 }

@@ -1,0 +1,4 @@
+FramePerSecond=87
+Volume=100.000000
+Resolution=1280x720
+Vsync=On

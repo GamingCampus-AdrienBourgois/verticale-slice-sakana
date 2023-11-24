@@ -8,6 +8,22 @@
 
 class Window_s; // Déclaration anticipée
 
+enum class Layer {
+    MENUB = 1,
+    TEXTBUTTON,
+    BAR, // for slider
+    HANDLE, // for slider
+    TEXTSLIDER, // for slider
+    TEXTRANDOM
+};
+// 1 menu buttons (destroyed after switch betwin states)
+// 2 text for buttons (destroyed after switch betwin states)
+// 3 bar for settings slider (destroyed after switch betwin states)
+// 4 handle for settings slider (destroyed after switch betwin states)
+// 5 text for bar for settings slider (destroyed after switch betwin states)
+// 6 random text in menu (destroyed after switch betwin states)
+
+
 // Classe de base abstraite pour les objets de menu
 // Elle sert pour la creation des boutons avec draw et setTextOnButton ainsi que la reinitialisation des états avec resetValues
 class MenuObject {
@@ -23,7 +39,8 @@ public:
 
     virtual void load(Window_s& window) = 0;
 
-    enum MenuStates {
+    enum MenuStates 
+    {
         BASE,
         PLAY,
         SETTINGS,
@@ -31,6 +48,11 @@ public:
         SUCCESS,
         CREDIT,
         QUIT
+    };
+    enum MusicStates
+    {
+        MBASE,
+        MCREDIT,
     };
 
 protected:
