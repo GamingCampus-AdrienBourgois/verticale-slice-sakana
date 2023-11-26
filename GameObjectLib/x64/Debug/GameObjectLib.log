@@ -1,4 +1,23 @@
-﻿  Menu.cpp
-  MenuObject.cpp
-  Génération de code en cours...
+﻿  Success.cpp
+C:\Users\cacag\OneDrive\Desktop\AllProjects\MENU\GameObjectLib\src\Success.cpp(47,95): warning C4244: 'argument' : conversion de 'T' en 'T', perte possible de données
+          with
+          [
+              T=unsigned int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\cacag\OneDrive\Desktop\AllProjects\MENU\GameObjectLib\src\Success.cpp(47,65): warning C4244: 'argument' : conversion de 'T' en 'T', perte possible de données
+          with
+          [
+              T=unsigned int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\cacag\OneDrive\Desktop\AllProjects\MENU\GameObjectLib\src\Success.cpp(94,19): warning C4244: 'initialisation' : conversion de 'int' en 'float', perte possible de données
+x64\Debug\GameStatistics.obj : warning LNK4042: objet spécifié plus d'une fois ; définitions supplémentaires ignorées
+x64\Debug\Play.obj : warning LNK4042: objet spécifié plus d'une fois ; définitions supplémentaires ignorées
   GameObjectLib.vcxproj -> C:\Users\cacag\OneDrive\Desktop\AllProjects\MENU\x64\Debug\GameObjectLib.lib

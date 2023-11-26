@@ -7,43 +7,92 @@ Credit::Credit() : elapsed(0.0f)
 	_fontAny.loadFromFile("asset/font/Dragon Slayer.ttf");
 }
 
+void Credit::textureSetters(Window_s& window) {
+    sf::Vector2u windowSize = window.getWindow().getSize();
+    float X = static_cast<float>(windowSize.x);
+    float Y = static_cast<float>(windowSize.y);
+
+    // load texture and create de sprite 
+    std::vector<std::string> globaleFile = { "asset/sprite/credit/background.png" };
+
+    bgTex.resize(globaleFile.size());
+    bgSprt.resize(globaleFile.size());
+
+    for (size_t i = 0; i < globaleFile.size(); i++) {
+        if (!bgTex[i].loadFromFile(globaleFile[i])) {
+            throw std::runtime_error("Failed to load texture");
+        }
+        else {
+            bgSprt[i].setTexture(bgTex[i]);
+        }
+    }
+    // here we set scale/position/origin
+    bgSprt[0].setScale(X / bgTex[0].getSize().x, Y / bgTex[0].getSize().y); // attapt pos to screen size
+
+}
+
 void Credit::load(Window_s& window)
 {
-	std::vector<std::string> creditString = { 
-	{"Issu d'une famille de petits notables de la Ferté-Milon et tôt orphelin, Racine reçoit auprès des"}, 
-	{"Solitaires de Port-Royal une éducation littéraire et religieuse rare. Se détournant d'une"},
-	{"carrière ecclésiastique, il entreprend, jeune, de faire une carrière des lettres2, en privilégiant la"},
-	{"poésie et le théâtre tragique. Le succès d’Alexandre le Grand, en 1665,"},
-	{"lui confère une solide réputation et lui apporte le soutien du jeune roi Louis XIV. Andromaque, en 1667, ouvre une"},
-	{"décennie de grandes créations qui voit, à côté d'une unique comédie (Les Plaideurs, 1668),"},
-	{"représentées les sept tragédies consacrées par l’historiographie comme ses plus remarquables :"},
-	{"Britannicus (1669), Bérénice (1670), Bajazet (1672), Mithridate (1673), Iphigénie (1674) et Phèdre"},
-	{"(1677). La « tristesse majestueuse3 » de ces pièces épurées rompant avec l’héroïsme baroque"},
-	{"fait la renommée du dramaturge et divise profondément le public français, dont une partie défend la tragédie cornélienne."},
-	{"Le succès populaire, les querelles critiques,"},
-	{"l'appui du roi et les faveurs à la cour de Mme de Montespan entraînent une ascension sociale et économique fulgurante de l'auteur :"},
-	{"élu à l'Académie française en 1672, anobli en 1674, Racine abandonne en 1677"},
-	{"le « métier de poésie » pour briguer le « glorieux emploi4 » d'historiographe du roi. Devenu l'un des courtisans proches du Roi-Soleil,"},
-	{" il ne délaisse son travail d'historien que pour donner, à la demande de Mme de Maintenon,"},
-	{"deux tragédies bibliques aux jeunes filles de Saint-Cyr : Esther (1689) et Athalie (1691), "},
-	{" et pour écrire en secret un Abrégé de l'histoire de Port-Royal, retrouvé et publié après sa mort. "}
-	};
+    std::vector<std::string> creditString = {
+        {"Issu d'une famille de petits notables de la Fertï¿½-Milon et tï¿½t orphelin, Racine reï¿½oit auprï¿½s des"},
+        {"Solitaires de Port-Royal une ï¿½ducation littï¿½raire et religieuse rare. Se dï¿½tournant d'une"},
+        {"carriï¿½re ecclï¿½siastique, il entreprend, jeune, de faire une carriï¿½re des lettres, en privilï¿½giant la"},
+        {"poï¿½sie et le thï¿½ï¿½tre tragique. Le succï¿½s dï¿½Alexandre le Grand, en 1665,"},
+        {"lui confï¿½re une solide rï¿½putation et lui apporte le soutien du jeune roi Louis XIV. Andromaque, en 1667, ouvre une"},
+        {"dï¿½cennie de grandes crï¿½ations qui voit, ï¿½ cï¿½tï¿½ d'une unique comï¿½die (Les Plaideurs, 1668),"},
+        {"reprï¿½sentï¿½es les sept tragï¿½dies consacrï¿½es par lï¿½historiographie comme ses plus remarquables :"},
+        {"Britannicus (1669), Bï¿½rï¿½nice (1670), Bajazet (1672), Mithridate (1673), Iphigï¿½nie (1674) et Phï¿½dre"},
+        {"(1677). La tristesse majestueuse de ces piï¿½ces ï¿½purï¿½es rompant avec lï¿½hï¿½roï¿½sme baroque"},
+        {"fait la renommï¿½e du dramaturge et divise profondï¿½ment le public franï¿½ais, dont une partie dï¿½fend la tragï¿½die cornï¿½lienne."},
+        {"Le succï¿½s populaire, les querelles critiques,"},
+        {"l'appui du roi et les faveurs ï¿½ la cour de Mme de Montespan entraï¿½nent une ascension sociale et ï¿½conomique fulgurante de l'auteur :"},
+        {"ï¿½lu ï¿½ l'Acadï¿½mie franï¿½aise en 1672, anobli en 1674, Racine abandonne en 1677"},
+        {"le mï¿½tier de poï¿½sie pour briguer le glorieux emploi d'historiographe du roi. Devenu l'un des courtisans proches du Roi-Soleil,"},
+        {" il ne dï¿½laisse son travail d'historien que pour donner, ï¿½ la demande de Mme de Maintenon,"},
+        {"deux tragï¿½dies bibliques aux jeunes filles de Saint-Cyr : Esther (1689) et Athalie (1691), "},
+        {" et pour ï¿½crire en secret un Abrï¿½gï¿½ de l'histoire de Port-Royal, retrouvï¿½ et publiï¿½ aprï¿½s sa mort. "},
+        {"Le vaste travail historique auquel il consacre la majeure partie de ses vingt derniï¿½res annï¿½es,"},
+        {"l'histoire de Louis XIV, disparaï¿½t entiï¿½rement dans l'incendie de la maison de son successeur, Valincour."},
+        {"L'ï¿½uvre de Racine passe pour avoir amenï¿½ la tragï¿½die classique ï¿½ son accomplissement et son harmonie5. "},
+        {"L'ï¿½conomie du propos, la rigueur de la construction (situation de crise menï¿½e ï¿½ son acmï¿½),"},
+        {"la maï¿½trise de l'alexandrin et la profondeur de l'analyse psychologique ont ï¿½levï¿½ le corpus racinien"},
+        {"au rang de modï¿½le classique. Par son respect strict des unitï¿½s de temps, de lieu et d'action,"},
+        {"Racine refuse la primautï¿½, la densitï¿½ et l'hï¿½roï¿½sme de l'action propres aux tragï¿½dies de Pierre Corneille,"},
+        {"auquel il est souvent opposï¿½. Il lui prï¿½fï¿½re un ï¿½purement de l'intrigue (parfois extrï¿½me, en particulier dans Bï¿½rï¿½nice)"},
+        {"et l'intensitï¿½ psychologique. Abandonnant le ton glorieux et moral du thï¿½ï¿½tre du dï¿½but du xviie siï¿½cle,"},
+        {"Racine soumet la vertu politique et la raison d'ï¿½tat, chï¿½res ï¿½ Corneille, sous les contingences passionnelles."},
+        {"La passion soumet et dï¿½truit ses personnages tout-puissants (rois, empereurs, princesses) qui tentent en vain"},
+        {"de lutter contre elle, perdant le sens du devoir jusqu'ï¿½ la dï¿½raison ou la mort."},
+        {"Les passions, parmi lesquelles l'amour prime, sont le fondement du tragique racinien en ce qu'ils sont les instruments du destin."},
+        {"L'amour racinien suit en ordre gï¿½nï¿½ral la structure du triangle amoureux, inexorable et cruel pour chacun des partis."},
+        {"Le fondement de ce tragique relï¿½ve ï¿½ ce titre de la confrontation de la dï¿½mesure et de la dï¿½raison des passions"},
+        {"avec l'humilitï¿½ de la finitude des mortels. Les tragï¿½dies de Racine se fondent sur la conjonction"},
+        {"de la crainte et de la pitiï¿½ (les deux ï¿½motions fondamentales du thï¿½ï¿½tre antique) ; la critique a souvent estimï¿½"},
+        {"que le dramaturge a ainsi cherchï¿½ ï¿½ associer la prï¿½destination jansï¿½niste et le fatum antique."},
+        {"Consacrï¿½ par la critique comme l'un des plus grands auteurs franï¿½ais de tragï¿½dies, il est l'un des trois dramaturges majeurs,"},
+        {"avec Corneille et Moliï¿½re, de la pï¿½riode classique en France. Aujourd'hui, il compte parmi les auteurs"},
+        {"les plus jouï¿½s ï¿½ la Comï¿½die-Franï¿½aise et dans le pays, et figure parmi les grandes rï¿½fï¿½rences"},
+        {"de la littï¿½rature universelle."}
+    };
+
 
 	float spacing = 50;
 
 	for (size_t i = 0; i < creditString.size(); ++i) {
-		sf::Text creditText = createText(creditString[i], sf::Vector2f(window.getWindow().getSize().x / 2, window.getWindow().getSize().y + (spacing * i)), 18);
+		sf::Text creditText = createText(creditString[i], sf::Vector2f(window.getWindow().getSize().x / 2, window.getWindow().getSize().y + (spacing * i)), 15, sf::Color(255, 255, 255));
 		basicTexts.push_back(creditText);
 	}
+
+    textureSetters(window);
 }
 
 void Credit::scroller(float deltaTime, Music& music) {
-	if (basicTexts[basicTexts.size() - 1].getPosition().y <= 0)
+	if (basicTexts[basicTexts.size() - 1].getPosition().y + 50 <= 0)
 		return;
 	float speed = 100.0f;
 
 	elapsed += deltaTime;
-	if (elapsed >= 0.001f) {
+	if (elapsed >= 0.01f) {
 		for (size_t i = 0; i < basicTexts.size(); ++i) {
 			basicTexts[i].move(0, -speed * deltaTime);
 		}

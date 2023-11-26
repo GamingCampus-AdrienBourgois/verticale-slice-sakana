@@ -10,4 +10,5 @@ public:
 	~Help() = default;
 
 	void load(Window_s& window);
+	void textureSetters(Window_s& window);
 };

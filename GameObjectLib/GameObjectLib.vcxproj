@@ -31,14 +31,19 @@
     <ClInclude Include="include\Success.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="include\Play.hpp" />
+    <ClCompile Include="src\GameStatistics.cpp" />
     <ClCompile Include="src\Help.cpp" />
     <ClCompile Include="src\Credit.cpp" />
+    <ClCompile Include="include\GameStatistics.hpp" />
+    <ClCompile Include="src\Play.cpp" />
     <ClCompile Include="src\Slider.cpp" />
     <ClCompile Include="src\MenuObject.cpp" />
     <ClCompile Include="src\Menu.cpp" />
     <ClCompile Include="src\Settings.cpp" />
     <ClCompile Include="src\Music.cpp" />
     <ClCompile Include="src\GameLoop.cpp" />
+    <ClCompile Include="src\Success.cpp" />
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

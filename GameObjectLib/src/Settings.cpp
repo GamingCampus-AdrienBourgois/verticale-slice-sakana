@@ -3,15 +3,19 @@
 Settings::Settings(Window_s& window, Music& music)
 	: _resolution(window.getWindow().getSize()),
 	resolutionChanged(false),
-	isVsync(false),
+	Vsync(false),
 	vsyncChanged(false),
+	pauseChanged(false),
+	isMax(false),
+	isMin(false),
+	paused(false),
 	settingsFile("Save/saveSettings.txt")
 {
 
-	// Appliquer tous les paramètres modifiés
+	// Appliquer tous les paramï¿½tres modifiï¿½s
 	valueSetter(window, music);
 
-	// Initialisez maintenant les sliders avec les valeurs potentiellement mises à jour
+	// Initialisez maintenant les sliders avec les valeurs potentiellement mises ï¿½ jour
 	volumeSlider = std::make_unique<Slider>(200, 100, 200, 0, 100, music.getVolume());
 	fpsSlider = std::make_unique<Slider>(200, 300, 200, 30, 244, window.getFps());
 
@@ -21,38 +25,105 @@ Settings::Settings(Window_s& window, Music& music)
 	_fontAny.loadFromFile("asset/font/Dragon Slayer.ttf");
 }
 
+void Settings::textureSetters(Window_s& window) {
+	sf::Vector2u windowSize = window.getWindow().getSize();
+	float X = static_cast<float>(windowSize.x);
+	float Y = static_cast<float>(windowSize.y);
+
+	// load texture and create de sprite 
+	std::vector<std::string> globaleFile = { "asset/sprite/settings/background.png" };
+
+	bgTex.resize(globaleFile.size());
+	bgSprt.resize(globaleFile.size());
+
+	for (size_t i = 0; i < globaleFile.size(); i++) {
+		if (!bgTex[i].loadFromFile(globaleFile[i])) {
+			throw std::runtime_error("Failed to load texture");
+		}
+		else {
+			bgSprt[i].setTexture(bgTex[i]);
+		}
+	}
+	// here we set scale/position/origin
+	bgSprt[0].setScale(X / bgTex[0].getSize().x, Y / bgTex[0].getSize().y); // attapt pos to screen size
+
+	// load texture on buttons
+	buttonTex.resize(buttons.size());
+
+	for (size_t i = 0; i < buttons.size(); i++) {
+		if (!buttonTex[i].loadFromFile("asset/sprite/menu/woodButton.jpg")) {
+			throw std::runtime_error("Failed to load texture");
+		}
+		else {
+			buttons[i].setTexture(&buttonTex[i]);
+		}
+	}
+}
 
 void Settings::load(Window_s& window) {
 	// Slider creation for fps and volume
 	sf::FloatRect boundfps = fpsSlider->getBar().getLocalBounds();
 	sf::FloatRect boundvolume = volumeSlider->getBar().getLocalBounds();
-	// Text for resolutions button
-	sf::Text resolutionCaller = createText("Resolution :", sf::Vector2f(200, 400), 20);
-	// Text for sliders
-	sf::Text fpsCaller = createText("Frame rate :", sf::Vector2f(fpsSlider->getBar().getPosition().x , fpsSlider->getBar().getPosition().y - (boundfps.height * 5)), 20);
-	sf::Text volumeCaller = createText("Volume rate :", sf::Vector2f(volumeSlider->getBar().getPosition().x, volumeSlider->getBar().getPosition().y - (boundvolume.height * 5)), 20);
-	// Text for vsync
-	sf::Text vsyncCaller = createText("Vsync :", sf::Vector2f(175, 525), 20);
 
+
+	// Text for declaration
+	// Text for resolutions button
+	sf::Text resolutionCaller = createText("Resolution :", sf::Vector2f(100, 375), 20, sf::Color(255, 255, 255));
+	// Text for sliders
+	sf::Text fpsCaller = createText("Frame rate :", sf::Vector2f(100 , fpsSlider->getBar().getPosition().y - (boundfps.height * 5)), 20, sf::Color(255, 255, 255));
+	sf::Text volumeCaller = createText("Volume rate :", sf::Vector2f(100, volumeSlider->getBar().getPosition().y - (boundvolume.height * 5)), 20, sf::Color(255, 255, 255));
+	// Text for vsync
+	sf::Text vsyncCaller = createText("Vsync :", sf::Vector2f(100, 525), 20, sf::Color(255, 255, 255));
 	basicTexts.push_back(vsyncCaller);
 	basicTexts.push_back(fpsCaller);
 	basicTexts.push_back(volumeCaller);
 	basicTexts.push_back(resolutionCaller);
 
+
+	// BackGround for text
+	std::vector<sf::Text*> texts = { &resolutionCaller, &fpsCaller, &volumeCaller, &vsyncCaller };
+	for (auto text : texts) {
+		sf::FloatRect textRect = text->getLocalBounds();
+		sf::RectangleShape background(sf::Vector2f(textRect.width + 10, textRect.height + 10));
+		background.setFillColor(sf::Color(255, 0, 0));
+		background.setOutlineThickness(2);
+		background.setOrigin(background.getSize().x / 2, background.getSize().y / 2);
+		background.setPosition(text->getPosition().x, text->getPosition().y);
+		particles.push_back(background);
+	}
+
+
 	// Buttons for resolution
 	sf::Vector2f buttonSize(180, 30);
 	std::vector<std::string> states = { "Full screen", "1920 x 1080", "1600 x 900", "1536 x 864", "1440 x 900", "1366 x 768", "1280 x 720"};
-	buttonCount = static_cast<unsigned int>(states.size());
 	float spacing = 175;
 
-	for (unsigned int i = 0; i < buttonCount; ++i) {
+	for (size_t i = 0; i < states.size(); ++i) {
 		sf::RectangleShape button(buttonSize);
 		button.setFillColor(sf::Color(255, 0, 0)); // Set RGB color
 		button.setOrigin(buttonSize.x / 2.0f, buttonSize.y / 2.0f);
 		button.setPosition(200 + i * (buttonSize.y + spacing), 450);
-		mapButton.push_back(button);
-		buttonTexts.push_back(setTextOnButton(states[i], mapButton[i], 15));
+		button.setOutlineThickness(1);
+		buttons.push_back(button);
+		buttonTexts.push_back(setTextOnButton(states[i], buttons[i], 15, sf::Color(0, 255, 0)));
 	}
+
+	
+	// Buttons for volume max and min
+	sf::Vector2f buttonSizeVolume(120, 30);
+	std::vector<std::string> volumeStates = { "Mute", "Max", "Pause" };
+	float spacingVolume = 100;
+
+	for (size_t i = 0; i < volumeStates.size(); i++) {
+		sf::RectangleShape buttonVolume(buttonSizeVolume);
+		buttonVolume.setFillColor(sf::Color(255, 0, 0)); // Set RGB color
+		buttonVolume.setOrigin(buttonSizeVolume.x / 2.0f, buttonSizeVolume.y / 2.0f);
+		buttonVolume.setPosition(150 + i * (buttonSizeVolume.y + spacingVolume), 175);
+		buttonVolume.setOutlineThickness(1);
+		buttons.push_back(buttonVolume);
+		buttonTexts.push_back(setTextOnButton(volumeStates[i], buttons[i + states.size()], 15, sf::Color(0, 255, 0)));
+	}
+
 
 	// Buttons for Vsync
 	sf::Vector2f buttonSizeVsync(180, 75);
@@ -61,12 +132,17 @@ void Settings::load(Window_s& window) {
 	buttonCount += 1;
 	buttonVsync.setFillColor(sf::Color(255, 0, 0)); // Set RGB color
 	buttonVsync.setOrigin(buttonSizeVsync.x / 2.0f, buttonSizeVsync.y / 2.0f);
-	buttonVsync.setPosition(200, 600);
-	mapButton.push_back(buttonVsync);
-	if (isVsync)
-		buttonTexts.push_back(setTextOnButton("On", buttonVsync, 25));
+	buttonVsync.setPosition(200, 625);
+	buttonVsync.setOutlineThickness(1);
+	buttons.push_back(buttonVsync);
+	if (Vsync)
+		buttonTexts.push_back(setTextOnButton("On", buttonVsync, 25, sf::Color(0, 255, 0)));
 	else
-		buttonTexts.push_back(setTextOnButton("Off", buttonVsync, 25));
+		buttonTexts.push_back(setTextOnButton("Off", buttonVsync, 25, sf::Color(0, 255, 0)));
+
+
+	// Texture for sprite or buttons
+	textureSetters(window);
 }
 
 void Settings::handleButtonClick(const sf::Event& event, Window_s& window, Music& music) {
@@ -78,10 +154,11 @@ void Settings::handleButtonClick(const sf::Event& event, Window_s& window, Music
 	sf::Vector2f mousePosF = window.getWindow().mapPixelToCoords(mousePos);
 
 	for (size_t i = 0; i < buttonTexts.size(); ++i) {
-		if (mapButton[i].getGlobalBounds().contains(mousePosF)) {
+		if (buttons[i].getGlobalBounds().contains(mousePosF)) {
 			std::string buttonText = buttonTexts[i].getString(); // Get the text of the button
 			sf::Vector2u oldResolution = _resolution;
-			bool oldVsync = isVsync;
+			bool oldVsync = Vsync;
+			bool oldPause = paused;
 
 			if (buttonText == "Full screen") {
 				_resolution = sf::Vector2u(0, 0);
@@ -105,13 +182,29 @@ void Settings::handleButtonClick(const sf::Event& event, Window_s& window, Music
 				_resolution = sf::Vector2u(1280, 720);
 			}
 			else if (buttonText == "On") {
-				isVsync = false;
+				Vsync = false;
 			}
 			else if (buttonText == "Off") {
-				isVsync = true;
+				Vsync = true;
+			}
+			else if (buttonText == "Mute") {
+				isMin = true;
+			}
+			else if (buttonText == "Max") {
+				isMax = true;
+			}
+			else if (buttonText == "Pause") {
+				paused = true;
+			}
+			else if (buttonText == "Play") {
+				paused = false;
 			}
 
-			if (oldVsync != isVsync) {
+			if (oldPause != paused) {
+				pauseChanged = true;
+			}
+
+			if (oldVsync != Vsync) {
 				vsyncChanged = true;
 			}
 			if (oldResolution != _resolution) {
@@ -137,14 +230,43 @@ void Settings::valueChanger(Window_s& window, Music& music) {
 	if (fpsSlider->getisDragging()) {
 		unsigned int fpsValue = static_cast<unsigned int>(fpsSlider->getValue());
 		window.setFps(fpsValue);
-		saveSettingsValue("FramePerSecond", settingsFile, std::to_string(fpsValue));
+		GameStatistics::saveSettingsValue("FramePerSecond", settingsFile, std::to_string(fpsValue));
 	}
 
 	// Volume
 	if (volumeSlider->getisDragging()) {
 		float volumeValue = volumeSlider->getValue();
 		music.setVolume(volumeValue);
-		saveSettingsValue("Volume", settingsFile, std::to_string(volumeValue));
+		GameStatistics::saveSettingsValue("Volume", settingsFile, std::to_string(volumeValue));
+	}
+	if (isMax) {
+		float volumeMax = 100;
+		volumeSlider->setValue(volumeMax);
+		music.setVolume(volumeMax);
+		GameStatistics::saveSettingsValue("Volume", settingsFile, std::to_string(volumeMax));
+		isMax = false;
+	}
+	if (isMin) {
+		float volumeMin = 0;
+		volumeSlider->setValue(volumeMin);
+		music.setVolume(volumeMin);
+		GameStatistics::saveSettingsValue("Volume", settingsFile, std::to_string(volumeMin));
+		isMin = false;
+	}
+	if (pauseChanged) {
+		std::string pauseValue = paused ? "Play" : "Pause";
+		for (int i = 0; i < buttonTexts.size(); ++i) {
+			if (buttonTexts[i].getString() == "Pause" || buttonTexts[i].getString() == "Play") {
+				buttonTexts[i].setString(pauseValue);
+				
+				break;
+			}
+		}
+		if (!paused)
+			music.playMusic(music.getIdx());
+		else
+			music.pauseMusic();
+		pauseChanged = false;
 	}
 
 	// Resolution
@@ -159,44 +281,49 @@ void Settings::valueChanger(Window_s& window, Music& music) {
 			rw.create(sf::VideoMode(_resolution.x, _resolution.y), window.getTitle(), sf::Style::Default);
 			resolutionValue = std::to_string(_resolution.x) + "x" + std::to_string(_resolution.y);
 		}
-		rw.setPosition(sf::Vector2i(sf::VideoMode::getDesktopMode().width / 2 - rw.getSize().x / 2,
-			sf::VideoMode::getDesktopMode().height / 2 - rw.getSize().y / 2));
-		saveSettingsValue("Resolution", settingsFile, resolutionValue);
+		rw.setPosition(sf::Vector2i(sf::VideoMode::getDesktopMode().width / 2 - rw.getSize().x / 2, sf::VideoMode::getDesktopMode().height / 2 - rw.getSize().y / 2));
+		GameStatistics::saveSettingsValue("Resolution", settingsFile, resolutionValue);
+		sf::Vector2u windowSize = window.getWindow().getSize();
+		float X = static_cast<float>(windowSize.x);
+		float Y = static_cast<float>(windowSize.y);
+		bgSprt[0].setScale(X / bgTex[0].getSize().x, Y / bgTex[0].getSize().y);
 		resolutionChanged = false;
 	}
 
 	// Vsync
 	if (vsyncChanged) {
-		std::string vsyncValue = isVsync ? "On" : "Off";
+		std::string vsyncValue = Vsync ? "On" : "Off";
 		for (int i = 0; i < buttonTexts.size(); ++i) {
 			if (buttonTexts[i].getString() == "Off" || buttonTexts[i].getString() == "On") {
 				buttonTexts[i].setString(vsyncValue);
 				break;
 			}
 		}
-		window.getWindow().setVerticalSyncEnabled(isVsync);
-		saveSettingsValue("Vsync", settingsFile, vsyncValue);
+		window.getWindow().setVerticalSyncEnabled(Vsync);
+		GameStatistics::saveSettingsValue("Vsync", settingsFile, vsyncValue);
 		vsyncChanged = false;
 	}
 }
 
 void Settings::valueSetter(Window_s& window, Music& music) {
-	std::string fpsStr = getParamFromString("FramePerSecond", settingsFile);
-	std::string volumeStr = getParamFromString("Volume", settingsFile);
-	std::string resolutionStr = getParamFromString("Resolution", settingsFile);
-	std::string vsyncStr = getParamFromString("Vsync", settingsFile);
+	std::string fpsStr = GameStatistics::getParamFromString("FramePerSecond", settingsFile);
+	std::string volumeStr = GameStatistics::getParamFromString("Volume", settingsFile);
+	std::string resolutionStr = GameStatistics::getParamFromString("Resolution", settingsFile);
+	std::string vsyncStr = GameStatistics::getParamFromString("Vsync", settingsFile);
 
 	try {
+		// FPS 
 		if (!fpsStr.empty()) {
 			unsigned int fps = static_cast<unsigned int>(std::stoi(fpsStr));
 			window.setFps(fps);
 		}
-
+		// VOLUME
 		if (!volumeStr.empty()) {
 			float volume = std::stof(volumeStr);
 			music.setVolume(volume);
 		}
 
+		// RESOLUTION
 		if (!resolutionStr.empty()) {
 			size_t xIndex = resolutionStr.find('x');
 			if (xIndex != std::string::npos) {
@@ -214,68 +341,15 @@ void Settings::valueSetter(Window_s& window, Music& music) {
 				rw.setPosition(sf::Vector2i(sf::VideoMode::getDesktopMode().width / 2 - rw.getSize().x / 2, sf::VideoMode::getDesktopMode().height / 2 - rw.getSize().y / 2));
 			}
 		}
-
+		// VSYNC
 		if (!vsyncStr.empty()) {
-			isVsync = (vsyncStr == "On");
-			window.getWindow().setVerticalSyncEnabled(isVsync);
+			Vsync = (vsyncStr == "On"); // ez way to attribute a bool
+			window.getWindow().setVerticalSyncEnabled(Vsync);
 		}
 	}
 	catch (const std::exception& e) {
-		std::cerr << "Erreur lors de la conversion des paramètres: " << e.what() << std::endl;
+		std::cerr << "Erreur lors de la conversion des paramï¿½tres: " << e.what() << std::endl;
 	}
-}
-
-
-std::string Settings::getParamFromString(std::string param, const std::string& file) {
-	std::fstream fileStream(file);
-	std::string line;
-	std::string emptyStr("");
-
-	if (!fileStream) {
-		std::cerr << "Can't open input file" << std::endl;
-		return emptyStr;
-	}
-	while (std::getline(fileStream, line)) {
-		if (line.find(param) != line.npos) {
-
-			size_t pos = line.find(param + "=");
-			if (pos != std::string::npos) {
-				return line.substr(pos + param.length() + 1);
-			}
-
-		}
-	}
-	return emptyStr;
-}
-
-void Settings::saveSettingsValue(const std::string& param, const std::string& file, const std::string& newValue) {
-	std::ifstream fileStream(file);
-	std::string line;
-	std::vector<std::string> lines;
-	bool found = false;
-
-	if (!fileStream) {
-		std::cerr << "Cannot open file for reading: " << file << std::endl;
-		return;
-	}
-	while (std::getline(fileStream, line)) {
-		size_t pos = line.find(param + "=");
-		if (pos != std::string::npos) {
-			line = param + "=" + newValue; // Replace the entire line
-			found = true;
-		}
-		lines.push_back(line);
-	}
-	fileStream.close();
-	if (!found)
-		std::cerr << "Parameter not found in file: " << param << std::endl;
-
-	// Rewrite the file
-	std::ofstream outFile(file);
-	for (const auto& outLine : lines) {
-		outFile << outLine << std::endl;
-	}
-	return;
 }
 
 const std::string Settings::getSettingsFile() const {

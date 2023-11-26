@@ -1,7 +1,7 @@
 #include "Music.hpp"
 #include <iostream>
 
-Music::Music() : _volume(100)
+Music::Music() : _volume(100), idx(0)
 {
 
 }
@@ -68,4 +68,19 @@ void Music::stopMusic(int level) {
 
 const std::vector<std::unique_ptr<sf::Music>>& Music::getMusic() const {
     return _music;
+}
+
+void Music::pauseMusic() {
+    idx = 0;
+    for (auto& music : _music) {
+        if (music->getStatus() == sf::Music::Playing) {
+            music->pause();
+            break;
+        }
+        idx++;
+    }
+}
+
+const int Music::getIdx() const {
+    return idx;
 }

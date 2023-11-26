@@ -6,15 +6,19 @@
 
 #include "Window.hpp"
 
-class Window_s; // Déclaration anticipée
+class Window_s; // Dï¿½claration anticipï¿½e
 
 enum class Layer {
-    MENUB = 1,
+    SRITESBG = 1,
+    MENUBUTTON,
     TEXTBUTTON,
+    PARTICLES,
     BAR, // for slider
     HANDLE, // for slider
     TEXTSLIDER, // for slider
-    TEXTRANDOM
+    TEXTRANDOM,
+    SPRITESGB
+
 };
 // 1 menu buttons (destroyed after switch betwin states)
 // 2 text for buttons (destroyed after switch betwin states)
@@ -25,16 +29,16 @@ enum class Layer {
 
 
 // Classe de base abstraite pour les objets de menu
-// Elle sert pour la creation des boutons avec draw et setTextOnButton ainsi que la reinitialisation des états avec resetValues
+// Elle sert pour la creation des boutons avec draw et setTextOnButton ainsi que la reinitialisation des ï¿½tats avec resetValues
 class MenuObject {
 public:
     virtual ~MenuObject() = default;
 
     virtual void draw(Window_s& window);
     virtual void resetValues(Window_s& window);
-    virtual sf::Text setTextOnButton(const std::string& text, sf::RectangleShape& button, unsigned int size);
+    virtual sf::Text setTextOnButton(const std::string& text, sf::RectangleShape& button, unsigned int size, sf::Color color);
     virtual void changeOnMouse(Window_s& window);
-    virtual sf::Text createText(const std::string& text, const sf::Vector2f& position, unsigned int size);
+    virtual sf::Text createText(const std::string& text, const sf::Vector2f& position, unsigned int size, sf::Color color);
     virtual void reloding(Window_s& window);
 
     virtual void load(Window_s& window) = 0;
@@ -61,9 +65,16 @@ protected:
 
     unsigned int buttonCount;
     std::vector<sf::Text> buttonTexts; // texts on the buttons
-    std::vector<sf::RectangleShape> mapButton; // buttons for each states
+    std::vector<sf::Texture> buttonTex; // texture for buttons (esthetic)
+    std::vector<sf::RectangleShape> buttons; // buttons for each states
 
     std::vector<sf::Text> basicTexts; // texts for anything
 
+    std::vector<sf::RectangleShape> particles;
 
+    std::vector<sf::Texture> globalTex;
+    std::vector<sf::Sprite> globalSprt;
+
+    std::vector<sf::Texture> bgTex;
+    std::vector<sf::Sprite> bgSprt;
 };

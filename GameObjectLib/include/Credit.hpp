@@ -15,4 +15,5 @@ public:
 
 	void load(Window_s& window);
 	void scroller(float deltaTime, Music &music);
+	void textureSetters(Window_s& window);
 };
