@@ -28,13 +28,7 @@ public:
 
 private:
     std::map<int, std::vector<const sf::Drawable*>> _renderLayers; 
-    // Layer assigment (menu): 
-    // 1 menu buttons (destroyed after switch betwin states)
-    // 2 text for buttons (destroyed after switch betwin states)
-    // 3 bar for settings slider (destroyed after switch betwin states)
-    // 4 handle for settings slider (destroyed after switch betwin states)
-    // 5 text for bar for settings slider (destroyed after switch betwin states)
-    // 6 random text in menu (destroyed after switch betwin states)
+
     sf::RenderWindow window;
     unsigned int _fps;
     std::string _title;

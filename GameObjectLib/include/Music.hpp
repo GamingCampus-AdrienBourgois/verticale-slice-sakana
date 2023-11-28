@@ -8,21 +8,22 @@
 class Music {
     std::vector<std::unique_ptr<sf::Music>> _music;
     float _volume;
-    int idx;
+    bool pause;
+
+    void operator=(const std::string& musicFile);
 public:
     Music();
     ~Music();
 
-    void LoadMusic();
+    void loadMusic();
     void playMusic(int level);
     void stopMusic(int level);
+    void stopAllMusic();
     void pauseMusic();
     const std::vector<std::unique_ptr<sf::Music>>& getMusic() const;
-    // Music idx attribution:
-    // 1 Menu
-    // 2 Credit
-    // 3 Game
-    const int getIdx() const;
+
     void setVolume(float volume);
     const float getVolume() const;
+    void setPause(bool _pause);
+    const bool getPause() const;
 };

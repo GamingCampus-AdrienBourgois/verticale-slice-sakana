@@ -1,7 +1,6 @@
 #include "Help.hpp"
 
 Help::Help() {
-    buttonCount = 0;
     _fontButton.loadFromFile("asset/font/Beyonders.ttf");
     _fontAny.loadFromFile("asset/font/Dragon Slayer.ttf");
 }
@@ -56,7 +55,7 @@ void Help::load(Window_s& window) {
 
 	for (size_t i = 0; i < helpString.size(); ++i) {
 		sf::Text helpText = createText(helpString[i], sf::Vector2f(window.getWindow().getSize().x / 2, 40 + (i * spacing)), 18, sf::Color(0, 0, 0));
-		basicTexts.push_back(helpText);
+		globalTexts.push_back(helpText);
 	}
 
     textureSetters(window);

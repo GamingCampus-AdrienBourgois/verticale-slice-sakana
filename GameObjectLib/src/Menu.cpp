@@ -7,7 +7,6 @@ Menu::Menu(Window_s& window, Music& music) : _settings(window, music), _credit()
 	_isMenu = true;
 	_MenuState = BASE;
 	_PreviousMenuState = BASE;
-	buttonCount = 0;
 	_fontButton.loadFromFile("asset/font/Beyonders.ttf");
 }
 
@@ -24,7 +23,7 @@ void Menu::rainAnim(float deltaTime, Window_s &window)
 	for (auto& drop : particles) {
 		drop.move(0, 1000 * deltaTime); // Vitesse de chute
 		if (drop.getPosition().y > winSize.y) {
-			drop.setPosition(static_cast<float>(rand() % winSize.x), -static_cast<float>(rand() % 30)); // R�initialisation de la goutte
+			drop.setPosition(static_cast<float>(rand() % winSize.x), -static_cast<float>(rand() % 30)); // Reinitialisation de la goutte
 		}
 	}
 }
@@ -68,13 +67,12 @@ void Menu::load(Window_s& window)
 	// load les boutons
 	sf::Vector2f buttonSize(300, 75);
 	std::vector<std::string> states = { "PLAY", "SETTINGS", "HELP", "SUCCESS", "CREDIT", "QUIT" };
-	buttonCount = static_cast<unsigned int>(states.size());
 
 	float spacing = 50;
 	float centerX = 300;
-	float firstButtonY = (window.getWindow().getSize().y - (buttonSize.y * buttonCount + spacing * (buttonCount - 1))) / 2.0f; // Dynamique set of buttons
+	float firstButtonY = (window.getWindow().getSize().y - (buttonSize.y * states.size() + spacing * (states.size() - 1))) / 2.0f; // Dynamique set of buttons
 
-	for (unsigned int i = 0; i < buttonCount; ++i) {
+	for (size_t i = 0; i < states.size(); ++i) {
 		sf::RectangleShape button(buttonSize);
 		button.setFillColor(sf::Color(255, 0, 0)); // Set RGB color
 		button.setOrigin(buttonSize.x / 2.0f, buttonSize.y / 2.0f);
@@ -93,7 +91,7 @@ void Menu::load(Window_s& window)
 		drop.setFillColor(sf::Color(255, 255, 255));
 		particles.push_back(drop);
 	}
-	std::cout << "prok";
+
 	// load les texture et sprite
 	textureSetters(window);
 }
@@ -130,7 +128,6 @@ void Menu::update(Window_s& window, Music& music, float deltaTime) {
 	}
 
 
-
 }
 
 void Menu::handleEvent(const sf::Event& event, Window_s &window, Music &music)
@@ -138,7 +135,7 @@ void Menu::handleEvent(const sf::Event& event, Window_s &window, Music &music)
 	// State switcher
 	if (event.type == sf::Event::KeyPressed) {
 		if (event.key.code == sf::Keyboard::Return) {
-			
+
 			switch (_MenuState)
 			{
 			case BASE:
@@ -148,35 +145,38 @@ void Menu::handleEvent(const sf::Event& event, Window_s &window, Music &music)
 				break;
 			case PLAY:
 				reloding(window);
+
 				_isMenu = true;
 				_MenuState = BASE;
 				_PreviousMenuState = PLAY;
 				break;
 			case SETTINGS:
-				// reloaders
-				reloding(window);
-
-				// the state before settings is BASE (globale menu)
-				_MenuState = BASE;
-				// set this, usefull if there are more states in the states for exemple if they is another state in settings
-				_PreviousMenuState = SETTINGS;
+				reloding(window); // reloaders
+				music.stopAllMusic();
+				music.playMusic(MBASE);
+				
+				_MenuState = BASE; // the state before settings is BASE (globale menu)
+				_PreviousMenuState = SETTINGS; // set this, usefull if there are more states in the states for exemple if they is another state in settings
 				break;
 			case HELP:
 				reloding(window);
+				music.stopAllMusic();
+				music.playMusic(MBASE);
 
 				_MenuState = BASE;
 				_PreviousMenuState = HELP;
 				break;
 			case SUCCESS:
 				reloding(window);
+				music.stopAllMusic();
+				music.playMusic(MBASE);
 
 				_MenuState = BASE;
 				_PreviousMenuState = SUCCESS;
 				break;
 			case CREDIT:
 				reloding(window);
-
-				music.stopMusic(MCREDIT);
+				music.stopAllMusic();
 				music.playMusic(MBASE);
 
 				_MenuState = BASE;
@@ -237,28 +237,34 @@ void Menu::handleButtonClick(const sf::Event& event, Window_s& window, Music &mu
 			}
 			else if (buttonText == "SETTINGS") {
 				resetValues(window); // reset value for menu only but destroy every layers for drawing
-
-				_settings.reloding(window);
-				// or reload range
-				_settings.drawSliders(window); // Draw les bouton charg� dans Slider.cpp (creer dans le constructeur et modul� dans HandleEvent) 
+				_settings.reloding(window); // or reload range
+				_settings.drawSliders(window); // Draw les bouton chargé dans Slider.cpp (creer dans le constructeur et module dans HandleEvent) 
+				music.stopAllMusic();
+				music.playMusic(MSETTINGS);
 				setMenuState(SETTINGS); // Set state for handleEvent
 			}
 			else if (buttonText == "HELP") {
 				resetValues(window);
 				_help.reloding(window);
+				music.stopAllMusic();
+				music.playMusic(MHELP);
+
 				setMenuState(HELP);
 			}
 			else if (buttonText == "SUCCESS") {
 				resetValues(window);
 				_success.reloding(window);
+				music.stopAllMusic();
+				music.playMusic(MSUCCESS);
+
 				setMenuState(SUCCESS);
 			}
 			else if (buttonText == "CREDIT") {
 				resetValues(window);
-
-				music.stopMusic(MBASE);
+				music.stopAllMusic();
 				music.playMusic(MCREDIT);
 				_credit.reloding(window);
+
 				setMenuState(CREDIT);
 			}
 			else if (buttonText == "QUIT") {

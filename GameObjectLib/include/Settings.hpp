@@ -34,9 +34,9 @@ private:
     bool isMax;
     bool isMin;
     bool pauseChanged;
-    bool paused;
+    bool paused; // Need the condition for load
 
-    bool Vsync;
+    bool Vsync; // Need the condition for load
     bool vsyncChanged;
 
     std::unique_ptr<Slider> volumeSlider;

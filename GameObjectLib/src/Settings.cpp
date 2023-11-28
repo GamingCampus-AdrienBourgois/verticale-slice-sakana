@@ -1,7 +1,7 @@
 #include "Settings.hpp"
 
-Settings::Settings(Window_s& window, Music& music)
-	: _resolution(window.getWindow().getSize()),
+Settings::Settings(Window_s& window, Music& music) : 
+	_resolution(window.getWindow().getSize()),
 	resolutionChanged(false),
 	Vsync(false),
 	vsyncChanged(false),
@@ -11,16 +11,14 @@ Settings::Settings(Window_s& window, Music& music)
 	paused(false),
 	settingsFile("Save/saveSettings.txt")
 {
-
-	// Appliquer tous les param�tres modifi�s
+	// Appliquer tous les paramatres modifiés
 	valueSetter(window, music);
 
-	// Initialisez maintenant les sliders avec les valeurs potentiellement mises � jour
+	// Initialisez maintenant les sliders avec les valeurs maj
 	volumeSlider = std::make_unique<Slider>(200, 100, 200, 0, 100, music.getVolume());
 	fpsSlider = std::make_unique<Slider>(200, 300, 200, 30, 244, window.getFps());
 
 
-	buttonCount = 0;
 	_fontButton.loadFromFile("asset/font/Beyonders.ttf");
 	_fontAny.loadFromFile("asset/font/Dragon Slayer.ttf");
 }
@@ -74,10 +72,10 @@ void Settings::load(Window_s& window) {
 	sf::Text volumeCaller = createText("Volume rate :", sf::Vector2f(100, volumeSlider->getBar().getPosition().y - (boundvolume.height * 5)), 20, sf::Color(255, 255, 255));
 	// Text for vsync
 	sf::Text vsyncCaller = createText("Vsync :", sf::Vector2f(100, 525), 20, sf::Color(255, 255, 255));
-	basicTexts.push_back(vsyncCaller);
-	basicTexts.push_back(fpsCaller);
-	basicTexts.push_back(volumeCaller);
-	basicTexts.push_back(resolutionCaller);
+	globalTexts.push_back(vsyncCaller);
+	globalTexts.push_back(fpsCaller);
+	globalTexts.push_back(volumeCaller);
+	globalTexts.push_back(resolutionCaller);
 
 
 	// BackGround for text
@@ -111,7 +109,12 @@ void Settings::load(Window_s& window) {
 	
 	// Buttons for volume max and min
 	sf::Vector2f buttonSizeVolume(120, 30);
-	std::vector<std::string> volumeStates = { "Mute", "Max", "Pause" };
+	std::vector<std::string> volumeStates = { "Mute", "Max" };
+	if (paused)
+		volumeStates.push_back("Play");
+	else
+		volumeStates.push_back("Pause");
+
 	float spacingVolume = 100;
 
 	for (size_t i = 0; i < volumeStates.size(); i++) {
@@ -129,7 +132,6 @@ void Settings::load(Window_s& window) {
 	sf::Vector2f buttonSizeVsync(180, 75);
 	sf::RectangleShape buttonVsync(buttonSizeVsync);
 
-	buttonCount += 1;
 	buttonVsync.setFillColor(sf::Color(255, 0, 0)); // Set RGB color
 	buttonVsync.setOrigin(buttonSizeVsync.x / 2.0f, buttonSizeVsync.y / 2.0f);
 	buttonVsync.setPosition(200, 625);
@@ -226,6 +228,7 @@ void Settings::handleMouseDrag(const sf::Event& event, Window_s& window) {
 }
 
 void Settings::valueChanger(Window_s& window, Music& music) {
+
 	// Fps
 	if (fpsSlider->getisDragging()) {
 		unsigned int fpsValue = static_cast<unsigned int>(fpsSlider->getValue());
@@ -239,21 +242,21 @@ void Settings::valueChanger(Window_s& window, Music& music) {
 		music.setVolume(volumeValue);
 		GameStatistics::saveSettingsValue("Volume", settingsFile, std::to_string(volumeValue));
 	}
-	if (isMax) {
+	if (isMax) { // buttons volume
 		float volumeMax = 100;
 		volumeSlider->setValue(volumeMax);
 		music.setVolume(volumeMax);
 		GameStatistics::saveSettingsValue("Volume", settingsFile, std::to_string(volumeMax));
 		isMax = false;
 	}
-	if (isMin) {
+	if (isMin) { // buttons volume
 		float volumeMin = 0;
 		volumeSlider->setValue(volumeMin);
 		music.setVolume(volumeMin);
 		GameStatistics::saveSettingsValue("Volume", settingsFile, std::to_string(volumeMin));
 		isMin = false;
 	}
-	if (pauseChanged) {
+	if (pauseChanged) { // buttons volume
 		std::string pauseValue = paused ? "Play" : "Pause";
 		for (int i = 0; i < buttonTexts.size(); ++i) {
 			if (buttonTexts[i].getString() == "Pause" || buttonTexts[i].getString() == "Play") {
@@ -262,10 +265,15 @@ void Settings::valueChanger(Window_s& window, Music& music) {
 				break;
 			}
 		}
-		if (!paused)
-			music.playMusic(music.getIdx());
-		else
+		if (!paused) {
+			music.setPause(paused);
+			music.playMusic(MSETTINGS);
+
+		}
+		else {
+			music.setPause(paused);
 			music.pauseMusic();
+		}
 		pauseChanged = false;
 	}
 

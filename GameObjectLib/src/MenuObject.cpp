@@ -3,11 +3,11 @@
 
 void MenuObject::draw(Window_s& window) {
     for (size_t i = 0; i < buttons.size(); i++) {
-        window.addToRenderLayer(static_cast<int>(Layer::TEXTBUTTON), buttonTexts[i]); // Add text on buttons
-        window.addToRenderLayer(static_cast<int>(Layer::MENUBUTTON), buttons[i]); // Add buttons
+        window.addToRenderLayer(static_cast<int>(Layer::TEXTBUTTON), buttonTexts[i]);
+        window.addToRenderLayer(static_cast<int>(Layer::MENUBUTTON), buttons[i]);
     }
-    for (size_t i = 0; i < basicTexts.size(); i++) {
-        window.addToRenderLayer(static_cast<int>(Layer::TEXTRANDOM), basicTexts[i]);
+    for (size_t i = 0; i < globalTexts.size(); i++) {
+        window.addToRenderLayer(static_cast<int>(Layer::TEXTRANDOM), globalTexts[i]);
     }
     for (size_t i = 0; i < bgSprt.size(); i++) {
         window.addToRenderLayer(static_cast<int>(Layer::SRITESBG), bgSprt[i]);
@@ -24,11 +24,11 @@ void MenuObject::draw(Window_s& window) {
 void MenuObject::resetValues(Window_s& window) {
     buttonTexts.clear();
     buttons.clear();
-    basicTexts.clear();
+    globalTexts.clear();
     bgSprt.clear();
     bgTex.clear();
     particles.clear();
-    buttonCount = 0;
+
     window.clearLayer(static_cast<int>(Layer::SRITESBG));
     window.clearLayer(static_cast<int>(Layer::MENUBUTTON));
     window.clearLayer(static_cast<int>(Layer::TEXTBUTTON));   
@@ -55,10 +55,10 @@ void MenuObject::changeOnMouse(Window_s& window) {
 
     for (size_t i = 0; i < buttons.size(); i++) {
         if (buttons[i].getGlobalBounds().contains(mousePosF)) {
-            buttons[i].setFillColor(sf::Color(0, 0, 255)); // Couleur de survol
+            buttons[i].setFillColor(sf::Color(0, 0, 255)); // Bleu
         }
         else {
-            buttons[i].setFillColor(sf::Color(255, 0, 0)); // Couleur par d�faut
+            buttons[i].setFillColor(sf::Color(255, 0, 0)); // Rouge
 
         }
     }
@@ -81,5 +81,5 @@ sf::Text MenuObject::createText(const std::string& text, const sf::Vector2f& pos
 void MenuObject::reloding(Window_s& window) {
     resetValues(window); // Detruit tout ce quil y a dans les layers et toute les valeurs (les valeurs seront remplacer par les loaders)
     load(window); // Load les bouttons
-    draw(window); // Draw les boutons charg�
+    draw(window); // Draw les boutons chargé
 }

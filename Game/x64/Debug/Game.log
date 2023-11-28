@@ -1,1 +1,4 @@
-﻿  Game.vcxproj -> C:\Users\cacag\OneDrive\Desktop\AllProjects\MENU\x64\Debug\Game.exe
+﻿sfml-graphics-s-d.lib(RenderStates.obj) : warning LNK4099: PDB '' n'a pu être trouvé avec 'sfml-graphics-s-d.lib(RenderStates.obj)' ou sur '' ; l'objet sera lié sans informations de débogage
+sfml-graphics-s-d.lib(BlendMode.obj) : warning LNK4099: PDB '' n'a pu être trouvé avec 'sfml-graphics-s-d.lib(BlendMode.obj)' ou sur '' ; l'objet sera lié sans informations de débogage
+sfml-graphics-s-d.lib(Transform.obj) : warning LNK4099: PDB '' n'a pu être trouvé avec 'sfml-graphics-s-d.lib(Transform.obj)' ou sur '' ; l'objet sera lié sans informations de débogage
+  Game.vcxproj -> C:\Users\cacag\OneDrive\Desktop\AllProjects\MENU\x64\Debug\Game.exe

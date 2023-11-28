@@ -2,7 +2,6 @@
 
 Success::Success() : file("Save/saveStatistics.txt"), clickS(false), openS(false), timeS(false), elapsed(0)
 {
-	buttonCount = 0;
 	_fontButton.loadFromFile("asset/font/Beyonders.ttf");
 	_fontAny.loadFromFile("asset/font/Dragon Slayer.ttf");
 }
@@ -15,8 +14,6 @@ void Success::textureSetters(Window_s& window) {
 	// load texture and create de sprite 
 	std::vector<std::string> backgroundFile = { "asset/sprite/success/background.png" };
 	std::vector<std::string> globalFile = { "asset/sprite/success/Cadenas.png", "asset/sprite/success/Cadenas.png", "asset/sprite/success/Cadenas.png",  "asset/sprite/success/Hourglass.png",  "asset/sprite/success/Open.png",  "asset/sprite/success/Click.png" };
-
-
 
 	bgTex.resize(backgroundFile.size());
 	bgSprt.resize(backgroundFile.size());
@@ -41,16 +38,26 @@ void Success::textureSetters(Window_s& window) {
 	// here we set scale/position/origin
 	bgSprt[0].setScale(X / bgTex[0].getSize().x, Y / bgTex[0].getSize().y); // attapt scale to screen size
 
-	
 	for (size_t i = 0; i < globalSprt.size(); i++) {
-		globalSprt[i].setScale(particles[0].getSize().x / globalTex[i].getSize().x, particles[0].getSize().y / globalTex[i].getSize().y);
+		globalSprt[i].setScale((particles[0].getSize().x / globalTex[i].getSize().x) * 0.8f, (particles[0].getSize().y / globalTex[i].getSize().y) * 0.8f);
 		globalSprt[i].setOrigin(sf::Vector2f(globalTex[i].getSize().x / 2, globalTex[i].getSize().y / 2));
-
 		globalSprt[i].setPosition(sf::Vector2f(particles[i].getPosition().x, particles[i].getPosition().y));
 	}
-	for (size_t i = globalFile.size() / 2; i < globalFile.size(); i++)
+	for (size_t i = globalFile.size() / 2; i < globalFile.size(); i++) // Set the success icones out of the way
 	{
 		globalSprt[i].setPosition(sf::Vector2f(-200, globalSprt[i].getPosition().y));
+	}
+
+	// set texture for rectangleShapes
+	buttonTex.resize(particles.size());
+
+	for (size_t i = 0; i < particles.size(); i++) {
+		if (!buttonTex[i].loadFromFile("asset/sprite/menu/woodButton.jpg")) {
+			throw std::runtime_error("Failed to load texture");
+		}
+		else {
+			particles[i].setTexture(&buttonTex[i]);
+		}
 	}
 }
 
@@ -59,16 +66,16 @@ void Success::load(Window_s& window) {
 	sf::Text successOppened = createText(GameStatistics::getParamFromString("gameOpenned", file) + " Oppened", sf::Vector2f(300, 300), 20, sf::Color(255, 255, 255));
 	sf::Text successClick = createText(GameStatistics::getParamFromString("clicks", file) + " Click", sf::Vector2f(300, 500), 20, sf::Color(255, 255, 255));
 
-	basicTexts.push_back(successTime);
-	basicTexts.push_back(successOppened);
-	basicTexts.push_back(successClick);
+	globalTexts.push_back(successTime);
+	globalTexts.push_back(successOppened);
+	globalTexts.push_back(successClick);
 
 	// Cadre for success
 	sf::Vector2f buttonSize(150, 150);
 	float spacing = 200;
 
 	for (int i = 0; i < 2; i++) {
-		for (size_t i = 0; i < basicTexts.size(); ++i) {
+		for (size_t i = 0; i < globalTexts.size(); ++i) {
 			sf::RectangleShape button(buttonSize);
 			button.setFillColor(sf::Color(208, 243, 112)); // Set RGB color
 			button.setOrigin(buttonSize.x / 2.0f, buttonSize.y / 2.0f);

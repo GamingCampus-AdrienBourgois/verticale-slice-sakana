@@ -20,16 +20,18 @@ enum class Layer {
     SPRITESGB
 
 };
-// 1 menu buttons (destroyed after switch betwin states)
-// 2 text for buttons (destroyed after switch betwin states)
-// 3 bar for settings slider (destroyed after switch betwin states)
-// 4 handle for settings slider (destroyed after switch betwin states)
-// 5 text for bar for settings slider (destroyed after switch betwin states)
-// 6 random text in menu (destroyed after switch betwin states)
+// 1 sprites for background (be rendered first)
+// 2 menu buttons (destroyed after switch betwin states)
+// 3 text for buttons (destroyed after switch betwin states)
+// 4 particles (like rain or wind or frame)
+// 5 bar for settings slider (destroyed after switch betwin states)
+// 6 handle for settings slider (destroyed after switch betwin states)
+// 7 text for bar for settings slider (destroyed after switch betwin states)
+// 8 random text in menu (destroyed after switch betwin states)
+// 9 global sprites for what ever (will be rendered first)
 
 
-// Classe de base abstraite pour les objets de menu
-// Elle sert pour la creation des boutons avec draw et setTextOnButton ainsi que la reinitialisation des �tats avec resetValues
+// Classe de base abstraite pour les objets de menu et ces differents states
 class MenuObject {
 public:
     virtual ~MenuObject() = default;
@@ -57,24 +59,26 @@ public:
     {
         MBASE,
         MCREDIT,
+        MSETTINGS,
+        MHELP,
+        MSUCCESS
     };
 
 protected:
     sf::Font _fontButton;
     sf::Font _fontAny;
 
-    unsigned int buttonCount;
     std::vector<sf::Text> buttonTexts; // texts on the buttons
     std::vector<sf::Texture> buttonTex; // texture for buttons (esthetic)
     std::vector<sf::RectangleShape> buttons; // buttons for each states
 
-    std::vector<sf::Text> basicTexts; // texts for anything
+    std::vector<sf::RectangleShape> particles; // rectangle shape for esthetisme like rain or frame
 
-    std::vector<sf::RectangleShape> particles;
+    std::vector<sf::Texture> globalTex; // texture for all the sprites
+    std::vector<sf::Sprite> globalSprt; // sprites for anything (first plan)
+    std::vector<sf::Text> globalTexts; // texts for anything
 
-    std::vector<sf::Texture> globalTex;
-    std::vector<sf::Sprite> globalSprt;
 
-    std::vector<sf::Texture> bgTex;
-    std::vector<sf::Sprite> bgSprt;
+    std::vector<sf::Sprite> bgSprt; // sprites for background (second plan)
+    std::vector<sf::Texture> bgTex; // texture for background
 };

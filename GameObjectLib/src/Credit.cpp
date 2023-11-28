@@ -2,7 +2,6 @@
 
 Credit::Credit() : elapsed(0.0f)
 {
-	buttonCount = 0;
 	_fontButton.loadFromFile("asset/font/Beyonders.ttf");
 	_fontAny.loadFromFile("asset/font/Dragon Slayer.ttf");
 }
@@ -80,21 +79,21 @@ void Credit::load(Window_s& window)
 
 	for (size_t i = 0; i < creditString.size(); ++i) {
 		sf::Text creditText = createText(creditString[i], sf::Vector2f(window.getWindow().getSize().x / 2, window.getWindow().getSize().y + (spacing * i)), 15, sf::Color(255, 255, 255));
-		basicTexts.push_back(creditText);
+		globalTexts.push_back(creditText);
 	}
 
     textureSetters(window);
 }
 
 void Credit::scroller(float deltaTime, Music& music) {
-	if (basicTexts[basicTexts.size() - 1].getPosition().y + 50 <= 0)
+	if (globalTexts[globalTexts.size() - 1].getPosition().y + 50 <= 0)
 		return;
 	float speed = 100.0f;
 
 	elapsed += deltaTime;
 	if (elapsed >= 0.01f) {
-		for (size_t i = 0; i < basicTexts.size(); ++i) {
-			basicTexts[i].move(0, -speed * deltaTime);
+		for (size_t i = 0; i < globalTexts.size(); ++i) {
+			globalTexts[i].move(0, -speed * deltaTime);
 		}
 		elapsed = 0.0f;
 	}

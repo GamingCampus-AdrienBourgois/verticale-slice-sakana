@@ -14,11 +14,12 @@ GameLoop::GameLoop() : _window(static_cast<std::string>("game")), _music(), _men
 
 
     // Load music for each level
-    _music.LoadMusic();
+    _music.loadMusic();
     // Music player and level 0 = menu music
     _music.playMusic(0);
 
 
+    // Load states for all game (set them)
     _gameStatistics.loadStatistics();
     _gameStatistics.incrementGameStarts();
 }
@@ -35,8 +36,6 @@ void GameLoop::run()
 
     while (_window.isOpen()) {
         float deltaTime = clock.restart().asSeconds();
-
-        //std::cout << _gameStatistics.getTotalGameTime() << std::endl;
 
         processEvents(deltaTime, cameraView);
         update(deltaTime);

@@ -1,45 +1,32 @@
 #include "Music.hpp"
 #include <iostream>
 
-Music::Music() : _volume(100), idx(0)
+Music::Music() : _volume(100), pause(false)
 {
 
 }
+
 Music::~Music() = default;
 
-void Music::LoadMusic() 
+void Music::loadMusic() 
 {
-    _music.push_back(std::make_unique<sf::Music>());
-    if (!_music.back()->openFromFile("asset/music/1.mp3")) {
-        std::cout << "Error loading music" << std::endl;
-    }
-
-    _music.push_back(std::make_unique<sf::Music>());
-    if (!_music.back()->openFromFile("asset/music/2.mp3")) {
-        std::cout << "Error loading music" << std::endl;
-    }
-    _music.push_back(std::make_unique<sf::Music>());
-    if (!_music.back()->openFromFile("asset/music/3.mp3")) {
-        std::cout << "Error loading music" << std::endl;
-    }
-    _music.push_back(std::make_unique<sf::Music>());
-    if (!_music.back()->openFromFile("asset/music/4.mp3")) {
-        std::cout << "Error loading music" << std::endl;
-    }
-    _music.push_back(std::make_unique<sf::Music>());
-    if (!_music.back()->openFromFile("asset/music/5.mp3")) {
-        std::cout << "Error loading music" << std::endl;
-    }
-    for (auto& musics : _music) {
-        musics->setVolume(_volume);
-    }
+    *this = "asset/music/1.mp3";
+    *this = "asset/music/2.mp3";
+    *this = "asset/music/3.mp3";
+    *this = "asset/music/4.mp3";
+    *this = "asset/music/5.mp3";
 }
 
-void Music::playMusic(int level) {
+void Music::playMusic(int level) 
+{
+    if (pause)
+        return;
+
     if (level >= 0 && level < _music.size()) {
         _music[level]->setVolume(_volume);
         _music[level]->setLoop(true);
         _music[level]->play();
+
     }
     else {
         std::cerr << "level out of range" << std::endl;
@@ -66,21 +53,44 @@ void Music::stopMusic(int level) {
     }
 }
 
+void Music::stopAllMusic() {
+    for (auto& music : _music) {
+        if (music->getStatus() == sf::Music::Playing) {
+            music->stop();
+            break;
+        }
+    }
+}
+
 const std::vector<std::unique_ptr<sf::Music>>& Music::getMusic() const {
     return _music;
 }
 
 void Music::pauseMusic() {
-    idx = 0;
     for (auto& music : _music) {
         if (music->getStatus() == sf::Music::Playing) {
             music->pause();
             break;
         }
-        idx++;
     }
 }
 
-const int Music::getIdx() const {
-    return idx;
+void Music::setPause(bool _pause)
+{
+    pause = _pause;
+}
+
+const bool Music::getPause() const
+{
+    return pause;
+}
+
+void Music::operator=(const std::string& musicFile) {
+    auto music = std::make_unique<sf::Music>();
+    if (!music->openFromFile(musicFile)) {
+        std::cout << "Error loading music from: " << musicFile << std::endl;
+        return;
+    }
+    music->setVolume(_volume);
+    _music.push_back(std::move(music));
 }
