@@ -8,6 +8,9 @@ Music::Music() : _volume(100), pause(false)
 
 Music::~Music() = default;
 
+// Utilisation de this :
+// loadMusic() == loadMusic(Music *this)
+// *this == this[0] (premiere instance de Music qui sera toujours le constructeur)
 void Music::loadMusic() 
 {
     *this = "asset/music/1.mp3";
