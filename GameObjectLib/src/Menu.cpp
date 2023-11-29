@@ -96,6 +96,36 @@ void Menu::load(Window_s& window)
 	textureSetters(window);
 }
 
+// Reload by state, good for settings application
+void Menu::reloadByState(Window_s& window) {
+	switch (_MenuState)
+	{
+	case BASE:
+		reloding(window);
+		break;
+	case PLAY:
+		_play.reloding(window);
+		break;
+	case SETTINGS:
+		_settings.reloding(window);
+		break;
+	case HELP:
+		_help.reloding(window);
+		break;
+	case SUCCESS:
+		_success.reloding(window);
+		break;
+	case CREDIT:
+		_credit.reloding(window);
+		break;
+	case QUIT:
+		break;
+	default:
+		break;
+	}
+}
+
+
 void Menu::update(Window_s& window, Music& music, float deltaTime) {
 	sf::Vector2i currentPosition = window.getWindow().getPosition();
 

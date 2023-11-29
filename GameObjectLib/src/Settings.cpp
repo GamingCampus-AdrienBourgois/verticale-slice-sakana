@@ -363,3 +363,11 @@ void Settings::valueSetter(Window_s& window, Music& music) {
 const std::string Settings::getSettingsFile() const {
 	return settingsFile;
 }
+
+void Settings::reloding(Window_s &window) {
+	resetValues(window);
+	load(window);
+	// add Sliders
+	drawSliders(window);
+	draw(window);
+}

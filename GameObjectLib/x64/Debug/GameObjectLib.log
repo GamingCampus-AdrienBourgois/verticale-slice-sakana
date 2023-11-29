@@ -1,4 +1,13 @@
-﻿  Music.cpp
+﻿  Credit.cpp
+C:\Users\cacag\OneDrive\Desktop\AllProjects\sakana t2\GameObjectLib\src\Credit.cpp(81,97): warning C4244: 'argument' : conversion de 'T' en 'T', perte possible de données
+          with
+          [
+              T=unsigned int
+          ]
+          and
+          [
+              T=float
+          ]
 x64\Debug\GameStatistics.obj : warning LNK4042: objet spécifié plus d'une fois ; définitions supplémentaires ignorées
 x64\Debug\Play.obj : warning LNK4042: objet spécifié plus d'une fois ; définitions supplémentaires ignorées
-  GameObjectLib.vcxproj -> C:\Users\cacag\OneDrive\Desktop\AllProjects\MENU\x64\Debug\GameObjectLib.lib
+  GameObjectLib.vcxproj -> C:\Users\cacag\OneDrive\Desktop\AllProjects\sakana t2\x64\Debug\GameObjectLib.lib

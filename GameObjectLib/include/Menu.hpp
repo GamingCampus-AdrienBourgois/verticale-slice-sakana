@@ -44,6 +44,7 @@ public:
     void update(Window_s& window, Music& music, float deltaTime);
     void textureSetters(Window_s &window);
     void rainAnim(float deltaTime, Window_s& window);
+    void reloadByState(Window_s& window);
 
     const MenuStates getMenuState() const;
     void setMenuState(MenuStates MenuState);

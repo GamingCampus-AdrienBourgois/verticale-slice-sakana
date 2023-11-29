@@ -71,6 +71,8 @@ void GameLoop::processEvents(float deltaTime, sf::View cameraView)
         case sf::Event::Resized:
             sf::FloatRect visibleArea(0, 0, static_cast<float>(event.size.width), static_cast<float>(event.size.height));
             _window.getWindow().setView(sf::View(visibleArea));
+
+            _menu.reloadByState(_window);
             break;
         }
 

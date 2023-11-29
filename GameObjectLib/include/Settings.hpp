@@ -27,6 +27,9 @@ public:
     void valueSetter(Window_s& window, Music& music);
     const std::string getSettingsFile() const;
 
+    // Surcharge de reload
+    void reloding(Window_s& window);
+
 private:
     sf::Vector2u _resolution;
     bool resolutionChanged;
