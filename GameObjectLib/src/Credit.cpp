@@ -88,7 +88,7 @@ void Credit::load(Window_s& window)
 void Credit::scroller(float deltaTime, Music& music) {
 	if (globalTexts[globalTexts.size() - 1].getPosition().y + 50 <= 0)
 		return;
-	float speed = 100.0f;
+	float speed = 80.0f;
 
 	elapsed += deltaTime;
 	if (elapsed >= 0.01f) {

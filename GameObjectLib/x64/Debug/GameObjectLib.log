@@ -1,5 +1,7 @@
-﻿  Credit.cpp
-C:\Users\cacag\OneDrive\Desktop\AllProjects\sakana t2\GameObjectLib\src\Credit.cpp(81,97): warning C4244: 'argument' : conversion de 'T' en 'T', perte possible de données
+﻿  Play.hpp
+C:\Users\cacag\OneDrive\Desktop\AllProjects\Sakana\GameObjectLib\include\Play.hpp(18,50): warning C4129: 's' : caractère de séquence d'échappement non reconnu
+C:\Users\cacag\OneDrive\Desktop\AllProjects\Sakana\GameObjectLib\include\Play.hpp(18,50): warning C4129: 'm' : caractère de séquence d'échappement non reconnu
+C:\Users\cacag\OneDrive\Desktop\AllProjects\Sakana\GameObjectLib\include\Play.hpp(44,103): warning C4244: 'argument' : conversion de 'T' en 'T', perte possible de données
           with
           [
               T=unsigned int
@@ -8,6 +10,42 @@ C:\Users\cacag\OneDrive\Desktop\AllProjects\sakana t2\GameObjectLib\src\Credit.c
           [
               T=float
           ]
+  Help.cpp
+C:\Users\cacag\OneDrive\Desktop\AllProjects\Sakana\GameObjectLib\src\Help.cpp(57,93): warning C4244: 'argument' : conversion de 'T' en 'T', perte possible de données
+          with
+          [
+              T=unsigned int
+          ]
+          and
+          [
+              T=float
+          ]
+  GameStatistics.hpp
+  Play.cpp
+C:\Users\cacag\OneDrive\Desktop\AllProjects\Sakana\GameObjectLib\include\Play.hpp(18,50): warning C4129: 's' : caractère de séquence d'échappement non reconnu
+C:\Users\cacag\OneDrive\Desktop\AllProjects\Sakana\GameObjectLib\include\Play.hpp(18,50): warning C4129: 'm' : caractère de séquence d'échappement non reconnu
+C:\Users\cacag\OneDrive\Desktop\AllProjects\Sakana\GameObjectLib\include\Play.hpp(44,103): warning C4244: 'argument' : conversion de 'T' en 'T', perte possible de données
+          with
+          [
+              T=unsigned int
+          ]
+          and
+          [
+              T=float
+          ]
+  Menu.cpp
+C:\Users\cacag\OneDrive\Desktop\AllProjects\Sakana\GameObjectLib\include\Play.hpp(18,50): warning C4129: 's' : caractère de séquence d'échappement non reconnu
+C:\Users\cacag\OneDrive\Desktop\AllProjects\Sakana\GameObjectLib\include\Play.hpp(18,50): warning C4129: 'm' : caractère de séquence d'échappement non reconnu
+C:\Users\cacag\OneDrive\Desktop\AllProjects\Sakana\GameObjectLib\include\Play.hpp(44,103): warning C4244: 'argument' : conversion de 'T' en 'T', perte possible de données
+          with
+          [
+              T=unsigned int
+          ]
+          and
+          [
+              T=float
+          ]
+  Génération de code en cours...
 x64\Debug\GameStatistics.obj : warning LNK4042: objet spécifié plus d'une fois ; définitions supplémentaires ignorées
 x64\Debug\Play.obj : warning LNK4042: objet spécifié plus d'une fois ; définitions supplémentaires ignorées
-  GameObjectLib.vcxproj -> C:\Users\cacag\OneDrive\Desktop\AllProjects\sakana t2\x64\Debug\GameObjectLib.lib
+  GameObjectLib.vcxproj -> C:\Users\cacag\OneDrive\Desktop\AllProjects\Sakana\x64\Debug\GameObjectLib.lib

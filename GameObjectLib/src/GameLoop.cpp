@@ -1,7 +1,7 @@
 #include "GameLoop.hpp"
 #include <iostream>
 
-GameLoop::GameLoop() : _window(static_cast<std::string>("game")), _music(), _menu(_window, _music), _gameStatistics(), isMousePressed(false)
+GameLoop::GameLoop() : _window(static_cast<std::string>("Sakana Man")), _music(), _menu(_window, _music), _gameStatistics(), isMousePressed(false)
 {
     // Set level to first
     level = 0;
@@ -99,8 +99,7 @@ void GameLoop::nextLevel()
 
 void GameLoop::update(float deltaTime) 
 {
-    if (_menu.getIsMenu())
-        _menu.update(_window, _music, deltaTime);
+    _menu.update(_window, _music, deltaTime);
     _gameStatistics.updateGameTime(deltaTime);
 }
 

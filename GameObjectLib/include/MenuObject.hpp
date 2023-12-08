@@ -61,7 +61,8 @@ public:
         MCREDIT,
         MSETTINGS,
         MHELP,
-        MSUCCESS
+        MSUCCESS,
+        MPLAY
     };
 
 protected:

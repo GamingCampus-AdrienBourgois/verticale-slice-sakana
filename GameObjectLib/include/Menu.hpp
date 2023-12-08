@@ -30,7 +30,6 @@ class Menu : public MenuObject
 
     int raindrops = 500;
 
-    bool _isMenu;
     MenuStates _MenuState;
     MenuStates _PreviousMenuState;
  

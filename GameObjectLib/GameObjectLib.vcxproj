@@ -29,6 +29,7 @@
     <ClInclude Include="include\MenuObject.hpp" />
     <ClInclude Include="include\Slider.hpp" />
     <ClInclude Include="include\Success.hpp" />
+    <ClInclude Include="include\PlayObject.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\Play.hpp" />

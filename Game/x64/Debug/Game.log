@@ -1,1 +1,26 @@
-﻿  Game.vcxproj -> C:\Users\cacag\OneDrive\Desktop\AllProjects\sakana t2\x64\Debug\Game.exe
+﻿  main.cpp
+C:\Users\cacag\OneDrive\Desktop\AllProjects\Sakana\GameObjectLib\include\Play.hpp(18,50): warning C4129: 's' : caractère de séquence d'échappement non reconnu
+C:\Users\cacag\OneDrive\Desktop\AllProjects\Sakana\GameObjectLib\include\Play.hpp(18,50): warning C4129: 'm' : caractère de séquence d'échappement non reconnu
+C:\Users\cacag\OneDrive\Desktop\AllProjects\Sakana\GameObjectLib\include\Play.hpp(44,103): warning C4244: 'argument' : conversion de 'T' en 'T', perte possible de données
+          with
+          [
+              T=unsigned int
+          ]
+          and
+          [
+              T=float
+          ]
+sfml-graphics-s-d.lib(RenderStates.obj) : warning LNK4099: PDB '' n'a pu être trouvé avec 'sfml-graphics-s-d.lib(RenderStates.obj)' ou sur '' ; l'objet sera lié sans informations de débogage
+sfml-graphics-s-d.lib(BlendMode.obj) : warning LNK4099: PDB '' n'a pu être trouvé avec 'sfml-graphics-s-d.lib(BlendMode.obj)' ou sur '' ; l'objet sera lié sans informations de débogage
+sfml-graphics-s-d.lib(Transform.obj) : warning LNK4099: PDB '' n'a pu être trouvé avec 'sfml-graphics-s-d.lib(Transform.obj)' ou sur '' ; l'objet sera lié sans informations de débogage
+GameObjectLib.lib(GameLoop.obj) : error LNK2019: symbole externe non résolu "public: __cdecl GameStatistics::GameStatistics(void)" (??0GameStatistics@@QEAA@XZ) référencé dans la fonction "public: __cdecl GameLoop::GameLoop(void)" (??0GameLoop@@QEAA@XZ)
+GameObjectLib.lib(GameLoop.obj) : error LNK2019: symbole externe non résolu "public: void __cdecl GameStatistics::incrementGameStarts(void)" (?incrementGameStarts@GameStatistics@@QEAAXXZ) référencé dans la fonction "public: __cdecl GameLoop::GameLoop(void)" (??0GameLoop@@QEAA@XZ)
+GameObjectLib.lib(GameLoop.obj) : error LNK2019: symbole externe non résolu "public: void __cdecl GameStatistics::incrementClicks(void)" (?incrementClicks@GameStatistics@@QEAAXXZ) référencé dans la fonction "public: void __cdecl GameLoop::processEvents(float,class sf::View)" (?processEvents@GameLoop@@QEAAXMVView@sf@@@Z)
+GameObjectLib.lib(GameLoop.obj) : error LNK2019: symbole externe non résolu "public: void __cdecl GameStatistics::updateGameTime(float)" (?updateGameTime@GameStatistics@@QEAAXM@Z) référencé dans la fonction "public: void __cdecl GameLoop::update(float)" (?update@GameLoop@@QEAAXM@Z)
+GameObjectLib.lib(GameLoop.obj) : error LNK2019: symbole externe non résolu "public: void __cdecl GameStatistics::saveStatistics(void)" (?saveStatistics@GameStatistics@@QEAAXXZ) référencé dans la fonction "public: __cdecl GameLoop::~GameLoop(void)" (??1GameLoop@@QEAA@XZ)
+GameObjectLib.lib(GameLoop.obj) : error LNK2019: symbole externe non résolu "public: void __cdecl GameStatistics::loadStatistics(void)" (?loadStatistics@GameStatistics@@QEAAXXZ) référencé dans la fonction "public: __cdecl GameLoop::GameLoop(void)" (??0GameLoop@@QEAA@XZ)
+GameObjectLib.lib(Menu.obj) : error LNK2019: symbole externe non résolu "public: __cdecl Play::Play(void)" (??0Play@@QEAA@XZ) référencé dans la fonction "public: __cdecl Menu::Menu(class Window_s &,class Music &)" (??0Menu@@QEAA@AEAVWindow_s@@AEAVMusic@@@Z)
+GameObjectLib.lib(Settings.obj) : error LNK2019: symbole externe non résolu "public: static class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > __cdecl GameStatistics::getParamFromString(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &)" (?getParamFromString@GameStatistics@@SA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V23@AEBV23@@Z) référencé dans la fonction "public: void __cdecl Settings::valueSetter(class Window_s &,class Music &)" (?valueSetter@Settings@@QEAAXAEAVWindow_s@@AEAVMusic@@@Z)
+GameObjectLib.lib(Success.obj) : error LNK2001: symbole externe non résolu "public: static class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > __cdecl GameStatistics::getParamFromString(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &)" (?getParamFromString@GameStatistics@@SA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V23@AEBV23@@Z)
+GameObjectLib.lib(Settings.obj) : error LNK2019: symbole externe non résolu "public: static void __cdecl GameStatistics::saveSettingsValue(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &)" (?saveSettingsValue@GameStatistics@@SAXAEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@00@Z) référencé dans la fonction "public: void __cdecl Settings::valueChanger(class Window_s &,class Music &)" (?valueChanger@Settings@@QEAAXAEAVWindow_s@@AEAVMusic@@@Z)
+C:\Users\cacag\OneDrive\Desktop\AllProjects\Sakana\x64\Debug\Game.exe : fatal error LNK1120: 9 externes non résolus

@@ -18,6 +18,8 @@ void Music::loadMusic()
     *this = "asset/music/3.mp3";
     *this = "asset/music/4.mp3";
     *this = "asset/music/5.mp3";
+    *this = "asset/music/6.mp3";
+
 }
 
 void Music::playMusic(int level) 

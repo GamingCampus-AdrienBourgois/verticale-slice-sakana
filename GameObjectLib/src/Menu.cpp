@@ -4,7 +4,6 @@ Menu::Menu(Window_s& window, Music& music) : _settings(window, music), _credit()
 {
 	// set values
 	elapsed = 0;
-	_isMenu = true;
 	_MenuState = BASE;
 	_PreviousMenuState = BASE;
 	_fontButton.loadFromFile("asset/font/Beyonders.ttf");
@@ -35,7 +34,7 @@ void Menu::textureSetters(Window_s &window)
 	float Y = static_cast<float>(windowSize.y);
 
 	// load texture and create de sprite 
-	std::vector<std::string> globaleFile = { "asset/sprite/menu/background.png" };
+	std::vector<std::string> globaleFile = { "asset/sprite/menu/background.png"};
 
 	bgTex.resize(globaleFile.size());
 	bgSprt.resize(globaleFile.size());
@@ -175,8 +174,9 @@ void Menu::handleEvent(const sf::Event& event, Window_s &window, Music &music)
 				break;
 			case PLAY:
 				reloding(window);
+				music.stopAllMusic();
+				music.playMusic(MBASE);
 
-				_isMenu = true;
 				_MenuState = BASE;
 				_PreviousMenuState = PLAY;
 				break;
@@ -262,7 +262,8 @@ void Menu::handleButtonClick(const sf::Event& event, Window_s& window, Music &mu
 
 			if (buttonText == "PLAY") {
 				resetValues(window);
-				_isMenu = true;
+				music.stopAllMusic();
+				music.playMusic(MPLAY);
 				setMenuState(PLAY);
 			}
 			else if (buttonText == "SETTINGS") {
@@ -311,12 +312,4 @@ const Menu::MenuStates Menu::getMenuState() const {
 
 void Menu::setMenuState(MenuStates MenuState) {
 	_MenuState = MenuState;
-}
-
-const bool Menu::getIsMenu() const {
-	return _isMenu;
-}
-
-void Menu::setIsMenu(bool isMenu) {
-	_isMenu = isMenu;
 }

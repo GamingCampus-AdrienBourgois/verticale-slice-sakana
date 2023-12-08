@@ -6,7 +6,3 @@ Play::Play()
 	_fontAny.loadFromFile("asset/font/Dragon Slayer.ttf");
 }
 
-
-void Play::load(Window_s& window) {
-	return;
-}
