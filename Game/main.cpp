@@ -1,18 +1,13 @@
-#include "GameLoop.hpp"
 #include <iostream>
-#include <time.h>
 #include <random>
+#include <time.h>
 
-int main() 
+#include "../GameObjectLib/include/GameLoop.hpp"
+
+int main()
 {
-    srand(static_cast<unsigned int>(time(NULL)));
-    GameLoop game;
-    game.run();
-    return 0;
+	srand(static_cast<unsigned int>(time(NULL)));
+	GameLoop game;
+	game.run();
+	return 0;
 }
-
-
-
-
-
-

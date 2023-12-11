@@ -1,10 +1,3 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
-
-
-
-
-class PlayObject {
-
-};
+class PlayObject {};

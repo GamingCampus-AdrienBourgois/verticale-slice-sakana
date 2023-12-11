@@ -1,14 +1,13 @@
 #pragma once
-#include <SFML/Graphics.hpp>
 
 #include "MenuObject.hpp"
 
-class Help : public MenuObject {
-	
+class Help : public MenuObject
+{
 public:
 	Help();
-	~Help() = default;
+	~Help() override = default;
 
-	void load(Window_s& window);
+	void load(Window_s& window) override;
 	void textureSetters(Window_s& window);
 };
