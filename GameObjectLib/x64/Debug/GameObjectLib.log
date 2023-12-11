@@ -1,3 +1,0 @@
-﻿x64\Debug\GameStatistics.obj : warning LNK4042: objet spécifié plus d'une fois ; définitions supplémentaires ignorées
-x64\Debug\Play.obj : warning LNK4042: objet spécifié plus d'une fois ; définitions supplémentaires ignorées
-  GameObjectLib.vcxproj -> C:\Users\sgalland\source\repos\a\x64\Debug\GameObjectLib.lib
