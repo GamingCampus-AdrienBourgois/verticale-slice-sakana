@@ -1,4 +1,4 @@
 FramePerSecond=129
-Volume=67.999985
-Resolution=1536x864
+Volume=75.500000
+Resolution=1440x900
 Vsync=On

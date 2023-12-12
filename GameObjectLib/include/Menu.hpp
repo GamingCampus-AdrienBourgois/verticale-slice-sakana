@@ -17,7 +17,7 @@ class Menu : public MenuObject
 	Credit _credit;
 	Help _help;
 	Success _success;
-	Play _play;
+
 
 	// Les autres variables utiles sont dans MenuObject en access protected
 	float elapsed;
@@ -41,6 +41,5 @@ public:
 
 	const MenuStates getMenuState() const;
 	void setMenuState(MenuStates MenuState);
-	const bool getIsMenu() const;
-	void setIsMenu(bool isMenu);
+	void togglePlayMenu();
 };

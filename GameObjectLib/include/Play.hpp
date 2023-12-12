@@ -1,12 +1,17 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-#include "MenuObject.hpp"
+#include "PlayObject.hpp"
 
-class Play : public MenuObject {
+class Play : public PlayObject {
 
 public:
-	Play();
+    Play()
+    {
+        _fontAny.loadFromFile("asset/font/Dragon Slayer.ttf");
+    }
+
+
 	~Play() = default;
 
     void textureSetters(Window_s& window) {

@@ -3,6 +3,7 @@
 GameLoop::GameLoop() : isMousePressed(false), _gameStatistics(), _window(static_cast<std::string>("Sakana Man")), _menu(_window, _music)
 {
 	// Set level to first
+	isMenu = true;
 	level = 0;
 
 	// Load menu
@@ -45,15 +46,27 @@ void GameLoop::processEvents(float deltaTime, sf::View cameraView)
 {
 	sf::Event event;
 
+
+
 	while (_window.pollEvent(event))
 	{
+
+
 		switch (event.type)
 		{
 		case sf::Event::Closed: _window.close();
 			break;
-		case sf::Event::KeyPressed: if (event.key.code == sf::Keyboard::Escape)
+		case sf::Event::KeyPressed: 
+			if (event.key.code == sf::Keyboard::Escape)
 			{
 				_window.close();
+			}
+
+
+			if (event.key.code == sf::Keyboard::Return && _menu.getMenuState() == 1) // 1 = play state and 0 = menu 
+			{
+				_menu.togglePlayMenu();
+				
 			}
 			break;
 		case sf::Event::MouseButtonPressed: isMousePressed = true;
@@ -65,15 +78,31 @@ void GameLoop::processEvents(float deltaTime, sf::View cameraView)
 				isMousePressed = false;
 			}
 			break;
-		case sf::Event::Resized: sf::FloatRect visibleArea(0, 0, static_cast<float>(event.size.width), static_cast<float>(event.size.height));
+		case sf::Event::Resized: 
+			sf::FloatRect visibleArea(0, 0, static_cast<float>(event.size.width), static_cast<float>(event.size.height));
 			_window.getWindow().setView(sf::View(visibleArea));
 
-			_menu.reloadByState(_window);
+			if (isMenu)
+				_menu.reloadByState(_window);
+			else
+			{
+				// game resizer
+			}
 			break;
 		}
 
-		_menu.handleEvent(event, _window, _music);
+
+
+
+
+		if (isMenu)
+			_menu.handleEvent(event, _window, _music);
+		else
+		{
+			//game events
+		}
 	}
+	isMenu = (_menu.getMenuState() == 1 ? false : true);
 }
 
 void GameLoop::nextLevel()
@@ -96,7 +125,14 @@ void GameLoop::nextLevel()
 
 void GameLoop::update(float deltaTime)
 {
-	_menu.update(_window, _music, deltaTime);
+	if (isMenu)
+		_menu.update(_window, _music, deltaTime);
+	else
+	{
+		// game updates
+	}
+
+
 	_gameStatistics.updateGameTime(deltaTime);
 }
 

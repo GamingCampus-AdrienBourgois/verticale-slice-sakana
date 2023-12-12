@@ -24,6 +24,7 @@ public:
 private:
 	unsigned int level;
 	bool isMousePressed;
+	bool isMenu;
 
 	// Ordre de declaration importante car si _window et _music sont pas declare avant _menu alors 
 	// il ne seront pas initilalié lorsquon les met en parametre de _menu

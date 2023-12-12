@@ -106,6 +106,24 @@ void Menu::load(Window_s& window)
 	textureSetters(window);
 }
 
+
+void Menu::togglePlayMenu() {
+	_MenuState = (_MenuState == BASE) ? PLAY : BASE;
+}
+
+
+const Menu::MenuStates Menu::getMenuState() const
+{
+	return _MenuState;
+}
+
+void Menu::setMenuState(MenuStates MenuState)
+{
+	_MenuState = MenuState;
+}
+
+
+// STATE APPLYIER OR STATE SWITCHER
 // Reload by state, good for settings application
 void Menu::reloadByState(Window_s& window)
 {
@@ -113,7 +131,7 @@ void Menu::reloadByState(Window_s& window)
 	{
 	case BASE: reloding(window);
 		break;
-	case PLAY: _play.reloding(window);
+	case PLAY:
 		break;
 	case SETTINGS: _settings.reloding(window);
 		break;
@@ -164,7 +182,11 @@ void Menu::handleEvent(const sf::Event& event, Window_s& window, Music& music)
 		{
 			switch (_MenuState)
 			{
-			case BASE: _MenuState = BASE;
+			case BASE:  reloding(window);
+				music.stopAllMusic();
+				music.playMusic(MBASE);
+				
+				_MenuState = BASE;
 				_PreviousMenuState = BASE;
 				break;
 			case PLAY: reloding(window);
@@ -293,14 +315,4 @@ void Menu::handleButtonClick(const sf::Event& event, Window_s& window, Music& mu
 			break;
 		}
 	}
-}
-
-const Menu::MenuStates Menu::getMenuState() const
-{
-	return _MenuState;
-}
-
-void Menu::setMenuState(MenuStates MenuState)
-{
-	_MenuState = MenuState;
 }

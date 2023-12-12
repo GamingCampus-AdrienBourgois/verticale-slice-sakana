@@ -93,7 +93,7 @@ void Success::update(float deltaTime) {
 	elapsed += deltaTime;
 
 
-	if (elapsed > 4.0f) {
+	if (elapsed > 2.0f) {
 		std::string timeStr = GameStatistics::getParamFromString("timePlaying", file);
 		size_t dotPos = timeStr.find('.');
 		int minutes = std::stoi(timeStr.substr(0, dotPos));
