@@ -34,7 +34,7 @@ void Window_s::setFps(unsigned int fps) {
     _fps = fps;
 }
 
-const float Window_s::getFps() const {
+const unsigned int Window_s::getFps() const {
     return _fps;
 }
 

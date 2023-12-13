@@ -47,7 +47,7 @@ void GameStatistics::loadStatistics()
 	size_t dotPos = timeStr.find('.');
 	int minutes = std::stoi(timeStr.substr(0, dotPos));
 	int seconds = std::stoi(timeStr.substr(dotPos + 1));
-	totalTime = minutes * 60 + seconds; // convert into seconds
+	totalTime = static_cast<float>(minutes * 60 + seconds); // convert into seconds
 }
 
 unsigned int GameStatistics::getGameStarts() const {

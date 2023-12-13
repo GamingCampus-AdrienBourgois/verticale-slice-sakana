@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\Fish.hpp" />
     <ClInclude Include="include\Credit.hpp" />
     <ClInclude Include="include\GameLoop.hpp" />
     <ClInclude Include="include\GameStatistics.hpp" />
@@ -32,8 +33,11 @@
     <ClInclude Include="include\Slider.hpp" />
     <ClInclude Include="include\Success.hpp" />
     <ClInclude Include="include\Window.hpp" />
+    <ClInclude Include="include\Map.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="include\HumanFish.hpp" />
+    <ClCompile Include="src\PlayObject.cpp" />
     <ClCompile Include="src\Credit.cpp" />
     <ClCompile Include="src\GameLoop.cpp" />
     <ClCompile Include="src\GameStatistics.cpp" />
@@ -196,6 +200,7 @@
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(SolutionDir)include\ImGui-SFML;$(SolutionDir)include\ImGui;$(SolutionDir)include;$(ProjectDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>

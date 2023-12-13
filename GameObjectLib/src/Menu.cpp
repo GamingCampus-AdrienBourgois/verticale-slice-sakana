@@ -131,8 +131,6 @@ void Menu::reloadByState(Window_s& window)
 	{
 	case BASE: reloding(window);
 		break;
-	case PLAY:
-		break;
 	case SETTINGS: _settings.reloding(window);
 		break;
 	case HELP: _help.reloding(window);
@@ -152,22 +150,23 @@ void Menu::update(Window_s& window, Music& music, float deltaTime)
 
 	switch (_MenuState)
 	{
-	case BASE: rainAnim(deltaTime, window);
+	case BASE: 
+		rainAnim(deltaTime, window);
 		changeOnMouse(window);
 		break;
-	case PLAY: break;
-	case SETTINGS: _settings.valueChanger(window, music);
+	case SETTINGS: 
+		_settings.valueChanger(window, music);
 		_settings.changeOnMouse(window);
 		break;
 	case HELP:
-		// none
 		break;
-	case SUCCESS: _success.update(deltaTime);
+	case SUCCESS: 
+		_success.update(deltaTime);
 		break;
-	case CREDIT: _credit.scroller(deltaTime, music);
+	case CREDIT: 
+		_credit.scroller(deltaTime, music);
 		break;
 	case QUIT:
-		// none
 		break;
 	default: break;
 	}
@@ -185,13 +184,16 @@ void Menu::handleEvent(const sf::Event& event, Window_s& window, Music& music)
 			case BASE:  reloding(window);
 				music.stopAllMusic();
 				music.playMusic(MBASE);
-				
 				_MenuState = BASE;
 				_PreviousMenuState = BASE;
 				break;
-			case PLAY: reloding(window);
+			case PLAY: 
+				
+				reloding(window);
 				music.stopAllMusic();
 				music.playMusic(MBASE);
+
+
 
 				_MenuState = BASE;
 				_PreviousMenuState = PLAY;
@@ -237,7 +239,6 @@ void Menu::handleEvent(const sf::Event& event, Window_s& window, Music& music)
 	{
 	case BASE: handleButtonClick(event, window, music);
 		break;
-	case PLAY: break;
 	case SETTINGS: _settings.handleMouseDrag(event, window);
 		_settings.handleButtonClick(event, window, music);
 		break;

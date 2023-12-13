@@ -40,7 +40,7 @@ void Success::textureSetters(Window_s& window) {
 
 	for (size_t i = 0; i < globalSprt.size(); i++) {
 		globalSprt[i].setScale((particles[0].getSize().x / globalTex[i].getSize().x) * 0.8f, (particles[0].getSize().y / globalTex[i].getSize().y) * 0.8f);
-		globalSprt[i].setOrigin(sf::Vector2f(globalTex[i].getSize().x / 2, globalTex[i].getSize().y / 2));
+		globalSprt[i].setOrigin(sf::Vector2f(static_cast<float>(globalTex[i].getSize().x) / 2, static_cast<float>(globalTex[i].getSize().y) / 2));
 		globalSprt[i].setPosition(sf::Vector2f(particles[i].getPosition().x, particles[i].getPosition().y));
 	}
 	for (size_t i = globalFile.size() / 2; i < globalFile.size(); i++) // Set the success icones out of the way
@@ -98,7 +98,7 @@ void Success::update(float deltaTime) {
 		size_t dotPos = timeStr.find('.');
 		int minutes = std::stoi(timeStr.substr(0, dotPos));
 		int seconds = std::stoi(timeStr.substr(dotPos + 1));
-		float totalTime = minutes * 60 + seconds;
+		float totalTime = static_cast<float>(minutes * 60 + seconds);
 
 		if (totalTime > 60) { // 10 minutes 
 			globalSprt[3].setPosition(sf::Vector2f(particles[3].getPosition().x, particles[3].getPosition().y));

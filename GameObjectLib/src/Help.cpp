@@ -54,7 +54,7 @@ void Help::load(Window_s& window) {
 	float spacing = 50;
 
 	for (size_t i = 0; i < helpString.size(); ++i) {
-		sf::Text helpText = createText(helpString[i], sf::Vector2f(window.getWindow().getSize().x / 2, 40 + (i * spacing)), 18, sf::Color(0, 0, 0));
+		sf::Text helpText = createText(helpString[i], sf::Vector2f(static_cast<float>(window.getWindow().getSize().x) / 2, 40 + (i * spacing)), 18, sf::Color(0, 0, 0));
 		globalTexts.push_back(helpText);
 	}
 

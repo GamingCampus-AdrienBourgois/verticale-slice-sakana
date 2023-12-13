@@ -78,7 +78,7 @@ void Credit::load(Window_s& window)
 	float spacing = 50;
 
 	for (size_t i = 0; i < creditString.size(); ++i) {
-		sf::Text creditText = createText(creditString[i], sf::Vector2f(window.getWindow().getSize().x / 2, window.getWindow().getSize().y + (spacing * i)), 15, sf::Color(255, 255, 255));
+		sf::Text creditText = createText(creditString[i], sf::Vector2f(static_cast<float>(window.getWindow().getSize().x) / 2, static_cast<float>(window.getWindow().getSize().y) + (spacing * i)), 15, sf::Color(255, 255, 255));
 		globalTexts.push_back(creditText);
 	}
 

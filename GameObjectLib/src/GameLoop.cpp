@@ -1,29 +1,53 @@
 #include "GameLoop.hpp"
 
-GameLoop::GameLoop() : isMousePressed(false), _gameStatistics(), _window(static_cast<std::string>("Sakana Man")), _menu(_window, _music)
+GameLoop::GameLoop() : 
+isMousePressed(false),
+loadOnce(true),
+isMenu(true),
+level(0),
+_play(),
+_gameStatistics(), 
+_window(static_cast<std::string>("Sakana Man")), 
+_menu(_window, _music)
 {
-	// Set level to first
-	isMenu = true;
-	level = 0;
 
-	// Load menu
-	_menu.load(_window);
-	// Base Menu draw
-	_menu.draw(_window);
-
-	// Load music for each level
-	_music.loadMusic();
-	// Music player and level 0 = menu music
-	_music.playMusic(0);
-
-	// Load states for all game (set them)
-	_gameStatistics.loadStatistics();
-	_gameStatistics.incrementGameStarts();
 }
 
 GameLoop::~GameLoop()
 {
 	_gameStatistics.saveStatistics();
+}
+
+void GameLoop::loader() 
+{
+	if (loadOnce) {
+
+		// Load menu and Base Menu draw
+		_menu.load(_window);
+		_menu.draw(_window);
+
+		// Load music for each level and Music player, level 0 = base menu music
+		_music.loadMusic();
+		_music.playMusic(0);
+
+		// Load states for all game (set them)
+		_gameStatistics.loadStatistics();
+		_gameStatistics.incrementGameStarts();
+	}
+
+	// Manage menu change to game for game loader to load once (when the state is changed)
+	bool initialIsMenu = isMenu;
+	isMenu = (_menu.getMenuState() == 1 ? false : true);
+	bool changedIsMenu = false;
+	if (initialIsMenu) {
+		changedIsMenu = isMenu ^ initialIsMenu; // bitwise operation 0 ^ 0 = 1 && 1 ^ 1 = 1
+	}
+	if (changedIsMenu) {
+		_play.load(_window);
+		_play.draw(_window);
+	}
+
+	loadOnce &= false; // bitwise operation (if its true [1] its set to false [0] and if its true do nothing)
 }
 
 void GameLoop::run()
@@ -35,6 +59,7 @@ void GameLoop::run()
 	{
 		float deltaTime = clock.restart().asSeconds();
 
+		loader();
 		processEvents(deltaTime, cameraView);
 		update(deltaTime);
 		nextLevel();
@@ -46,32 +71,25 @@ void GameLoop::processEvents(float deltaTime, sf::View cameraView)
 {
 	sf::Event event;
 
-
-
 	while (_window.pollEvent(event))
 	{
-
-
 		switch (event.type)
 		{
 		case sf::Event::Closed: _window.close();
 			break;
 		case sf::Event::KeyPressed: 
 			if (event.key.code == sf::Keyboard::Escape)
-			{
 				_window.close();
-			}
-
-
-			if (event.key.code == sf::Keyboard::Return && _menu.getMenuState() == 1) // 1 = play state and 0 = menu 
-			{
+			if (event.key.code == sf::Keyboard::Return && _menu.getMenuState() == 1) { // 1 = play state and 0 = menu 
 				_menu.togglePlayMenu();
-				
 			}
+
 			break;
-		case sf::Event::MouseButtonPressed: isMousePressed = true;
+		case sf::Event::MouseButtonPressed: 
+			isMousePressed = true;
 			break;
-		case sf::Event::MouseButtonReleased: if (isMousePressed)
+		case sf::Event::MouseButtonReleased: 
+			if (isMousePressed)
 			{
 				_gameStatistics.incrementClicks();
 				_gameStatistics.saveStatistics();
@@ -84,25 +102,18 @@ void GameLoop::processEvents(float deltaTime, sf::View cameraView)
 
 			if (isMenu)
 				_menu.reloadByState(_window);
-			else
-			{
-				// game resizer
-			}
+
+				
 			break;
 		}
-
-
-
-
 
 		if (isMenu)
 			_menu.handleEvent(event, _window, _music);
 		else
-		{
-			//game events
-		}
+			_play.handleEvent(event, _window, _music);
+
 	}
-	isMenu = (_menu.getMenuState() == 1 ? false : true);
+
 }
 
 void GameLoop::nextLevel()
@@ -128,9 +139,7 @@ void GameLoop::update(float deltaTime)
 	if (isMenu)
 		_menu.update(_window, _music, deltaTime);
 	else
-	{
-		// game updates
-	}
+		_play.update(_window, _music, deltaTime);
 
 
 	_gameStatistics.updateGameTime(deltaTime);

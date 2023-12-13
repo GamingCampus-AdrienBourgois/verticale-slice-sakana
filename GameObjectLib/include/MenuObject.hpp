@@ -39,12 +39,12 @@ class MenuObject
 public:
 	virtual ~MenuObject() = default;
 
-	virtual void draw(Window_s& window);
-	virtual void resetValues(Window_s& window);
-	virtual sf::Text setTextOnButton(const std::string& text, sf::RectangleShape& button, unsigned int size, sf::Color color);
-	virtual void changeOnMouse(Window_s& window);
-	virtual sf::Text createText(const std::string& text, const sf::Vector2f& position, unsigned int size, sf::Color color);
-	virtual void reloding(Window_s& window);
+	void draw(Window_s& window);
+	void resetValues(Window_s& window);
+	sf::Text setTextOnButton(const std::string& text, sf::RectangleShape& button, unsigned int size, sf::Color color);
+	void changeOnMouse(Window_s& window);
+    sf::Text createText(const std::string& text, const sf::Vector2f& position, unsigned int size, sf::Color color);
+    void reloding(Window_s& window);
 
 	virtual void load(Window_s& window) = 0;
 

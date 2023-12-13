@@ -13,84 +13,114 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Menu">
+      <UniqueIdentifier>{cf274ded-d37b-4dfe-9fd0-b87c25175d77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Menu">
+      <UniqueIdentifier>{b27223ac-f5c8-4f5e-b195-5ceb5386fe77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SystemManager">
+      <UniqueIdentifier>{1b73e55e-c1e2-4c37-b524-f5e97e70f5d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\SystemManager">
+      <UniqueIdentifier>{502992e0-bf53-4e6d-bf82-d1fd1d9654c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Game">
+      <UniqueIdentifier>{9c297801-7497-4976-a3ca-c249836bdc1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game">
+      <UniqueIdentifier>{c0a641a6-3e69-47a4-93b0-c665b041dc4b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Credit.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\GameLoop.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\GameStatistics.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="include\Credit.hpp">
+      <Filter>Header Files\Menu</Filter>
     </ClInclude>
     <ClInclude Include="include\Help.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Menu</Filter>
     </ClInclude>
     <ClInclude Include="include\Menu.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\MenuObject.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Music.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Play.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\PlayObject.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Menu</Filter>
     </ClInclude>
     <ClInclude Include="include\Settings.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Slider.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Menu</Filter>
     </ClInclude>
     <ClInclude Include="include\Success.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MenuObject.hpp">
+      <Filter>Header Files\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Music.hpp">
+      <Filter>Header Files\SystemManager</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GameStatistics.hpp">
+      <Filter>Header Files\SystemManager</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Slider.hpp">
+      <Filter>Header Files\SystemManager</Filter>
     </ClInclude>
     <ClInclude Include="include\Window.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SystemManager</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Play.hpp">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\PlayObject.hpp">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Fish.hpp">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Map.hpp">
+      <Filter>Header Files\Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Credit.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\GameLoop.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\GameStatistics.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Help.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Credit.cpp">
+      <Filter>Source Files\Menu</Filter>
     </ClCompile>
     <ClCompile Include="src\Menu.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Help.cpp">
+      <Filter>Source Files\Menu</Filter>
     </ClCompile>
     <ClCompile Include="src\MenuObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Music.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Play.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Menu</Filter>
     </ClCompile>
     <ClCompile Include="src\Settings.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Slider.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Menu</Filter>
     </ClCompile>
     <ClCompile Include="src\Success.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameStatistics.cpp">
+      <Filter>Source Files\SystemManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Music.cpp">
+      <Filter>Source Files\SystemManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Slider.cpp">
+      <Filter>Source Files\SystemManager</Filter>
     </ClCompile>
     <ClCompile Include="src\Window.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\SystemManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Play.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PlayObject.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="include\HumanFish.hpp">
+      <Filter>Header Files\Game</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

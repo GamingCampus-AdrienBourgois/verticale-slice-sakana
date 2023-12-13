@@ -18,15 +18,13 @@ class Menu : public MenuObject
 	Help _help;
 	Success _success;
 
-
 	// Les autres variables utiles sont dans MenuObject en access protected
-	float elapsed;
 
+	float elapsed;
 	int raindrops = 500;
 
 	MenuStates _MenuState;
 	MenuStates _PreviousMenuState;
-
 public:
 	Menu(Window_s& window, Music& music);
 	~Menu() override;
