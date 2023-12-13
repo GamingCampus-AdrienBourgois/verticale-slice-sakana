@@ -78,6 +78,9 @@
     <ClInclude Include="include\Map.hpp">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
+    <ClInclude Include="include\FisherMan.hpp">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\GameLoop.cpp">

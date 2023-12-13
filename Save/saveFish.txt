@@ -1,23 +1,23 @@
 Name=Ray
 Speed=100
-Scale=1
+Scale=5
 Power=speed
 Path=asset/sprite/fishgame/fishs/fish (1).png
 
 Name=Lantern
 Speed=20
-Scale=1
+Scale=5
 Power=light
 Path=asset/sprite/fishgame/fishs/fish (2).png
 
 Name=Shark
 Speed=80
-Scale=1
+Scale=6
 Power=size
 Path=asset/sprite/fishgame/fishs/fish (3).png
 
 Name=Small
 Speed=60
-Scale=1
+Scale=4
 Power=dash
 Path=asset/sprite/fishgame/fishs/fish (4).png

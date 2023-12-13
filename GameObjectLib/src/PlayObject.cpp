@@ -29,6 +29,8 @@ void PlayObject::draw(Window_s& window)
 		window.addToRenderLayer(static_cast<int>(Scene::SPRITESBG), bgSprt[i]);
 	for (size_t i = 0; i < bgRec.size(); i++)
 		window.addToRenderLayer(static_cast<int>(Scene::RECTBG), bgRec[i]);
+	for (size_t i = 0; i < frontSprt.size(); i++)
+		window.addToRenderLayer(static_cast<int>(Scene::FRONT), frontSprt[i]);
 	
 
 }
@@ -36,14 +38,20 @@ void PlayObject::draw(Window_s& window)
 void PlayObject::resetValues(Window_s& window)
 {
 	globalRec.clear();
+	globalTex.clear();
 	globalSprt.clear();
 	globalTexts.clear();
+	bgTex.clear();
 	bgSprt.clear();
 	bgRec.clear();
+	frontSprt.clear();
+	frontTex.clear();
 
 	window.clearLayer(static_cast<int>(Scene::SPRITESBG));
 	window.clearLayer(static_cast<int>(Scene::RECTBG));
 	window.clearLayer(static_cast<int>(Scene::SPRITESGB));
 	window.clearLayer(static_cast<int>(Scene::RECTGB));
 	window.clearLayer(static_cast<int>(Scene::TEXTGB));
+	window.clearLayer(static_cast<int>(Scene::FRONT));
+
 }

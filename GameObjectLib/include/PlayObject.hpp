@@ -4,11 +4,14 @@
 #include "Music.hpp"
 
 enum class Scene {
-	SPRITESBG = 1,
+	SPRITESBG,
 	RECTBG,
 	SPRITESGB,
 	RECTGB,
-	TEXTGB
+	TEXTGB,
+    FRONT,
+    SEND
+ 
 };
 
 enum GlobalS {
@@ -17,13 +20,18 @@ enum GlobalS {
     FISHB,
     FISHC,
     FISHD,
-    FISHE,
-    FISHF
+    GEND
+};
+
+enum FrontS {
+    MAPBORDER,
+    MAPGRAD,
+    FEND
 };
 
 enum BackS {
     MAP,
-    MAPGRAD
+    BEND
 };
 
 class PlayObject {
@@ -31,13 +39,21 @@ public:
 
 
 
-    PlayObject() = default;
+    PlayObject() {
+        globalSprt.resize(GlobalS::GEND);
+        globalTex.resize(GlobalS::GEND);
+        bgSprt.resize(BackS::BEND);
+        bgTex.resize(BackS::BEND);
+        frontTex.resize(FrontS::FEND);
+        frontSprt.resize(FrontS::FEND);
+    }
     virtual ~PlayObject() = default;
 
     sf::Text createText(const std::string& text, const sf::Vector2f& position, unsigned int size, sf::Color color);
 
     void draw(Window_s& window);
     void resetValues(Window_s& window);
+
 
 
     // public because PlayObject is the object
@@ -52,6 +68,7 @@ public:
     std::vector<sf::Sprite> bgSprt; // sprites for background (second plan)
     std::vector<sf::RectangleShape> bgRec; // rectangle shape for any background effect like rain
 
-
+    std::vector<sf::Texture> frontTex; // texture for front sprites
+    std::vector<sf::Sprite> frontSprt; // sprites for front (second plan)
 
 };

@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\FisherMan.hpp" />
     <ClInclude Include="include\Fish.hpp" />
     <ClInclude Include="include\Credit.hpp" />
     <ClInclude Include="include\GameLoop.hpp" />
