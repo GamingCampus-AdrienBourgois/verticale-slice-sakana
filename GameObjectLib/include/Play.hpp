@@ -74,7 +74,7 @@ public:
     void update(Window_s& window, Music& music, float deltaTime) {
         //_humanFish.followMouse(window, deltaTime);
         _ficherMan.followMouse(window, deltaTime);
-        _ficherMan.update(deltaTime);
+        _ficherMan.update(deltaTime, window);
         animate(deltaTime, window);
     }
     void handleEvent(const sf::Event& event, Window_s& window, Music& music) {

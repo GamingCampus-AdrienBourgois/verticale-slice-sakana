@@ -102,7 +102,7 @@ public:
 		if (elapsed >= 0.30f && timerAnim <=7) {
 			currentFrame = (currentFrame + 1) % 5;
 			elapsed -= 0.30f;
-			std::cout << "Framed";
+			std::cout << "proke";
 			timerAnim++;
 		}
 		_obj.globalSprt[GlobalS::FISHERMAN].setTextureRect(sf::IntRect(currentFrame * static_cast<int>(FRAME_WIDTH), 0, static_cast<int>(FRAME_WIDTH), static_cast<int>(FRAME_HEIGHT)));
@@ -113,20 +113,28 @@ public:
 	}
 
 	void collision(const float deltaTime) {
-		if (_obj.globalSprt[GlobalS::FISHA].getGlobalBounds().intersects(_obj.globalSprt[GlobalS::HOOK].getGlobalBounds()))
+		bool proke = false;
+		for (size_t i = GlobalS::FISHA; i < GlobalS::GEND; i++)
 		{
-			std::cout << "proke";
-
-
-			remonte(deltaTime);
-			isFishing = false;
-
+			if (_obj.globalSprt[i].getGlobalBounds().intersects(_obj.globalSprt[GlobalS::HOOK].getGlobalBounds()))
+				proke = true;
 		}
-		else
-			isFishing = true; // Hook has returned, can fish again
+
+			if (proke)
+			{
+
+
+
+				remonte(deltaTime, GlobalS::FISHA);
+				isFishing = false;
+
+			}
+			else
+				isFishing = true; // Hook has returned, can fish again
+		
 	}
 
-	void remonte(float deltaTime) {
+	void remonte(float deltaTime, size_t i) {
 		sf::Vector2f pointInitial(610.f, 650.f); // Define your initial point for the hook
 
 		float vitesseRemontee = 100.f; // Speed of return (adjust as needed)
@@ -137,7 +145,7 @@ public:
 		// Check if we are close enough to the initial point
 		if (std::sqrt(direction.x * direction.x + direction.y * direction.y) < vitesseRemontee * deltaTime) {
 			_obj.globalSprt[GlobalS::HOOK].move(direction);
-			_obj.globalSprt[GlobalS::FISHA].move(direction);
+			_obj.globalSprt[i].move(direction);
 
 		}
 		else {
@@ -150,7 +158,7 @@ public:
 
 			// Update the position of the hook and the fish (if caught)
 			_obj.globalSprt[GlobalS::HOOK].move(deplacement);
-			_obj.globalSprt[GlobalS::FISHA].move(deplacement);
+			_obj.globalSprt[i].move(deplacement);
 		}
 	}
 
@@ -198,7 +206,7 @@ public:
 		}
 	}
 
-	void update(const float deltaTime) {
+	void update(const float deltaTime, Window_s &window) {
 		collision(deltaTime);
 	}
 };
