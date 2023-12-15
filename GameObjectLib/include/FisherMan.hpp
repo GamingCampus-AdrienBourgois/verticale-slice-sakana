@@ -10,6 +10,7 @@ class FicherMan {
 	int currentFrame;
 	int timerAnim = 0;
 	bool isFishing;
+	int nbFish;
 
 	static constexpr float FRAME_WIDTH = 64.f;
 	static constexpr float FRAME_HEIGHT = 64.f;
@@ -26,6 +27,7 @@ public:
 		currentFrame = 1;
 		elapsed = 0.f;
 		isFishing = true;
+		nbFish = 0;
 	}
 
 	void load(Window_s& window) {
@@ -61,6 +63,18 @@ public:
 			throw std::runtime_error("Failed to load");
 		}
 
+		if (!_obj.globalTex[GlobalS::FISHB].loadFromFile("asset/sprite/fishgame/fishs/fish (2).png")) {
+			throw std::runtime_error("Failed to load");
+		}
+
+		if (!_obj.globalTex[GlobalS::FISHC].loadFromFile("asset/sprite/fishgame/fishs/fish (3).png")) {
+			throw std::runtime_error("Failed to load");
+		}
+
+		if (!_obj.globalTex[GlobalS::FISHD].loadFromFile("asset/sprite/fishgame/fishs/fish (4).png")) {
+			throw std::runtime_error("Failed to load");
+		}
+
 		if (!_obj.globalTex[GlobalS::HOUSE].loadFromFile("asset/sprite/fishgame/fisherHouse.png")) {
 			throw std::runtime_error("Failed to load");
 		}
@@ -78,18 +92,35 @@ public:
 		_obj.globalSprt[GlobalS::HOUSE].setPosition(sf::Vector2f(0.f, -262.f));
 
 		_obj.globalSprt[GlobalS::FISHA].setTexture(_obj.globalTex[GlobalS::FISHA]);
-
-		/*sf::RectangleShape string(sf::Vector2f(100.f, 100.f));
-		std::cout << "BUG BUG BUG";
-		_obj.globalRec[RectangleS::BAR] = string;*/
-
-
+		_obj.globalSprt[GlobalS::FISHA].setPosition(sf::Vector2f(600.f, 1200.f));
+		_obj.globalSprt[GlobalS::FISHB].setTexture(_obj.globalTex[GlobalS::FISHB]);
+		_obj.globalSprt[GlobalS::FISHB].setPosition(sf::Vector2f(1200.f, 800.f));
+		_obj.globalSprt[GlobalS::FISHC].setTexture(_obj.globalTex[GlobalS::FISHC]);
+		_obj.globalSprt[GlobalS::FISHC].setPosition(sf::Vector2f(1800.f, 1400.f));
+		_obj.globalSprt[GlobalS::FISHD].setTexture(_obj.globalTex[GlobalS::FISHD]);
+		_obj.globalSprt[GlobalS::FISHD].setPosition(sf::Vector2f(2200.f, 1200.f));
 
 		_obj.globalSprt[GlobalS::HOOK].setTexture(_obj.globalTex[GlobalS::HOOK]);
 		_obj.globalSprt[GlobalS::HOOK].setScale(1.f, 1.f);
 		_obj.globalSprt[GlobalS::HOOK].setOrigin(_obj.globalTex[GlobalS::HOOK].getSize().x / 2.f, _obj.globalTex[GlobalS::HOOK].getSize().y / 2.f);
 
 		_obj.globalSprt[GlobalS::HOOK].setPosition(sf::Vector2f(X / 2, Y / 2));
+
+		sf::Font font;
+		if (!font.loadFromFile("asset/font/Beyonders.ttf")) {
+			std::cout << "Problème de police";
+		}
+
+		_obj._fontAny = font;
+
+		// Créer un objet texte
+		sf::Text text;
+		text.setFont(_obj._fontAny); // Sélectionner la police
+		text.setString(std::to_string(nbFish) + " / 4"); // Définir le texte
+		text.setCharacterSize(24); // Définir la taille du texte
+		text.setPosition(-100.f, -100.f);
+		text.setFillColor(sf::Color::Red); // Définir la couleur du texte
+		_obj.globalTexts.push_back(text);
 	}
 
 	void animate(float deltaTime, Window_s& window) {
@@ -116,18 +147,14 @@ public:
 		bool proke = false;
 		for (size_t i = GlobalS::FISHA; i < GlobalS::GEND; i++)
 		{
-			if (_obj.globalSprt[i].getGlobalBounds().intersects(_obj.globalSprt[GlobalS::HOOK].getGlobalBounds()))
+			if (_obj.globalSprt[i].getGlobalBounds().intersects(_obj.globalSprt[GlobalS::HOOK].getGlobalBounds())) {
+				remonte(deltaTime, i, window);
 				proke = true;
+			}
 		}
-
 			if (proke)
 			{
-
-
-
-				remonte(deltaTime, GlobalS::FISHA, window);
 				isFishing = false;
-
 			}
 			else
 				isFishing = true; // Hook has returned, can fish again
@@ -159,11 +186,16 @@ public:
 			// Update the position of the hook and the fish (if caught)
 			_obj.globalSprt[GlobalS::HOOK].move(deplacement);
 			_obj.globalSprt[i].move(deplacement);
+			_obj.globalTexts[0].setPosition(sf::Vector2f(currentPosition.x - 780.f, currentPosition.y - 430.f));
+			cameraView.setCenter(currentPosition);
+			window.getWindow().setView(cameraView);
 		}
 		if (_obj.globalSprt[GlobalS::HOOK].getPosition() == pointInitial) {
-			std::cout << "kill";
+			std::cout << nbFish;
 			window.removeFromRenderLayer(static_cast<int>(Scene::SPRITESGB), _obj.globalSprt[i]);
 			_obj.globalSprt[i].setPosition(sf::Vector2f(20000.f, 20000.f));
+			nbFish += 1;
+			_obj.globalTexts[0].setString(std::to_string(nbFish) + " / 4");
 		}
 	}
 
@@ -205,6 +237,7 @@ public:
 			sf::Vector2f newPosition = currentPosition + deltaTime * (mousePosF - currentPosition);
 
 			_obj.globalSprt[GlobalS::HOOK].setPosition(newPosition);
+			_obj.globalTexts[0].setPosition(sf::Vector2f(newPosition.x -780.f, newPosition.y - 430.f));
 
 			cameraView.setCenter(newPosition);
 
