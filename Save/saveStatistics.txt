@@ -1,3 +1,3 @@
-timePlaying=130.06
-gameOpenned=548
-clicks=1463
+timePlaying=142.55
+gameOpenned=600
+clicks=1519

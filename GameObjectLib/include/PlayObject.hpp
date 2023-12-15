@@ -15,6 +15,9 @@ enum class Scene {
 };
 
 enum GlobalS {
+    HOOK,
+    HOUSE,
+    FISHERMAN,
     HFISH,
     FISHA,
     FISHB,
@@ -31,7 +34,13 @@ enum FrontS {
 
 enum BackS {
     MAP,
+    SKY,
     BEND
+};
+
+enum RectangleS {
+    BAR,
+    REND
 };
 
 class PlayObject {
@@ -46,6 +55,7 @@ public:
         bgTex.resize(BackS::BEND);
         frontTex.resize(FrontS::FEND);
         frontSprt.resize(FrontS::FEND);
+        globalRec.resize(RectangleS::REND);
     }
     virtual ~PlayObject() = default;
 

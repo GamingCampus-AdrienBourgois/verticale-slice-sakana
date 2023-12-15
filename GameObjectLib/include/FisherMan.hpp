@@ -6,8 +6,15 @@
 class FicherMan {
 	PlayObject& _obj;
 	sf::View cameraView;
+	float elapsed;
+	int currentFrame;
+	int timerAnim = 0;
+	bool isFishing;
+	bool isReelingIn;
 
-
+	static constexpr float FRAME_WIDTH = 64.f;
+	static constexpr float FRAME_HEIGHT = 64.f;
+	static constexpr float M_PI = 3.1416f;
 
 public:
 	enum Fishing
@@ -17,7 +24,10 @@ public:
 	};
 
 	FicherMan(PlayObject& obj) : _obj(obj) {
-
+		currentFrame = 1;
+		elapsed = 0.f;
+		isFishing = true;
+		isReelingIn = false;
 	}
 
 	void load(Window_s& window) {
@@ -32,44 +42,165 @@ public:
 		if (!_obj.bgTex[BackS::MAP].loadFromFile("asset/sprite/fishgame/fisherman/map.png")) {
 			throw std::runtime_error("Failed to load");
 		}
-		_obj.bgSprt[Fishing::HOOK].setTexture(_obj.bgTex[BackS::MAP]);
-		_obj.bgSprt[Fishing::HOOK].setScale(5.f, 5.f);
 
-		// Load sprites
-		if (!_obj.globalTex[Fishing::HOOK].loadFromFile("asset/sprite/fishgame/fisherman/hook.png")) {
+		if (!_obj.bgTex[BackS::SKY].loadFromFile("asset/sprite/fishgame/fisherman/WideBackground.png")) {
 			throw std::runtime_error("Failed to load");
 		}
 
+		_obj.bgSprt[BackS::SKY].setTexture(_obj.bgTex[BackS::SKY]);
+		_obj.bgSprt[BackS::SKY].setScale(3.f, 3.f);
+		_obj.bgSprt[BackS::SKY].setPosition(sf::Vector2f(0.f, -687.f));
 
-		_obj.globalSprt[Fishing::HOOK].setTexture(_obj.globalTex[Fishing::HOOK]);
-		_obj.globalSprt[Fishing::HOOK].setScale(0.2f, 0.2f);
-		_obj.globalSprt[Fishing::HOOK].setOrigin(_obj.globalTex[Fishing::HOOK].getSize().x / 2.f, _obj.globalTex[Fishing::HOOK].getSize().y / 2.f);
+		_obj.bgSprt[GlobalS::HOOK].setTexture(_obj.bgTex[BackS::MAP]);
+		_obj.bgSprt[GlobalS::HOOK].setScale(5.f, 5.f);
 
-		_obj.globalSprt[Fishing::HOOK].setPosition(sf::Vector2f(X / 2, Y / 2));
+		// Load sprites
+		if (!_obj.globalTex[GlobalS::HOOK].loadFromFile("asset/sprite/fishgame/fisherman/hook.png")) {
+			throw std::runtime_error("Failed to load");
+		}
+
+		if (!_obj.globalTex[GlobalS::FISHA].loadFromFile("asset/sprite/fishgame/fishs/fish (1).png")) {
+			throw std::runtime_error("Failed to load");
+		}
+
+		if (!_obj.globalTex[GlobalS::HOUSE].loadFromFile("asset/sprite/fishgame/fisherHouse.png")) {
+			throw std::runtime_error("Failed to load");
+		}
+
+		if (!_obj.globalTex[GlobalS::FISHERMAN].loadFromFile("asset/sprite/fishgame/Fish_Anim_start.png")) {
+			throw std::runtime_error("Failed to load");
+		}
+
+		_obj.globalSprt[GlobalS::FISHERMAN].setTexture(_obj.globalTex[GlobalS::FISHERMAN]);
+		_obj.globalSprt[GlobalS::FISHERMAN].setScale(2.f, 2.f);
+		_obj.globalSprt[GlobalS::FISHERMAN].setPosition(sf::Vector2f(487.f, -196.f));
+
+		_obj.globalSprt[GlobalS::HOUSE].setTexture(_obj.globalTex[GlobalS::HOUSE]);
+		_obj.globalSprt[GlobalS::HOUSE].setScale(2.f, 2.f);
+		_obj.globalSprt[GlobalS::HOUSE].setPosition(sf::Vector2f(0.f, -262.f));
+
+		_obj.globalSprt[GlobalS::FISHA].setTexture(_obj.globalTex[GlobalS::FISHA]);
+
+		/*sf::RectangleShape string(sf::Vector2f(100.f, 100.f));
+		std::cout << "BUG BUG BUG";
+		_obj.globalRec[RectangleS::BAR] = string;*/
+
+
+
+		_obj.globalSprt[GlobalS::HOOK].setTexture(_obj.globalTex[GlobalS::HOOK]);
+		_obj.globalSprt[GlobalS::HOOK].setScale(1.f, 1.f);
+		_obj.globalSprt[GlobalS::HOOK].setOrigin(_obj.globalTex[GlobalS::HOOK].getSize().x / 2.f, _obj.globalTex[GlobalS::HOOK].getSize().y / 2.f);
+
+		_obj.globalSprt[GlobalS::HOOK].setPosition(sf::Vector2f(X / 2, Y / 2));
 	}
 
 	void animate(float deltaTime, Window_s& window) {
 
 	}
+
+	void animateFisherman(float deltaTime, Window_s& window) {
+		sf::Vector2f spritePos = _obj.globalSprt[GlobalS::FISHERMAN].getPosition();
+		elapsed += deltaTime;
+		if (elapsed >= 0.30f && timerAnim <=7) {
+			currentFrame = (currentFrame + 1) % 5;
+			elapsed -= 0.30f;
+			std::cout << "Framed";
+			timerAnim++;
+		}
+		_obj.globalSprt[GlobalS::FISHERMAN].setTextureRect(sf::IntRect(currentFrame * static_cast<int>(FRAME_WIDTH), 0, static_cast<int>(FRAME_WIDTH), static_cast<int>(FRAME_HEIGHT)));
+	}
+
 	void handleEvent(const sf::Event& event, Window_s& window, Music& music) {
 
 	}
 
+	void collision(const float deltaTime) {
+		if (_obj.globalSprt[GlobalS::FISHA].getGlobalBounds().intersects(_obj.globalSprt[GlobalS::HOOK].getGlobalBounds()))
+		{
+			std::cout << "Caught";
+			isFishing = false;
+			isReelingIn = true;
+			remonte(deltaTime);
+		}
+	}
+
+	void remonte(float deltaTime) {
+		// Définissez votre point initial (pointInitial) pour le hameçon
+		sf::Vector2f pointInitial(610.f, 650.f);
+
+		// Vitesse de remontée (ajustez selon vos besoins)
+		float vitesseRemontee = 100.f;
+
+		// Calcul de la direction vers le point initial
+		sf::Vector2f direction = pointInitial - _obj.globalSprt[GlobalS::HOOK].getPosition();
+
+		// Normalisation de la direction
+		float norme = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+		direction /= norme;
+
+		// Calcul du déplacement en fonction de la vitesse et du delta time
+		sf::Vector2f deplacement = direction * vitesseRemontee * deltaTime;
+
+		// Mise à jour de la position du hameçon
+		_obj.globalSprt[GlobalS::HOOK].move(deplacement);
+
+		// Vérification si le hameçon est suffisamment proche du point initial
+		if (_obj.globalSprt[GlobalS::HOOK].getPosition() == pointInitial) {
+			// Le hameçon est arrivé au point initial, vous pouvez effectuer d'autres actions si nécessaire
+			std::cout << "Hamecon est de retour au point initial" << std::endl;
+			isFishing = true;
+			isReelingIn = false;
+		}
+		else {
+			std::cout << "Hook Position: " << _obj.globalSprt[GlobalS::HOOK].getPosition().x << ", " << _obj.globalSprt[GlobalS::HOOK].getPosition().y << std::endl;
+		}
+	}
+
+	void displayLine() {
+		sf::Vector2f pointA(610.f, -130.f);
+		sf::Vector2f pointB(_obj.globalSprt[GlobalS::HOOK].getPosition().x, _obj.globalSprt[GlobalS::HOOK].getPosition().y - 30.f);
+
+		// Calcul de la distance entre les points A et B
+		float distance = std::sqrt((pointB.x - pointA.x) * (pointB.x - pointA.x) +
+			(pointB.y - pointA.y) * (pointB.y - pointA.y));
+
+		// Création d'un rectangle pour représenter la ligne
+		sf::RectangleShape line(sf::Vector2f(distance, 4.f)); // 4.f est l'épaisseur de la ligne
+
+		// Positionnement du rectangle
+		line.setPosition(pointA);
+
+		// Calcul de la rotation pour aligner la ligne avec les points A et B
+		float angle = std::atan2(pointB.y - pointA.y, pointB.x - pointA.x) * (180.f / M_PI);
+		line.setRotation(angle);
+
+		// Choix de la couleur de la ligne
+		line.setFillColor(sf::Color(145, 92, 67));
+
+		_obj.globalRec[RectangleS::BAR] = line;
+	}
+
 	void followMouse(Window_s& window, float deltaTime) {
-		sf::Vector2i mousePos = sf::Mouse::getPosition(window.getWindow());
-		sf::Vector2f mousePosF = window.getWindow().mapPixelToCoords(mousePos);
+		if (isFishing && !isReelingIn) {
+			sf::Vector2i mousePos = sf::Mouse::getPosition(window.getWindow());
+			sf::Vector2f mousePosF = window.getWindow().mapPixelToCoords(mousePos);
 
 
 
-		sf::Vector2f currentPosition = _obj.globalSprt[Fishing::HOOK].getPosition();
+			sf::Vector2f currentPosition = _obj.globalSprt[GlobalS::HOOK].getPosition();
 
 
-		sf::Vector2f newPosition = currentPosition + deltaTime * (mousePosF - currentPosition);
+			sf::Vector2f newPosition = currentPosition + deltaTime * (mousePosF - currentPosition);
 
-		_obj.globalSprt[Fishing::HOOK].setPosition(newPosition);
+			_obj.globalSprt[GlobalS::HOOK].setPosition(newPosition);
 
-		cameraView.setCenter(newPosition);
+			cameraView.setCenter(newPosition);
 
-		window.getWindow().setView(cameraView);
+			window.getWindow().setView(cameraView);
+		}
+	}
+
+	void update(const float deltaTime) {
+		collision(deltaTime);
 	}
 };

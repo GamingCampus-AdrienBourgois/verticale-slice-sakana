@@ -41,6 +41,8 @@ public:
     void animate(float deltaTime, Window_s &window) {
 
         _ficherMan.animate(deltaTime, window);
+        _ficherMan.animateFisherman(deltaTime, window);
+        _ficherMan.displayLine();
         /*
         _humanFish.animate(deltaTime, window);
         // animate each fish
@@ -72,6 +74,7 @@ public:
     void update(Window_s& window, Music& music, float deltaTime) {
         //_humanFish.followMouse(window, deltaTime);
         _ficherMan.followMouse(window, deltaTime);
+        _ficherMan.update(deltaTime);
         animate(deltaTime, window);
     }
     void handleEvent(const sf::Event& event, Window_s& window, Music& music) {
