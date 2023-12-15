@@ -10,7 +10,6 @@ class FicherMan {
 	int currentFrame;
 	int timerAnim = 0;
 	bool isFishing;
-	bool isReelingIn;
 
 	static constexpr float FRAME_WIDTH = 64.f;
 	static constexpr float FRAME_HEIGHT = 64.f;
@@ -27,7 +26,6 @@ public:
 		currentFrame = 1;
 		elapsed = 0.f;
 		isFishing = true;
-		isReelingIn = false;
 	}
 
 	void load(Window_s& window) {
@@ -115,44 +113,39 @@ public:
 	}
 
 	void collision(const float deltaTime) {
-		if (_obj.globalSprt[GlobalS::FISHA].getGlobalBounds().intersects(_obj.globalSprt[GlobalS::HOOK].getGlobalBounds()))
+		while (_obj.globalSprt[GlobalS::FISHA].getGlobalBounds().intersects(_obj.globalSprt[GlobalS::HOOK].getGlobalBounds()))
 		{
 			std::cout << "Caught";
 			isFishing = false;
-			isReelingIn = true;
 			remonte(deltaTime);
 		}
 	}
 
 	void remonte(float deltaTime) {
-		// Définissez votre point initial (pointInitial) pour le hameçon
-		sf::Vector2f pointInitial(610.f, 650.f);
+		sf::Vector2f pointInitial(610.f, 650.f); // Define your initial point for the hook
 
-		// Vitesse de remontée (ajustez selon vos besoins)
-		float vitesseRemontee = 100.f;
+		float vitesseRemontee = 100.f; // Speed of return (adjust as needed)
 
-		// Calcul de la direction vers le point initial
-		sf::Vector2f direction = pointInitial - _obj.globalSprt[GlobalS::HOOK].getPosition();
+		sf::Vector2f currentPosition = _obj.globalSprt[GlobalS::HOOK].getPosition();
+		sf::Vector2f direction = pointInitial - currentPosition;
 
-		// Normalisation de la direction
-		float norme = std::sqrt(direction.x * direction.x + direction.y * direction.y);
-		direction /= norme;
-
-		// Calcul du déplacement en fonction de la vitesse et du delta time
-		sf::Vector2f deplacement = direction * vitesseRemontee * deltaTime;
-
-		// Mise à jour de la position du hameçon
-		_obj.globalSprt[GlobalS::HOOK].move(deplacement);
-
-		// Vérification si le hameçon est suffisamment proche du point initial
-		if (_obj.globalSprt[GlobalS::HOOK].getPosition() == pointInitial) {
-			// Le hameçon est arrivé au point initial, vous pouvez effectuer d'autres actions si nécessaire
-			std::cout << "Hamecon est de retour au point initial" << std::endl;
-			isFishing = true;
-			isReelingIn = false;
+		// Check if we are close enough to the initial point
+		if (std::sqrt(direction.x * direction.x + direction.y * direction.y) < vitesseRemontee * deltaTime) {
+			_obj.globalSprt[GlobalS::HOOK].setPosition(pointInitial);
+			_obj.globalSprt[GlobalS::FISHA].setPosition(pointInitial);
+			isFishing = true; // Hook has returned, can fish again
 		}
 		else {
-			std::cout << "Hook Position: " << _obj.globalSprt[GlobalS::HOOK].getPosition().x << ", " << _obj.globalSprt[GlobalS::HOOK].getPosition().y << std::endl;
+			// Normalize the direction
+			float norme = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+			direction /= norme;
+
+			// Calculate the movement based on speed and delta time
+			sf::Vector2f deplacement = direction * vitesseRemontee * deltaTime;
+
+			// Update the position of the hook and the fish (if caught)
+			_obj.globalSprt[GlobalS::HOOK].move(deplacement);
+			_obj.globalSprt[GlobalS::FISHA].move(deplacement);
 		}
 	}
 
@@ -181,7 +174,7 @@ public:
 	}
 
 	void followMouse(Window_s& window, float deltaTime) {
-		if (isFishing && !isReelingIn) {
+		if (isFishing) {
 			sf::Vector2i mousePos = sf::Mouse::getPosition(window.getWindow());
 			sf::Vector2f mousePosF = window.getWindow().mapPixelToCoords(mousePos);
 
