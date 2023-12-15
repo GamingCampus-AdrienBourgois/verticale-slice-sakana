@@ -46,6 +46,9 @@ public:
 		_obj.globalSprt[Fishing::HOOK].setOrigin(_obj.globalTex[Fishing::HOOK].getSize().x / 2.f, _obj.globalTex[Fishing::HOOK].getSize().y / 2.f);
 
 		_obj.globalSprt[Fishing::HOOK].setPosition(sf::Vector2f(X / 2, Y / 2));
+
+
+
 	}
 
 

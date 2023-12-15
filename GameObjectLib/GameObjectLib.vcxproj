@@ -38,7 +38,7 @@
     <ClInclude Include="include\Props.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="include\HumanFish.hpp" />
+    <ClInclude Include="include\HumanFish.hpp" />
     <ClCompile Include="src\PlayObject.cpp" />
     <ClCompile Include="src\Credit.cpp" />
     <ClCompile Include="src\GameLoop.cpp" />
