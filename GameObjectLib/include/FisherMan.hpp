@@ -113,12 +113,17 @@ public:
 	}
 
 	void collision(const float deltaTime) {
-		while (_obj.globalSprt[GlobalS::FISHA].getGlobalBounds().intersects(_obj.globalSprt[GlobalS::HOOK].getGlobalBounds()))
+		if (_obj.globalSprt[GlobalS::FISHA].getGlobalBounds().intersects(_obj.globalSprt[GlobalS::HOOK].getGlobalBounds()))
 		{
-			std::cout << "Caught";
-			isFishing = false;
+			std::cout << "proke";
+
+
 			remonte(deltaTime);
+			isFishing = false;
+
 		}
+		else
+			isFishing = true; // Hook has returned, can fish again
 	}
 
 	void remonte(float deltaTime) {
@@ -131,9 +136,9 @@ public:
 
 		// Check if we are close enough to the initial point
 		if (std::sqrt(direction.x * direction.x + direction.y * direction.y) < vitesseRemontee * deltaTime) {
-			_obj.globalSprt[GlobalS::HOOK].setPosition(pointInitial);
-			_obj.globalSprt[GlobalS::FISHA].setPosition(pointInitial);
-			isFishing = true; // Hook has returned, can fish again
+			_obj.globalSprt[GlobalS::HOOK].move(direction);
+			_obj.globalSprt[GlobalS::FISHA].move(direction);
+
 		}
 		else {
 			// Normalize the direction
