@@ -1,8 +1,6 @@
 #include "Music.hpp"
 #include <iostream>
 
-#include "SFML/Audio/SoundSource.hpp"
-
 Music::Music() : _volume(100), pause(false) {}
 
 Music::~Music() = default;
