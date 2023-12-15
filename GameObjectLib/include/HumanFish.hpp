@@ -166,9 +166,11 @@ public:
         auto& algaeSprites = _obj.massSprt[MassS::ALGAES];
         sf::Sprite& fishSprite = _obj.globalSprt[GlobalS::HFISH];
 
+        sf::FloatRect fishBounds = fishSprite.getGlobalBounds();
+
         for (auto it = algaeSprites.begin(); it != algaeSprites.end(); ) {
-            if (checkPixelCollision(fishSprite, *it)) {
-                // Eat the algae and grow the fish
+            if (fishBounds.intersects(it->getGlobalBounds())) {
+                // Collision detected, eat algae and grow the fish
                 it = algaeSprites.erase(it);
                 sf::Vector2f currentScale = fishSprite.getScale();
                 fishSprite.setScale(currentScale.x + 0.05f, currentScale.y + 0.05f);
@@ -178,7 +180,6 @@ public:
             }
         }
     }
-
 
 
     bool checkPixelCollision(const sf::Sprite& tracker, const sf::Sprite& target, const std::vector<sf::Vector2f>& points) {
