@@ -1,0 +1,9 @@
+dash=press action key to dash to mouse
+cloak=press action key to cloak
+size=the fish grow bigger
+food=more foot spawn
+speed=fish is faster
+jump=press action key to jumb
+impress=the fishs track you less
+vision= see in the darkness
+killer=you can eat fishs

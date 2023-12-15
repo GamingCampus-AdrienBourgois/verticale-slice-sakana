@@ -2,10 +2,12 @@
 #include <SFML/Graphics.hpp>
 #include "Window.hpp"
 #include "Music.hpp"
+#include <map>
 
 enum class Scene {
 	SPRITESBG,
 	RECTBG,
+    SPRITESMASS,
 	SPRITESGB,
 	RECTGB,
 	TEXTGB,
@@ -15,23 +17,36 @@ enum class Scene {
 };
 
 enum GlobalS {
+    ALGAE,
     HFISH,
     FISHA,
     FISHB,
     FISHC,
     FISHD,
+    FISHE,
+    FISHF,
+    FISHG,
+    FISHH,
+    FISHI,
+
     GEND
 };
 
 enum FrontS {
-    MAPBORDER,
     MAPGRAD,
+    MAPBORDER,
     FEND
 };
 
 enum BackS {
     MAP,
+    SKY,
     BEND
+};
+
+enum MassS {
+    ALGAES,
+    MEND
 };
 
 class PlayObject {
@@ -46,6 +61,41 @@ public:
         bgTex.resize(BackS::BEND);
         frontTex.resize(FrontS::FEND);
         frontSprt.resize(FrontS::FEND);
+
+        // mass
+        massSprt[MassS::ALGAES].resize(2000);
+
+    }
+    bool checkPixelCollision(const sf::Sprite& sprite1, const sf::Sprite& sprite2) {
+        sf::FloatRect intersection;
+        if (sprite1.getGlobalBounds().intersects(sprite2.getGlobalBounds(), intersection)) {
+            sf::IntRect rect1 = sprite1.getTextureRect();
+            sf::IntRect rect2 = sprite2.getTextureRect();
+
+            sf::Image image1 = sprite1.getTexture()->copyToImage();
+            sf::Image image2 = sprite2.getTexture()->copyToImage();
+
+            for (size_t i = intersection.left; i < intersection.left + intersection.width; ++i) {
+                for (size_t j = intersection.top; j < intersection.top + intersection.height; ++j) {
+                    
+                    sf::Vector2f sprite1Pos = sprite1.getInverseTransform().transformPoint(static_cast<float>(i), static_cast<float>(j));
+                    sf::Vector2f sprite2Pos = sprite2.getInverseTransform().transformPoint(static_cast<float>(i), static_cast<float>(j));
+
+                    if (sprite1Pos.x > 0 && sprite1Pos.y > 0 && sprite1Pos.x < rect1.width && sprite1Pos.y < rect1.height &&
+                        sprite2Pos.x > 0 && sprite2Pos.y > 0 && sprite2Pos.x < rect2.width && sprite2Pos.y < rect2.height) {
+
+                        sf::Color color1 = image1.getPixel(static_cast<unsigned int>(sprite1Pos.x + rect1.left), static_cast<unsigned int>(sprite1Pos.y + rect1.top));
+                        sf::Color color2 = image2.getPixel(static_cast<unsigned int>(sprite2Pos.x + rect2.left), static_cast<unsigned int>(sprite2Pos.y + rect2.top));
+
+                        if (color1.a != 0 && color2.a != 0) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
     }
     virtual ~PlayObject() = default;
 
@@ -71,4 +121,5 @@ public:
     std::vector<sf::Texture> frontTex; // texture for front sprites
     std::vector<sf::Sprite> frontSprt; // sprites for front (second plan)
 
+    std::map<int, std::vector<sf::Sprite>> massSprt; // for mass generation
 };

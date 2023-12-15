@@ -25,6 +25,8 @@ public:
     const std::string &getTitle() const;
     void setFps(unsigned int fps);
     const unsigned int getFps() const;
+    void resetView();
+
 
 private:
     std::map<int, std::vector<const sf::Drawable*>> _renderLayers; 

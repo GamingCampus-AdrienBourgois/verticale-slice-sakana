@@ -14,7 +14,7 @@ void Window_s::close() {
 }
 
 void Window_s::clear() {
-    window.clear();
+    window.clear(sf::Color(61, 37, 59));
 }
 
 void Window_s::display() {
@@ -68,4 +68,9 @@ void Window_s::renderLayers()
             window.draw(*drawable);
         }
     }
+}
+
+void Window_s::resetView() {
+    sf::FloatRect visibleArea(0, 0, this->getWindow().getSize().x, this->getWindow().getSize().y);
+    this->getWindow().setView(sf::View(visibleArea));
 }

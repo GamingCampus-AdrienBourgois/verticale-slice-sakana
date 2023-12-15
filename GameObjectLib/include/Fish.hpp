@@ -13,15 +13,32 @@ class Fish {
     std::string power;
     std::string path;
 
+    std::vector<bool> colidedVec;
+    std::vector<float> depthVec;
+
     int currentFrame;
     float elapsed;
+
+
 public:
 
-    Fish() = default;
+    Fish() : currentFrame(0), elapsed(0), speed(0), scale(0)
+    {
+        colidedVec.resize(static_cast<size_t>(GlobalS::GEND - GlobalS::FISHA) + 1);
+        for (auto colided : colidedVec) {
+            colided = false;
+        }
+        depthVec.resize(static_cast<size_t>(GlobalS::GEND - GlobalS::FISHA) + 1);
+    }
 
     Fish(const std::string& _name, float _speed, float _scale, const std::string& _power, const std::string& _path)
         : name(_name), speed(_speed), scale(_scale), power(_power), path(_path), elapsed(0), currentFrame(0)
     {
+        colidedVec.resize(static_cast<size_t>(GlobalS::GEND - GlobalS::FISHA) + 1);
+        for (auto colided : colidedVec) {
+            colided = false;
+        }
+        depthVec.resize(static_cast<size_t>(GlobalS::GEND - GlobalS::FISHA) + 1);
     }
 
 
@@ -58,59 +75,96 @@ public:
 
 
 
-    void loadTextures(PlayObject& _obj, size_t i, std::vector<Fish> fishes) {
-        size_t idx = i - GlobalS::FISHA;
+    void loadTextures(PlayObject& _obj, std::vector<Fish> fishes) {
+        for (size_t i = GlobalS::FISHA; i < GlobalS::GEND; i++) {
+            size_t idx = i - GlobalS::FISHA;
 
             if (!_obj.globalTex[i].loadFromFile(fishes[idx].getPath())) {
                 throw std::runtime_error("Failed to load fish texture: " + fishes[idx].getPath());
             }
             _obj.globalSprt[i].setTexture(_obj.globalTex[i]);
             _obj.globalSprt[i].setScale(fishes[idx].getScale(), fishes[idx].getScale());
+            _obj.globalSprt[i].setOrigin(_obj.globalTex[i].getSize().x / 4.f, _obj.globalTex[i].getSize().y / 4.f);
 
-            _obj.globalSprt[i].setOrigin(_obj.globalTex[i].getSize().x / 2.f, _obj.globalTex[i].getSize().x / 2.f);
+            float X = (_obj.bgSprt[BackS::MAP].getScale().x * _obj.bgTex[BackS::MAP].getSize().x) / 2.f; // pos at x (middle of map)
+            float Y = (_obj.bgSprt[BackS::MAP].getScale().y * _obj.bgTex[BackS::MAP].getSize().y) / (GlobalS::GEND - GlobalS::FISHA + 1); // pos the more the fish is a big idx the deepest he is
 
-            _obj.globalSprt[i].setPosition(sf::Vector2f(1000, 500));
-            std::cout << "prok";
+            depthVec[idx] = Y * (idx + 1);
+            _obj.globalSprt[i].setPosition(sf::Vector2f(X, depthVec[idx]));
+        }
+
     }
 
-    void moveAI(float deltaTime, PlayObject& _obj, size_t fishIndex, const sf::Sprite& humanFishSprite) {
-        // Position du poisson humain
+
+
+
+    void moveAI(float deltaTime, PlayObject& _obj, size_t fishIndex, const sf::Sprite& humanFishSprite, std::vector<Fish> fishs) {
+        int fishsIdx = fishIndex - GlobalS::FISHA;
+        float ms = fishs[fishsIdx].getSpeed();
+        sf::Sprite& fishSprite = _obj.globalSprt[fishIndex];
+        sf::Vector2f fishPos = fishSprite.getPosition();
         sf::Vector2f humanFishPos = humanFishSprite.getPosition();
+        // limite de profondeur
+        float depthLimit = 500.0f;
+        float depthBase = depthVec[fishsIdx]; // Chaque poisson a sa propre profondeur de base
+        // determiner la direction du mouvement en X
 
-        // Position actuelle de ce poisson
-        sf::Vector2f fishPos = _obj.globalSprt[fishIndex].getPosition();
+         // gerer les collisions avec les bords de la carte
+        
+        float directionX = 0.f;/*
+        if (_obj.checkPixelCollision(fishSprite, _obj.frontSprt[FrontS::MAPBORDER])) {
+            colidedVec[fishsIdx] = (colidedVec[fishsIdx] ? false : true);
+        }*/
+        if (colidedVec[fishsIdx]) {
+            directionX = (fishIndex % 2 == 0) ? -1.0f : 1.0f; // Alternance des directions
+        }
+        else {
+            directionX = (fishIndex % 2 == 0) ? 1.0f : -1.0f; // Alternance des directions
+        }
 
-        // Calcul de la distance au poisson humain
-        float distance = std::sqrt(std::pow(humanFishPos.x - fishPos.x, 2) + std::pow(humanFishPos.y - fishPos.y, 2));
-
-        // Si la distance est inférieure à un certain seuil, suivez le poisson humain
-        const float followDistance = 200.0f; // Distance pour commencer à suivre le poisson humain
+        // distance pour suivre le poisson humain
+        const float followDistance = 1000.0f;
+        float distanceToHumanFish = std::hypot(humanFishPos.x - fishPos.x, humanFishPos.y - fishPos.y);
+        // movement total du poisson
         sf::Vector2f movement;
 
-        if (distance < followDistance) {
-            // Suivre le poisson humain
+        if (distanceToHumanFish < followDistance && humanFishPos != fishPos) {
+            // suivre le poisson humain
             sf::Vector2f direction = humanFishPos - fishPos;
-            float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
-            direction /= length; // Normaliser le vecteur de direction
-
-            movement = direction * speed * deltaTime;
+            float length = std::hypot(direction.x, direction.y);
+            direction /= length; // Normaliser
+            // deplacement
+            movement = direction * ms * deltaTime;
         }
         else {
-            // Mouvement aléatoire
-            movement = sf::Vector2f(static_cast<float>(rand() % 3 - 1), static_cast<float>(rand() % 3 - 1)) * speed * deltaTime;
+            // mouvement normal
+            movement.x = directionX * ms * deltaTime;
+            // empecher le mouvement en Y à une certaine profondeur
+            float newY = fishPos.y + ((rand() % 3 - 1) * ms * deltaTime);
+            newY = std::max(depthBase - depthLimit, std::min(newY, depthBase + depthLimit));
+            movement.y = newY - fishPos.y;
         }
-
-        // Appliquer le mouvement
-        _obj.globalSprt[fishIndex].move(movement);
-
-        // Orientez le sprite en fonction de la direction du mouvement
+        // orientation en fonction du mouvement
         if (movement.x < 0) {
-            _obj.globalSprt[fishIndex].setScale(-std::abs(_obj.globalSprt[fishIndex].getScale().x), _obj.globalSprt[fishIndex].getScale().y);
+            fishSprite.setScale(-std::abs(fishSprite.getScale().x), fishSprite.getScale().y);
         }
-        else {
-            _obj.globalSprt[fishIndex].setScale(std::abs(_obj.globalSprt[fishIndex].getScale().x), _obj.globalSprt[fishIndex].getScale().y);
+        else if (movement.x > 0) {
+            fishSprite.setScale(std::abs(fishSprite.getScale().x), fishSprite.getScale().y);
+        }
+
+        // appliquer le mouvement
+        fishSprite.move(movement);
+
+        // Vérifier si le poisson sort de la profondeur autorisée
+        if (fishPos.y < depthBase - depthLimit || fishPos.y > depthBase + depthLimit) {
+            fishSprite.setPosition(fishPos.x, std::min(std::max(fishPos.y, depthBase - depthLimit), depthBase + depthLimit));
         }
     }
+
+
+
+
+
 
 
 
@@ -125,6 +179,15 @@ public:
             _obj.globalSprt[globalIndex].setTextureRect(sf::IntRect(currentFrame * static_cast<int>(width), 0, static_cast<int>(width), static_cast<int>(height)));
 
             elapsed -= 0.1f;
+
+
+        }
+    }
+    void animateAllFish(float deltaTime, PlayObject& _obj, const sf::Sprite& humanFishSprite, std::vector<Fish>& fishes) {
+        for (size_t i = GlobalS::FISHA; i < GlobalS::GEND; i++) {
+            int fishIdx = i - GlobalS::FISHA;
+            moveAI(deltaTime, _obj, i, humanFishSprite, fishes);
+            fishes[fishIdx].animate(deltaTime, _obj, i);
         }
     }
 

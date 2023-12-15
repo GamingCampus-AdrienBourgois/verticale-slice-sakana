@@ -1,23 +1,53 @@
-Name=Ray
-Speed=100
-Scale=5
-Power=speed
+Name=Small
+Speed=180
+Scale=6
+Power=dash
 Path=asset/sprite/fishgame/fishs/fish (1).png
 
-Name=Lantern
-Speed=20
-Scale=5
-Power=light
+Name=Thon
+Speed=250
+Scale=7
+Power=cloak
 Path=asset/sprite/fishgame/fishs/fish (2).png
 
-Name=Shark
-Speed=80
-Scale=6
+Name=Rock
+Speed=150
+Scale=10
 Power=size
 Path=asset/sprite/fishgame/fishs/fish (3).png
 
-Name=Small
-Speed=60
-Scale=4
-Power=dash
+Name=Trout
+Speed=300
+Scale=7
+Power=food
 Path=asset/sprite/fishgame/fishs/fish (4).png
+
+Name=Ray
+Speed=600
+Scale=5
+Power=speed
+Path=asset/sprite/fishgame/fishs/fish (5).png
+
+Name=Jeff
+Speed=350
+Scale=7
+Power=jump
+Path=asset/sprite/fishgame/fishs/fish (6).png
+
+Name=Parot
+Speed=400
+Scale=8
+Power=impress
+Path=asset/sprite/fishgame/fishs/fish (7).png
+
+Name=Lantern
+Speed=400
+Scale=10
+Power=vision
+Path=asset/sprite/fishgame/fishs/fish (8).png
+
+Name=Shark
+Speed=800
+Scale=10
+Power=killer
+Path=asset/sprite/fishgame/fishs/fish (9).png

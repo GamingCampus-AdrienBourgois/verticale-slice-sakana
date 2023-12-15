@@ -20,8 +20,8 @@ public:
         float Y = static_cast<float>(windowSize.y);
 
         // load texture and create de sprite 
-        std::vector<std::string> globaleFile = { "asset/sprite/fishgame/map.jpg"};
-        std::vector<std::string> frontFile = { "asset/sprite/fishgame/map-cover.png",  "asset/sprite/fishgame/border.png" };
+        std::vector<std::string> globaleFile = { "asset/sprite/fishgame/map.jpg", "asset/sprite/fishgame/sky.png" };
+        std::vector<std::string> frontFile = { "asset/sprite/fishgame/map-cover.png",  "asset/sprite/fishgame/borderN.png" };
 
 
         for (size_t i = 0; i < globaleFile.size(); i++) {
@@ -41,20 +41,27 @@ public:
             }
         }
 
-        
+        float mult = 20.f;
 
         float scaleX = X / _obj.bgTex[BackS::MAP].getSize().x; // scale to screen level x
         float scaleY = Y / _obj.bgTex[BackS::MAP].getSize().y; // scale to screen level y
-        _obj.bgSprt[BackS::MAP].setScale(scaleX * 10, scaleY * 10);
+        _obj.bgSprt[BackS::MAP].setScale(scaleX * mult, scaleY * mult);
 
+
+        float scaleX3 = scaleX * (_obj.bgTex[BackS::MAP].getSize().x / static_cast<float>(_obj.bgTex[BackS::SKY].getSize().x)); // scale to map x
+        float scaleY3 = 1;
+        _obj.bgSprt[BackS::SKY].setScale(scaleX3 * mult, scaleY3 * 3.f);
+        _obj.bgSprt[BackS::SKY].setPosition(sf::Vector2f(0, -1.f * (static_cast<float>(_obj.bgTex[BackS::SKY].getSize().y) * 3.f)));
+        
         float scaleX1 = scaleX * (_obj.bgTex[BackS::MAP].getSize().x / static_cast<float>(_obj.frontTex[FrontS::MAPGRAD].getSize().x)); // scale to map x
         float scaleY1 = scaleY * (_obj.bgTex[BackS::MAP].getSize().y / static_cast<float>(_obj.frontTex[FrontS::MAPGRAD].getSize().y)); // scale to map y
-        _obj.frontSprt[FrontS::MAPGRAD].setScale(scaleX1 * 10, scaleY1 * 10);
+        _obj.frontSprt[FrontS::MAPGRAD].setScale(scaleX1 * mult, scaleY1 * mult);
         
         float scaleX2 = scaleX * (_obj.bgTex[BackS::MAP].getSize().x / static_cast<float>(_obj.frontTex[FrontS::MAPBORDER].getSize().x)); // scale to map x
         float scaleY2 = scaleY * (_obj.bgTex[BackS::MAP].getSize().y / static_cast<float>(_obj.frontTex[FrontS::MAPBORDER].getSize().y)); // scale to map y
-        _obj.frontSprt[FrontS::MAPBORDER].setScale(scaleX2 * 10, scaleY2 * 10);
+        _obj.frontSprt[FrontS::MAPBORDER].setScale(scaleX2 * mult, scaleY2 * mult);
         
+
     }
 
 

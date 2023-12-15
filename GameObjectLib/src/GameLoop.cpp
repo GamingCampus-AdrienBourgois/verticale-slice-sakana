@@ -39,13 +39,20 @@ void GameLoop::loader()
 	bool initialIsMenu = isMenu;
 	isMenu = (_menu.getMenuState() == 1 ? false : true);
 	bool changedIsMenu = false;
-	if (initialIsMenu) {
-		changedIsMenu = isMenu ^ initialIsMenu; // bitwise operation 0 ^ 0 = 1 && 1 ^ 1 = 1
+
+	changedIsMenu = isMenu ^ initialIsMenu; // bitwise operation 0 ^ 0 = 0 && 1 ^ 1 = 0 && 1 ^ 0 = 1
+	
+
+	if (changedIsMenu && !initialIsMenu) {
+		_window.resetView();
 	}
-	if (changedIsMenu) {
+
+
+	if (changedIsMenu && initialIsMenu) {
 		_play.load(_window);
 		_play.draw(_window);
 	}
+
 
 	loadOnce &= false; // bitwise operation (if its true [1] its set to false [0] and if its true do nothing)
 }
@@ -62,7 +69,6 @@ void GameLoop::run()
 		loader();
 		processEvents(deltaTime, cameraView);
 		update(deltaTime);
-		nextLevel();
 		render();
 	}
 }
@@ -75,15 +81,14 @@ void GameLoop::processEvents(float deltaTime, sf::View cameraView)
 	{
 		switch (event.type)
 		{
-		case sf::Event::Closed: _window.close();
+		case sf::Event::Closed: 
+			_window.close();
 			break;
 		case sf::Event::KeyPressed: 
 			if (event.key.code == sf::Keyboard::Escape)
 				_window.close();
-			if (event.key.code == sf::Keyboard::Return && _menu.getMenuState() == 1) { // 1 = play state and 0 = menu 
+			if (event.key.code == sf::Keyboard::Return && _menu.getMenuState() == 1) // 1 = play state and 0 = menu 
 				_menu.togglePlayMenu();
-			}
-
 			break;
 		case sf::Event::MouseButtonPressed: 
 			isMousePressed = true;
@@ -97,13 +102,9 @@ void GameLoop::processEvents(float deltaTime, sf::View cameraView)
 			}
 			break;
 		case sf::Event::Resized: 
-			sf::FloatRect visibleArea(0, 0, static_cast<float>(event.size.width), static_cast<float>(event.size.height));
-			_window.getWindow().setView(sf::View(visibleArea));
-
+			_window.resetView();
 			if (isMenu)
 				_menu.reloadByState(_window);
-
-				
 			break;
 		}
 
@@ -114,24 +115,6 @@ void GameLoop::processEvents(float deltaTime, sf::View cameraView)
 
 	}
 
-}
-
-void GameLoop::nextLevel()
-{
-	if (/*next level cond*/true != true)
-	{
-		_music.stopMusic(level);
-		if (/*level not max*/true != true)
-		{
-			level += 1;
-			_music.playMusic(level);
-		}
-		else
-		{
-			level = 0;
-			_music.playMusic(level);
-		}
-	}
 }
 
 void GameLoop::update(float deltaTime)

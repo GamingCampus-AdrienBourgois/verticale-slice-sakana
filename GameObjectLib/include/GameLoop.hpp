@@ -17,7 +17,6 @@ public:
 	~GameLoop();
 
 	void run();
-	void nextLevel();
 	void processEvents(float deltaTime, sf::View cameraView);
 	void update(float deltaTime);
 	void render();

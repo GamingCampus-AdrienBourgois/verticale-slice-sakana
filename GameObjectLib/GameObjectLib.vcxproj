@@ -35,6 +35,7 @@
     <ClInclude Include="include\Success.hpp" />
     <ClInclude Include="include\Window.hpp" />
     <ClInclude Include="include\Map.hpp" />
+    <ClInclude Include="include\Props.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\HumanFish.hpp" />

@@ -48,6 +48,7 @@ public:
 		_obj.globalSprt[Fishing::HOOK].setPosition(sf::Vector2f(X / 2, Y / 2));
 	}
 
+
 	void animate(float deltaTime, Window_s& window) {
 
 	}
