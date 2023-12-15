@@ -102,7 +102,7 @@ public:
 		if (elapsed >= 0.30f && timerAnim <=7) {
 			currentFrame = (currentFrame + 1) % 5;
 			elapsed -= 0.30f;
-			std::cout << "proke";
+			std::cout << "framed";
 			timerAnim++;
 		}
 		_obj.globalSprt[GlobalS::FISHERMAN].setTextureRect(sf::IntRect(currentFrame * static_cast<int>(FRAME_WIDTH), 0, static_cast<int>(FRAME_WIDTH), static_cast<int>(FRAME_HEIGHT)));
@@ -112,7 +112,7 @@ public:
 
 	}
 
-	void collision(const float deltaTime) {
+	void collision(const float deltaTime, Window_s &window) {
 		bool proke = false;
 		for (size_t i = GlobalS::FISHA; i < GlobalS::GEND; i++)
 		{
@@ -125,7 +125,7 @@ public:
 
 
 
-				remonte(deltaTime, GlobalS::FISHA);
+				remonte(deltaTime, GlobalS::FISHA, window);
 				isFishing = false;
 
 			}
@@ -134,10 +134,10 @@ public:
 		
 	}
 
-	void remonte(float deltaTime, size_t i) {
-		sf::Vector2f pointInitial(610.f, 650.f); // Define your initial point for the hook
+	void remonte(float deltaTime, size_t i, Window_s &window) {
+		sf::Vector2f pointInitial(610.f, 0.f); // Define your initial point for the hook
 
-		float vitesseRemontee = 100.f; // Speed of return (adjust as needed)
+		float vitesseRemontee = 400.f; // Speed of return (adjust as needed)
 
 		sf::Vector2f currentPosition = _obj.globalSprt[GlobalS::HOOK].getPosition();
 		sf::Vector2f direction = pointInitial - currentPosition;
@@ -160,7 +160,13 @@ public:
 			_obj.globalSprt[GlobalS::HOOK].move(deplacement);
 			_obj.globalSprt[i].move(deplacement);
 		}
+		if (_obj.globalSprt[GlobalS::HOOK].getPosition() == pointInitial) {
+			std::cout << "kill";
+			window.removeFromRenderLayer(static_cast<int>(Scene::SPRITESGB), _obj.globalSprt[i]);
+			_obj.globalSprt[i].setPosition(sf::Vector2f(20000.f, 20000.f));
+		}
 	}
+
 
 	void displayLine() {
 		sf::Vector2f pointA(610.f, -130.f);
@@ -207,6 +213,6 @@ public:
 	}
 
 	void update(const float deltaTime, Window_s &window) {
-		collision(deltaTime);
+		collision(deltaTime, window);
 	}
 };
