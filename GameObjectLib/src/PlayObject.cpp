@@ -1,5 +1,5 @@
 #include "PlayObject.hpp"
-
+#include <iostream>
 sf::Text PlayObject::createText(const std::string& text, const sf::Vector2f& position, unsigned int size, sf::Color color)
 {
 	sf::Text textObject;
@@ -31,6 +31,9 @@ void PlayObject::draw(Window_s& window)
 		window.addToRenderLayer(static_cast<int>(Scene::RECTBG), bgRec[i]);
 	for (size_t i = 0; i < frontSprt.size(); i++)
 		window.addToRenderLayer(static_cast<int>(Scene::FRONT), frontSprt[i]);
+
+
+
 
 	for (size_t i = 0; i < massSprt.size(); i++)
 	{

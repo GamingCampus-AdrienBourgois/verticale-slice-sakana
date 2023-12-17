@@ -65,7 +65,7 @@ public:
             }
             else if (line.find("Path=") != std::string::npos) {
                 path = line.substr(5);
-                fishes.emplace_back(name, speed, scale, power, path); // Créer un poisson et l'ajouter à la liste
+                fishes.emplace_back(name, speed, scale, power, path); // Crï¿½er un poisson et l'ajouter ï¿½ la liste
             }
 
         }
@@ -111,10 +111,12 @@ public:
 
          // gerer les collisions avec les bords de la carte
         
-        float directionX = 0.f;/*
+        float directionX = 0.f;
+        /*
         if (_obj.checkPixelCollision(fishSprite, _obj.frontSprt[FrontS::MAPBORDER])) {
             colidedVec[fishsIdx] = (colidedVec[fishsIdx] ? false : true);
-        }*/
+        }
+        */
         if (colidedVec[fishsIdx]) {
             directionX = (fishIndex % 2 == 0) ? -1.0f : 1.0f; // Alternance des directions
         }
@@ -139,7 +141,7 @@ public:
         else {
             // mouvement normal
             movement.x = directionX * ms * deltaTime;
-            // empecher le mouvement en Y à une certaine profondeur
+            // empecher le mouvement en Y ï¿½ une certaine profondeur
             float newY = fishPos.y + ((rand() % 3 - 1) * ms * deltaTime);
             newY = std::max(depthBase - depthLimit, std::min(newY, depthBase + depthLimit));
             movement.y = newY - fishPos.y;
@@ -155,7 +157,7 @@ public:
         // appliquer le mouvement
         fishSprite.move(movement);
 
-        // Vérifier si le poisson sort de la profondeur autorisée
+        // Vï¿½rifier si le poisson sort de la profondeur autorisï¿½e
         if (fishPos.y < depthBase - depthLimit || fishPos.y > depthBase + depthLimit) {
             fishSprite.setPosition(fishPos.x, std::min(std::max(fishPos.y, depthBase - depthLimit), depthBase + depthLimit));
         }

@@ -18,6 +18,11 @@ enum class Scene {
 
 enum GlobalS {
     ALGAE,
+    TRASH2,
+    TRASH1,
+    CAN,
+    WOOD,
+
     HFISH,
     FISHA,
     FISHB,
@@ -28,7 +33,6 @@ enum GlobalS {
     FISHG,
     FISHH,
     FISHI,
-
     GEND
 };
 
@@ -41,11 +45,16 @@ enum FrontS {
 enum BackS {
     MAP,
     SKY,
+    WAVE,
     BEND
 };
 
 enum MassS {
     ALGAES,
+    TRASHS1,
+    TRASHS2,
+    CANS,
+    WOODS,
     MEND
 };
 
@@ -62,8 +71,10 @@ public:
         frontTex.resize(FrontS::FEND);
         frontSprt.resize(FrontS::FEND);
 
-        // mass
-        massSprt[MassS::ALGAES].resize(2000);
+
+        
+
+
 
     }
     bool checkPixelCollision(const sf::Sprite& sprite1, const sf::Sprite& sprite2) {
