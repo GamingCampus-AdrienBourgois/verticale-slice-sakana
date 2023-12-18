@@ -46,13 +46,13 @@ public:
         killer = false;
 
         //dash = true;
-        cloak = true;
-        size = true;
+        //cloak = true;
+        //size = true;
         //food = true;
         //speed = true;
         //jump = true;
         impress = true;
-        vision = true;
+        //vision = true;
         killer = true;
     }
 
@@ -87,9 +87,15 @@ public:
         humanFish.pusher(window, deltaTime, false);
     }
 
-    void Cloak(Window_s& window, float deltaTime) {}
+    void Cloak(Window_s& window, float deltaTime) 
+    {
+        humanFish.setCloack();
+    }
 
-    void Size(Window_s& window) {}
+    void Size(Window_s& window) 
+    {
+        _obj.globalSprt[GlobalS::HFISH].setScale(sf::Vector2f(7.f, 7.f));
+    }
 
     void Food(Window_s& window) 
     {

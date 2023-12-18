@@ -15,6 +15,8 @@ class HumanFish {
     // animation
     float elapsed;
     int currentFrame;
+    bool cloak;
+    bool cloaked;
 
     // move
     std::vector<sf::Vector2f> points;
@@ -50,7 +52,9 @@ public:
         pushElapsed = 0.0f;
         pushDelay = 3.0f;
         shaderLoaded = false;
-        radius = 200.0f;
+        radius = 400.0f;
+        cloak = false;
+        cloaked = false;
     }
 
     void load(Window_s& window) {
@@ -79,12 +83,24 @@ public:
             if (event.key.code == sf::Keyboard::LAlt) {
                 zoomFactor = 2.0f;
             }
+            // jump or dash
             else if (event.key.code == sf::Keyboard::Space) {
                 if (!isPushing && pushElapsed >= pushDelay) {
                     isPushing = true;
                     pushElapsed = 0.0f; // Réinitialiser le timer de saut
                 }
+
             }
+        }
+        // cloak
+        if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space && cloak) {
+            cloaked = true;
+            sf::Sprite& fsh = _obj.globalSprt[GlobalS::HFISH];
+            fsh.setColor(sf::Color(fsh.getColor().r, fsh.getColor().g, fsh.getColor().b, 100));
+        } else if (event.type == sf::Event::KeyReleased) {
+            sf::Sprite& fsh = _obj.globalSprt[GlobalS::HFISH];
+            fsh.setColor(sf::Color(fsh.getColor().r, fsh.getColor().g, fsh.getColor().b, 255));
+            cloaked = false;
         }
     }
 
@@ -108,7 +124,7 @@ public:
 
     void followMouse(Window_s& window, float deltaTime) 
     {
-        if (zoomFactor == 2.0f && !isPushing && isNotDead()) {
+        if (zoomFactor == 2.0f && !isPushing && isNotDead() && !cloaked) {
             sf::Sprite& fish = _obj.globalSprt[GlobalS::HFISH];
             sf::Vector2i mousePos = sf::Mouse::getPosition(window.getWindow());
             sf::Vector2f mousePosF = window.getWindow().mapPixelToCoords(mousePos);
@@ -373,11 +389,17 @@ public:
             }
             shaderLoaded = true;
         }
-        Rshader.setUniform("mouse", sf::Glsl::Vec2(_obj.globalSprt[GlobalS::HFISH].getPosition().x, _obj.globalSprt[GlobalS::HFISH].getPosition().y));
+
+        sf::Vector2f worldPos = _obj.globalSprt[GlobalS::HFISH].getPosition();
+        sf::Vector2i pixelPos = window.getWindow().mapCoordsToPixel(worldPos);
+        Rshader.setUniform("mouse", sf::Glsl::Vec2(pixelPos.x, pixelPos.y));
         Rshader.setUniform("radius", radius);
 
         shaderStates.shader = &Rshader;
-        window.replaceFromRenderLayer(static_cast<int>(Scene::FRONT), _obj.bgSprt[FrontS::MAPBORDER], _obj.bgSprt[FrontS::MAPBORDER], shaderStates);
+        window.replaceFromRenderLayer(static_cast<int>(Scene::FRONT), _obj.frontSprt[FrontS::MAPGRAD], _obj.frontSprt[FrontS::MAPGRAD], shaderStates);
     }
 
+    void setCloack() {
+        cloak = true;
+    }
 };  

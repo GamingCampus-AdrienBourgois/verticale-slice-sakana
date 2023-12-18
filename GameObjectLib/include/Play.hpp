@@ -64,13 +64,13 @@ public:
 
 
     void load(Window_s& window) {
-        _power.load(window);
 
         _map.load(window);
         _fish.loadTextures(_obj, fishs);
         _humanFish.load(window);
         _props.load(window);
         _ath.load(window);
+        _power.load(window);
     }
 
     void update(Window_s& window, Music& music, float deltaTime) {

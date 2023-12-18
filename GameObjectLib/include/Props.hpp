@@ -73,7 +73,7 @@ public:
 		float maxY = (_obj.bgSprt[BackS::MAP].getScale().y * _obj.bgTex[BackS::MAP].getSize().y);
 		std::uniform_real_distribution<> disY(100, maxY - 50); // Y position
 
-
+		
 
 
 		for (size_t i = 0; i < obstacles.size(); ++i) {
@@ -137,6 +137,8 @@ public:
 	}
 
 	void generateObstacles(Window_s& window, int count, GlobalS textureId, MassS spriteId) {
+		std::cout << "tess";
+
 		std::random_device rd;
 		std::mt19937 gen(rd());
 		std::uniform_real_distribution<> disY(100, (_obj.bgSprt[BackS::MAP].getScale().y * _obj.bgTex[BackS::MAP].getSize().y) + 50); // Y position

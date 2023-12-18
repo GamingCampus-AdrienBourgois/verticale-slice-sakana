@@ -73,7 +73,6 @@ void Window_s::addToRenderLayer(int layer, const sf::Drawable& drawable, const s
         for (const auto& [layer, pairs] : _renderLayers) {
             for (const auto& [drawable, optionalState] : pairs) {
                 if (optionalState) {
-                    std::cout << "cacas";
                     window.draw(*drawable, *optionalState);
                 }
                 else {

@@ -39,8 +39,6 @@ public:
 private:
     std::map<int, std::vector<std::pair<const sf::Drawable*, std::optional<sf::RenderStates>>>> _renderLayers;
 
-
-
     sf::RenderWindow window;
     unsigned int _fps;
     std::string _title;
