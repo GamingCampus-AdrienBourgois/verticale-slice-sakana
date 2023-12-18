@@ -2,6 +2,7 @@
 #include <map>
 #include <vector>
 #include <SFML/Graphics.hpp>
+#include <optional>
 
 class Window_s {
 public:
@@ -10,9 +11,16 @@ public:
 
     // Layers functions
     void addToRenderLayer(int layer, const sf::Drawable& drawable);
+    void addToRenderLayer(int layer, const sf::Drawable& drawable, const sf::RenderStates& state);
     void removeFromRenderLayer(int layer, const sf::Drawable& drawable);
     void renderLayers();
     void clearLayer(int layer);
+    void replaceFromRenderLayer(int layer, const sf::Drawable& oldDrawable, const sf::Drawable& newDrawable, const sf::RenderStates& state = sf::RenderStates::Default);
+    void placeInLayerAt(int layer, const sf::Drawable& drawable, size_t position);
+
+
+
+
 
     bool isOpen() const;
     void close();
@@ -29,7 +37,9 @@ public:
 
 
 private:
-    std::map<int, std::vector<const sf::Drawable*>> _renderLayers; 
+    std::map<int, std::vector<std::pair<const sf::Drawable*, std::optional<sf::RenderStates>>>> _renderLayers;
+
+
 
     sf::RenderWindow window;
     unsigned int _fps;

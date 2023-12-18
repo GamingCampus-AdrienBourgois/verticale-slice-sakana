@@ -45,9 +45,6 @@
     <ClInclude Include="include\Menu.hpp">
       <Filter>Header Files\Menu</Filter>
     </ClInclude>
-    <ClInclude Include="include\Settings.hpp">
-      <Filter>Header Files\Menu</Filter>
-    </ClInclude>
     <ClInclude Include="include\Success.hpp">
       <Filter>Header Files\Menu</Filter>
     </ClInclude>
@@ -88,6 +85,12 @@
       <Filter>Header Files\Game</Filter>
     </ClInclude>
     <ClInclude Include="include\Powers.hpp">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Settings.hpp">
+      <Filter>Header Files\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Ath.hpp">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
   </ItemGroup>

@@ -71,4 +71,12 @@ void PlayObject::resetValues(Window_s& window)
 	window.clearLayer(static_cast<int>(Scene::FRONT));
 	window.clearLayer(static_cast<int>(Scene::SPRITESMASS));
 
+	globalSprt.resize(GlobalS::GEND);
+	globalTex.resize(GlobalS::GEND);
+	bgSprt.resize(BackS::BEND);
+	bgTex.resize(BackS::BEND);
+	frontTex.resize(FrontS::FEND);
+	frontSprt.resize(FrontS::FEND);
+	globalTexts.resize(TextS::TEND);
+	globalRec.resize(RectS::REEND);
 }

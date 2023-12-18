@@ -84,7 +84,7 @@ public:
             }
             _obj.globalSprt[i].setTexture(_obj.globalTex[i]);
             _obj.globalSprt[i].setScale(fishes[idx].getScale(), fishes[idx].getScale());
-            _obj.globalSprt[i].setOrigin(_obj.globalTex[i].getSize().x / 4.f, _obj.globalTex[i].getSize().y / 4.f);
+            _obj.globalSprt[i].setOrigin((_obj.globalTex[i].getSize().x / 2.f) / 2.f, _obj.globalTex[i].getSize().y / 2.f);
 
             float X = (_obj.bgSprt[BackS::MAP].getScale().x * _obj.bgTex[BackS::MAP].getSize().x) / 2.f; // pos at x (middle of map)
             float Y = (_obj.bgSprt[BackS::MAP].getScale().y * _obj.bgTex[BackS::MAP].getSize().y) / (GlobalS::GEND - GlobalS::FISHA + 1); // pos the more the fish is a big idx the deepest he is
@@ -125,7 +125,7 @@ public:
         }
 
         // distance pour suivre le poisson humain
-        const float followDistance = 1000.0f;
+        const float followDistance = 2000.0f;
         float distanceToHumanFish = std::hypot(humanFishPos.x - fishPos.x, humanFishPos.y - fishPos.y);
         // movement total du poisson
         sf::Vector2f movement;

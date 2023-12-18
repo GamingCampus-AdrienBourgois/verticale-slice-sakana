@@ -49,6 +49,8 @@ void GameLoop::loader()
 
 
 	if (changedIsMenu && initialIsMenu) {
+		_play.reset(_window);
+		
 		_play.load(_window);
 		_play.draw(_window);
 	}

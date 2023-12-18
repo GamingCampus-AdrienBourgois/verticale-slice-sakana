@@ -7,35 +7,57 @@
 class HumanFish {
     PlayObject& _obj;
 
-    sf::View cameraView;
-    sf::Vector2f targetPosition;
+    // cam
+    sf::View &cameraView;
+    float zoomFactor;
+    float camDelay;
+
+    // animation
     float elapsed;
     int currentFrame;
-    std::vector<sf::Vector2f> points;
-    float zoomFactor;
 
-    float camDelay;
+    // move
+    std::vector<sf::Vector2f> points;
+    sf::Vector2f targetPosition;
+    float speed;
+    bool isPushing;
+    float pushElapsed;
+    float pushDelay;
+
+    // change size
+    float elapsedSize;
+
+    // shader
+    sf::Shader Rshader;
+    float radius;
+    bool shaderLoaded;
+    sf::RenderStates shaderStates;
+
+   
 
     static constexpr float FRAME_WIDTH = 29.f;
     static constexpr float FRAME_HEIGHT = 21.f;
     static constexpr float M_PI = 3.1416f;
 public:
-    HumanFish(PlayObject& obj) : _obj(obj) {
+    HumanFish(PlayObject& obj, sf::View &_cameraView) : _obj(obj), cameraView(_cameraView) {
         zoomFactor = 2.f;
         currentFrame = 1;
         elapsed = 0.f;
         camDelay = 0.f;
+        speed = 1.f;
+        elapsedSize = 0.f;
+        isPushing = false;
+        pushElapsed = 0.0f;
+        pushDelay = 3.0f;
+        shaderLoaded = false;
+        radius = 200.0f;
     }
 
     void load(Window_s& window) {
         textureSetters(window);
         cameraView.setSize(static_cast<float>(window.getWindow().getSize().x), static_cast<float>(window.getWindow().getSize().y));
         cameraView.setCenter(_obj.globalSprt[GlobalS::HFISH].getPosition().x, _obj.globalSprt[GlobalS::HFISH].getPosition().y);
-
         points = loadCollisionPoints(_obj.globalSprt[GlobalS::HFISH]);
-
-
-
     }
 
     void textureSetters(Window_s& window) {
@@ -50,84 +72,109 @@ public:
     }
 
     void handleEvent(const sf::Event& event, Window_s& window) {
-        if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space) {
-            // Zoom out quand la touche espace est press
+        if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::LAlt) {
             zoomFactor = 20.f; // Dézoomer de 20 fois
-
-
         }
-        else if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Space) {
-            // Zoom in (retour à la normale) quand la touche espace est release
-            zoomFactor = 2.0f;
+        else if (event.type == sf::Event::KeyReleased) {
+            if (event.key.code == sf::Keyboard::LAlt) {
+                zoomFactor = 2.0f;
+            }
+            else if (event.key.code == sf::Keyboard::Space) {
+                if (!isPushing && pushElapsed >= pushDelay) {
+                    isPushing = true;
+                    pushElapsed = 0.0f; // Réinitialiser le timer de saut
+                }
+            }
         }
     }
 
-    void updateCamera(float deltaTime, Window_s& window) {
+    void updateCamera(float deltaTime, Window_s& window) 
+    {
         sf::Vector2f humanFishPosition = _obj.globalSprt[GlobalS::HFISH].getPosition();
         sf::Vector2f currentCameraCenter = cameraView.getCenter();
-
-        // Facteur d'interpolation
-        float lerpFactor = 0.1f; // Ajustez cette valeur pour changer la vitesse du "lag" de la caméra
-
-        // Interpolation linéaire entre la position actuelle de la caméra et la position du poisson
-        sf::Vector2f newCameraCenter = currentCameraCenter + lerpFactor * (humanFishPosition - currentCameraCenter);
+        float lat = 0.1f;
+        sf::Vector2f newCameraCenter = currentCameraCenter + lat * (humanFishPosition - currentCameraCenter);
 
         cameraView.setCenter(newCameraCenter);
-
         // appliquer le facteur de zoom a la caméra
         cameraView.setSize(window.getWindow().getDefaultView().getSize() * zoomFactor);
         window.getWindow().setView(cameraView);
     }
 
+    bool isNotDead() 
+    {
+        return (std::abs(_obj.globalSprt[GlobalS::HFISH].getScale().x) > 1.f && std::abs(_obj.globalSprt[GlobalS::HFISH].getScale().y) > 1.f);
+    }
 
-
-    void followMouse(Window_s& window, float deltaTime) {
-        if (zoomFactor == 2.0f) {
+    void followMouse(Window_s& window, float deltaTime) 
+    {
+        if (zoomFactor == 2.0f && !isPushing && isNotDead()) {
             sf::Sprite& fish = _obj.globalSprt[GlobalS::HFISH];
             sf::Vector2i mousePos = sf::Mouse::getPosition(window.getWindow());
             sf::Vector2f mousePosF = window.getWindow().mapPixelToCoords(mousePos);
             targetPosition = mousePosF;
             sf::Vector2f currentPosition = fish.getPosition();
-
-            // Calculez la nouvelle position potentielle
             sf::Vector2f direction = targetPosition - currentPosition;
-            sf::Vector2f newPosition = currentPosition + deltaTime * direction;
+            sf::Vector2f newPosition = currentPosition + speed * deltaTime * direction;
 
-
-
-            // Vérifiez si une collision se produit avec la nouvelle position
             if (!_obj.checkPixelCollision(fish, _obj.frontSprt[FrontS::MAPBORDER]) && newPosition.y > 0) {
                 fish.setPosition(newPosition);
-                
-
             }
             else {
                 // collied;
             }
-
-
-
-
         }
     }
 
+    void pusher(Window_s& window, float deltaTime, bool isPush) {
+        if (isPush) {
 
+            if (isPushing) {
+                float pushHeight = 20.f;
 
+                sf::Sprite& fish = _obj.globalSprt[GlobalS::HFISH];
+                fish.move(0, -pushHeight + 20.0f * deltaTime);
 
+                pushElapsed += deltaTime;
+                if (pushElapsed >= 0.5f) {
+                    isPushing = false;
+                }
+            }
+            else {
+                pushElapsed += deltaTime;
+                if (pushElapsed > pushDelay) {
+                    pushElapsed = pushDelay;
+                }
+            }
+        }
+        if (!isPush) {
+            if (isPushing) {
+                float pushHeight = 40.f;
 
+                sf::Sprite& fish = _obj.globalSprt[GlobalS::HFISH];
 
+                if (_obj.globalSprt[GlobalS::HFISH].getScale().x < 0)
+                    fish.move(-pushHeight + 50.0f * deltaTime, 0);
+                else
+                    fish.move(pushHeight + 50.0f * deltaTime, 0);
 
+                pushElapsed += deltaTime;
+                if (pushElapsed >= 0.5f) {
+                    isPushing = false;
+                }
+            }
+            else {
+                pushElapsed += deltaTime;
+                if (pushElapsed > pushDelay) {
+                    pushElapsed = pushDelay;
+                }
+            }
+        }
+    }
 
-
-
-
-
-
-
-
-
-
-
+    void setSpeed(float _speed) {
+        speed = _speed;
+    }
 
     std::vector<sf::Vector2f> loadCollisionPoints(const sf::Sprite& sprite) {
         std::vector<sf::Vector2f> collisionPoints;
@@ -181,10 +228,6 @@ public:
         return collisionPoints;
     }
 
-
-
-
-
     bool checkPixelCollision(const sf::Sprite& tracker, const sf::Sprite& target, const std::vector<sf::Vector2f>& points) {
         // Assurez-vous que les rectangles englobants se croisent
         if (!tracker.getGlobalBounds().intersects(target.getGlobalBounds())) {
@@ -223,21 +266,16 @@ public:
 
 
     void animate(float deltaTime, Window_s& window) {
-
         if (checkPixelCollision(_obj.globalSprt[GlobalS::HFISH], _obj.frontSprt[FrontS::MAPBORDER], points))
             std::cout << "boom";
 
-
         sf::Vector2f spritePos = _obj.globalSprt[GlobalS::HFISH].getPosition();
-
-        // Convert the mouse position to world coordinates relative to the camera view
         sf::Vector2i mousePixelPos = sf::Mouse::getPosition(window.getWindow());
         sf::Vector2f mouseWorldPos = window.getWindow().mapPixelToCoords(mousePixelPos, cameraView);
-
         sf::Vector2f direction = mouseWorldPos - spritePos;
-
         float angle = atan2(direction.y, direction.x) * 180 / M_PI;
 
+        // change x direction
         if (direction.x < 0) {
             angle += 180;
             _obj.globalSprt[GlobalS::HFISH].setScale(-std::abs(_obj.globalSprt[GlobalS::HFISH].getScale().x), _obj.globalSprt[GlobalS::HFISH].getScale().y);
@@ -246,23 +284,21 @@ public:
             _obj.globalSprt[GlobalS::HFISH].setScale(std::abs(_obj.globalSprt[GlobalS::HFISH].getScale().x), _obj.globalSprt[GlobalS::HFISH].getScale().y);
         }
         _obj.globalSprt[GlobalS::HFISH].setRotation(angle);
-
-
+        // anim
         elapsed += deltaTime;
         if (elapsed >= 0.10f) {
             currentFrame = (currentFrame + 1) % 2;
             elapsed -= 0.10f;
         }
         _obj.globalSprt[GlobalS::HFISH].setTextureRect(sf::IntRect(currentFrame * static_cast<int>(FRAME_WIDTH), 0, static_cast<int>(FRAME_WIDTH), static_cast<int>(FRAME_HEIGHT)));
-
-
-
-
     }
 
-    void handleObstacleCollision(Window_s& window, MassS type) {
-        // Supposons que vous avez un vecteur d'obstacles dans _obj
-        auto& obstacles = _obj.massSprt[type]; // Remplacez par le bon identifiant
+    void handleObstacleCollision(Window_s& window, MassS type) 
+    {
+        if (!isNotDead())
+            return;
+
+        auto& obstacles = _obj.massSprt[type];
         sf::Sprite& fishSprite = _obj.globalSprt[GlobalS::HFISH];
         sf::FloatRect fishBounds = fishSprite.getGlobalBounds();
 
@@ -270,18 +306,37 @@ public:
             if (fishBounds.intersects(obstacle.getGlobalBounds())) {
                 window.removeFromRenderLayer(static_cast<int>(Scene::SPRITESMASS), obstacle);
 
-                // Collision detected, shrink the fish
                 sf::Vector2f currentScale = fishSprite.getScale();
                 float proportion = static_cast<float>(_obj.globalTex[GlobalS::HFISH].getSize().x / _obj.globalTex[GlobalS::HFISH].getSize().y);
-                float reduction = 0.01f; // La quantité de réduction, ajustez selon le besoin
+                float reduction = 0.01f;
 
-                // Assurez-vous que le poisson ne rétrécisse pas en dessous d'une certaine taille
-                fishSprite.setScale(currentScale.x - reduction, currentScale.y - (reduction * proportion));
+                std::cout << proportion;
+
+                fishSprite.setScale(currentScale.x - (reduction * proportion), currentScale.y - reduction);
 
             }
         }
     }
 
+    void handleFishsCollision(Window_s& window) {
+        if (!isNotDead())
+            return;
+
+        sf::Sprite& humanFishSprite = _obj.globalSprt[GlobalS::HFISH];
+        sf::FloatRect humanFishBounds = humanFishSprite.getGlobalBounds();
+
+        for (size_t i = GlobalS::FISHA; i < GlobalS::GEND; i++) {
+            sf::Sprite& fishSprite = _obj.globalSprt[i];
+            sf::FloatRect fishBounds = fishSprite.getGlobalBounds();
+            if (humanFishBounds.intersects(fishBounds)) {
+                float scaleReduction = 0.01f;
+                sf::Vector2f currentScale = humanFishSprite.getScale();
+                if (currentScale.x > 0.5f && currentScale.y > 0.5f) {
+                    humanFishSprite.setScale(currentScale.x - scaleReduction, currentScale.y - scaleReduction);
+                }
+            }
+        }
+    }
 
 
     void checkAndEatAlgae(Window_s& window) {
@@ -291,7 +346,6 @@ public:
 
         for (size_t i = 0; i != algaeSprites.size(); ++i) {
             if (fishBounds.intersects(algaeSprites[i].getGlobalBounds())) {
-                // Collision detected, remove algae and grow fish
                 window.removeFromRenderLayer(static_cast<int>(Scene::SPRITESMASS), algaeSprites[i]);
                 sf::Vector2f currentScale = fishSprite.getScale();
                 float proportion = static_cast<float>(_obj.globalTex[GlobalS::HFISH].getSize().x / _obj.globalTex[GlobalS::HFISH].getSize().y);
@@ -301,5 +355,29 @@ public:
         }
     }
 
+    void shrinkWithTime(float deltaTime) {
+        elapsedSize += deltaTime;
 
-};
+        if (elapsedSize >= 10.f) {
+            sf::Vector2f currentScale = _obj.globalSprt[GlobalS::HFISH].getScale();
+            float proportion = static_cast<float>(_obj.globalTex[GlobalS::HFISH].getSize().x / _obj.globalTex[GlobalS::HFISH].getSize().y);
+            _obj.globalSprt[GlobalS::HFISH].setScale(currentScale.x - (0.03f * proportion), currentScale.y - 0.03f);
+            elapsedSize -= 10.f;
+        }
+    }
+
+    void applyAuraEffect(Window_s& window) {
+        if (!shaderLoaded) {
+            if (!Rshader.loadFromFile("erase.frag", sf::Shader::Fragment)) {
+                throw std::runtime_error("Failed to load shaders");
+            }
+            shaderLoaded = true;
+        }
+        Rshader.setUniform("mouse", sf::Glsl::Vec2(_obj.globalSprt[GlobalS::HFISH].getPosition().x, _obj.globalSprt[GlobalS::HFISH].getPosition().y));
+        Rshader.setUniform("radius", radius);
+
+        shaderStates.shader = &Rshader;
+        window.replaceFromRenderLayer(static_cast<int>(Scene::FRONT), _obj.bgSprt[FrontS::MAPBORDER], _obj.bgSprt[FrontS::MAPBORDER], shaderStates);
+    }
+
+};  

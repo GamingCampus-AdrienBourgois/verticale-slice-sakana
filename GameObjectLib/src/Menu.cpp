@@ -2,11 +2,16 @@
 
 Menu::Menu(Window_s& window, Music& music) : _settings(window, music)
 {
+
+
 	// set values
 	elapsed = 0;
 	_MenuState = BASE;
 	_PreviousMenuState = BASE;
 	_fontButton.loadFromFile("asset/font/Beyonders.ttf");
+
+
+
 }
 
 Menu::~Menu() = default;

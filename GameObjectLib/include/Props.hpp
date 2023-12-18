@@ -17,18 +17,33 @@ class Props {
 	float elapsed;
 	int frame;
 
+	//sf::Sprite& hfish;
+
+
+
+
 	std::map<size_t, float> obstacleDelays;
 	size_t nextObstacleId = 0;
+
+	int can;
+	int wood;
+	int trash1;
+	int trash2;
+	int algae;
 
 public:
 
 
 	Props(PlayObject& obj) : _obj(obj) {
 
+		can = _CAN_;
+		wood = _WOOD_;
+		trash1 = _TRASH1_;
+		trash2 = _TRASH2_;
+		algae = _ALGAE_;
+
 		frame = 0;
 		elapsed = 0;
-
-
 	}
 	void textureSetters(Window_s& window) {
 
@@ -51,12 +66,14 @@ public:
 
 
 	}
-#include <iostream>
+
 	void animateSpecificObstacle(float deltaTime, std::vector<sf::Sprite>& obstacles, Window_s& window) {
 		std::random_device rd;
 		std::mt19937 gen(rd());
 		float maxY = (_obj.bgSprt[BackS::MAP].getScale().y * _obj.bgTex[BackS::MAP].getSize().y);
-		std::uniform_real_distribution<> disY(50, maxY - 50); // Y position
+		std::uniform_real_distribution<> disY(100, maxY - 50); // Y position
+
+
 
 
 		for (size_t i = 0; i < obstacles.size(); ++i) {
@@ -105,8 +122,8 @@ public:
 		std::mt19937 gen(rd());
 
 		std::uniform_real_distribution<> disX(50, _obj.bgSprt[BackS::MAP].getScale().x * _obj.bgTex[BackS::MAP].getSize().x);
-		std::uniform_real_distribution<> disY(50, _obj.bgSprt[BackS::MAP].getScale().y * _obj.bgTex[BackS::MAP].getSize().y);
-		std::uniform_real_distribution<> disAngle(0, 360); // Angle entre 0 et 360 degrés
+		std::uniform_real_distribution<> disY(200, _obj.bgSprt[BackS::MAP].getScale().y * _obj.bgTex[BackS::MAP].getSize().y);
+		std::uniform_real_distribution<> disAngle(0, 360); // Angle entre 0 et 360 degrï¿½s
 
 
 
@@ -114,7 +131,7 @@ public:
 			sf::Sprite algaeSprite;
 			algaeSprite.setTexture(_obj.globalTex[GlobalS::ALGAE]);
 			algaeSprite.setPosition(disX(gen), disY(gen));
-			algaeSprite.setRotation(disAngle(gen)); // Définir une rotation aléatoire
+			algaeSprite.setRotation(disAngle(gen)); // Dï¿½finir une rotation alï¿½atoire
 			_obj.massSprt[MassS::ALGAES].push_back(algaeSprite);
 		}
 	}
@@ -122,7 +139,7 @@ public:
 	void generateObstacles(Window_s& window, int count, GlobalS textureId, MassS spriteId) {
 		std::random_device rd;
 		std::mt19937 gen(rd());
-		std::uniform_real_distribution<> disY(50, (_obj.bgSprt[BackS::MAP].getScale().y * _obj.bgTex[BackS::MAP].getSize().y) + 50); // Y position
+		std::uniform_real_distribution<> disY(100, (_obj.bgSprt[BackS::MAP].getScale().y * _obj.bgTex[BackS::MAP].getSize().y) + 50); // Y position
 		std::uniform_real_distribution<> disDelay(0, 100); // Delay time in seconds
 
 
@@ -144,12 +161,12 @@ public:
 
 	void load(Window_s& window) {
 		textureSetters(window);
-		generateAlgae(window, _ALGAE_);
+		generateAlgae(window, algae);
 
-		generateObstacles(window, _CAN_, GlobalS::CAN, MassS::CANS);
-		generateObstacles(window, _WOOD_, GlobalS::WOOD, MassS::WOODS);
-		generateObstacles(window, _TRASH1_, GlobalS::TRASH1, MassS::TRASHS1);
-		generateObstacles(window, _TRASH2_, GlobalS::TRASH2, MassS::TRASHS2);
+		generateObstacles(window, can, GlobalS::CAN, MassS::CANS);
+		generateObstacles(window, wood, GlobalS::WOOD, MassS::WOODS);
+		generateObstacles(window, trash1, GlobalS::TRASH1, MassS::TRASHS1);
+		generateObstacles(window, trash2, GlobalS::TRASH2, MassS::TRASHS2);
 
 
 
@@ -170,6 +187,8 @@ public:
 	void animateAlgae(float deltaTime, Window_s& window) {
 		elapsed += deltaTime;
 
+
+
 		sf::Vector2f size = static_cast<sf::Vector2f>(_obj.globalTex[GlobalS::ALGAE].getSize());
 		size.x /= 20;
 
@@ -179,12 +198,51 @@ public:
 			for (auto& algaeSprite : _obj.massSprt[MassS::ALGAES]) {
 				algaeSprite.setTextureRect(sf::IntRect(size.x * frame, 0, size.x, size.y));
 			}
-
 			elapsed -= 0.1f;
 		}
 	}
 	void handleEvent(const sf::Event& event, Window_s& window, Music& music) {
 
 	}
+	
+	int getCan() const {
+		return can;
+	}
 
+	void setCan(int value) {
+		can = value;
+	}
+
+	int getWood() const {
+		return wood;
+	}
+
+	void setWood(int value) {
+		wood = value;
+	}
+
+	int getTrash1() const {
+		return trash1;
+	}
+
+	void setTrash1(int value) {
+		trash1 = value;
+	}
+
+	int getTrash2() const {
+		return trash2;
+	}
+
+	void setTrash2(int value) {
+		trash2 = value;
+	}
+
+	int getAlgae() const {
+
+		return algae;
+	}
+
+	void setAlgae(int value) {
+		algae = value;
+	}
 };

@@ -3,6 +3,7 @@
 #include "Window.hpp"
 #include "Music.hpp"
 #include <map>
+#include <iostream>
 
 enum class Scene {
 	SPRITESBG,
@@ -39,6 +40,7 @@ enum GlobalS {
 enum FrontS {
     MAPGRAD,
     MAPBORDER,
+    BLUR,
     FEND
 };
 
@@ -55,7 +57,18 @@ enum MassS {
     TRASHS2,
     CANS,
     WOODS,
+    WAVES,
     MEND
+};
+
+enum TextS {
+    TIMER,
+    TEND
+};
+
+enum RectS {
+    FRAME,
+    REEND
 };
 
 class PlayObject {
@@ -71,7 +84,8 @@ public:
         frontTex.resize(FrontS::FEND);
         frontSprt.resize(FrontS::FEND);
 
-
+        globalTexts.resize(TextS::TEND);
+        globalRec.resize(RectS::REEND);
         
 
 

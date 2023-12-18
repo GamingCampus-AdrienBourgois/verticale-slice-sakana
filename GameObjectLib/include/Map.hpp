@@ -8,6 +8,7 @@
 class Map {
 	PlayObject& _obj;
 
+
     int frame;
     float elapsed;
 public:
@@ -17,13 +18,14 @@ public:
 	}
     void textureSetters(Window_s& window) {
         sf::Vector2u windowSize = window.getWindow().getSize();
-
         float X = static_cast<float>(windowSize.x);
         float Y = static_cast<float>(windowSize.y);
+        float mult = 20.f;
+
 
         // load texture and create de sprite 
-        std::vector<std::string> globaleFile = { "asset/sprite/fishgame/map.jpg", "asset/sprite/fishgame/sky.png",  "asset/sprite/fishgame/Waves.png" };
-        std::vector<std::string> frontFile = { "asset/sprite/fishgame/map-cover.png",  "asset/sprite/fishgame/borderN.png" };
+        std::vector<std::string> globaleFile = { "asset/sprite/fishgame/map.jpg", "asset/sprite/fishgame/sky.png" };
+        std::vector<std::string> frontFile = { "asset/sprite/fishgame/map-cover.png",  "asset/sprite/fishgame/borderN.png"};
 
 
 
@@ -43,31 +45,51 @@ public:
                 _obj.frontSprt[i].setTexture(_obj.frontTex[i]);
             }
         }
+        if (!_obj.bgTex[BackS::WAVE].loadFromFile("asset/sprite/fishgame/Waves.png")) {
+            throw std::runtime_error("Failed to load texture");
+        }
 
-        float mult = 20.f;
 
+
+
+        // map
         float scaleX = X / _obj.bgTex[BackS::MAP].getSize().x; // scale to screen level x
         float scaleY = Y / _obj.bgTex[BackS::MAP].getSize().y; // scale to screen level y
         _obj.bgSprt[BackS::MAP].setScale(scaleX * mult, scaleY * mult);
 
-        /*
+        
+        // map grad
         float scaleX1 = scaleX * (_obj.bgTex[BackS::MAP].getSize().x / static_cast<float>(_obj.frontTex[FrontS::MAPGRAD].getSize().x)); // scale to map x
         float scaleY1 = scaleY * (_obj.bgTex[BackS::MAP].getSize().y / static_cast<float>(_obj.frontTex[FrontS::MAPGRAD].getSize().y)); // scale to map y
-        _obj.frontSprt[FrontS::MAPGRAD].setScale(scaleX1 * mult, scaleY1 * mult);*/
+        _obj.frontSprt[FrontS::MAPGRAD].setScale(scaleX1 * mult, scaleY1 * mult);
         
+        // map border
         float scaleX2 = scaleX * (_obj.bgTex[BackS::MAP].getSize().x / static_cast<float>(_obj.frontTex[FrontS::MAPBORDER].getSize().x)); // scale to map x
         float scaleY2 = scaleY * (_obj.bgTex[BackS::MAP].getSize().y / static_cast<float>(_obj.frontTex[FrontS::MAPBORDER].getSize().y)); // scale to map y
         _obj.frontSprt[FrontS::MAPBORDER].setScale(scaleX2 * mult, scaleY2 * mult);
         
+        // sky
         float scaleX3 = scaleX * (_obj.bgTex[BackS::MAP].getSize().x / static_cast<float>(_obj.bgTex[BackS::SKY].getSize().x)); // scale to map x
         float scaleY3 = 1;
         _obj.bgSprt[BackS::SKY].setScale(scaleX3 * mult, scaleY3 * 3.f);
         _obj.bgSprt[BackS::SKY].setPosition(sf::Vector2f(0, -1.f * (static_cast<float>(_obj.bgTex[BackS::SKY].getSize().y) * 3.f)));
 
+        // waves
+        float waveSectionWidth = static_cast<float>(_obj.bgTex[BackS::WAVE].getSize().x) / 4.f;
         float scaleX4 = scaleX * (_obj.bgTex[BackS::MAP].getSize().x / static_cast<float>(_obj.bgTex[BackS::WAVE].getSize().x));
         float scaleY4 = 1;
-        _obj.bgSprt[BackS::WAVE].setPosition(sf::Vector2f(0, -1.f * (static_cast<float>(_obj.bgTex[BackS::WAVE].getSize().y))));
+        int totalWaveSections = std::ceil(static_cast<float>(_obj.bgTex[BackS::MAP].getSize().x * _obj.bgSprt[BackS::MAP].getScale().x) / waveSectionWidth);
+        for (int i = 0; i < totalWaveSections + 1; ++i) {
+            sf::Sprite wave;
+            wave.setTexture(_obj.bgTex[BackS::WAVE]);
+            wave.setPosition(sf::Vector2f((i * waveSectionWidth) - 68 -(i * 128), -1.f * (static_cast<float>(_obj.bgTex[BackS::WAVE].getSize().y))));
+            _obj.massSprt[MassS::WAVES].push_back(wave);
+        }
+
+
+
     }
+
 
 
     void load(Window_s& window) {
@@ -83,10 +105,14 @@ public:
             float height = _obj.bgTex[BackS::WAVE].getSize().y;
 
             frame = (frame + 1) % 4;
-            _obj.bgSprt[BackS::WAVE].setTextureRect(sf::IntRect(width * frame, 0, width, height));
+
+            for (auto& wave : _obj.massSprt[MassS::WAVES]) {
+                wave.setTextureRect(sf::IntRect(width * frame, 0, width, height));
+            }
 
             elapsed -= 0.1f;
         }
     }
+
 
 };

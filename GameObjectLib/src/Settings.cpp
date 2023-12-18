@@ -21,6 +21,8 @@ Settings::Settings(Window_s& window, Music& music) :
 
 	_fontButton.loadFromFile("asset/font/Beyonders.ttf");
 	_fontAny.loadFromFile("asset/font/Dragon Slayer.ttf");
+
+
 }
 
 void Settings::textureSetters(Window_s& window) {
