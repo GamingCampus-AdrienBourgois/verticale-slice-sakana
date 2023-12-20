@@ -41,8 +41,6 @@ public:
     void animate(float deltaTime, Window_s &window) {
 
         _ficherMan.animate(deltaTime, window);
-        _ficherMan.animateFisherman(deltaTime, window);
-        _ficherMan.displayLine();
         /*
         _humanFish.animate(deltaTime, window);
         // animate each fish

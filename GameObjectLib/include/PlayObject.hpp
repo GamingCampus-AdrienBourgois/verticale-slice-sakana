@@ -18,6 +18,8 @@ enum GlobalS {
     HOOK,
     HOUSE,
     FISHERMAN,
+    FISHERMAND,
+    FISHERMANS,
     HFISH,
     FISHA,
     FISHB,
@@ -40,6 +42,7 @@ enum BackS {
 
 enum RectangleS {
     BAR,
+    TRANS,
     REND
 };
 
