@@ -16,6 +16,7 @@ class Play  {
 
     Props _props;
 
+
     Ath _ath;
     Map _map;
     Fish _fish;
@@ -32,9 +33,9 @@ public:
     _obj(),
     _fish(),
     _map(_obj),
-    _props(_obj),
     _humanFish(_obj, cameraView),
     _ath(_obj),
+    _props(_obj),
     _power(_obj, _humanFish, _map, _props, _fish)
     {
 
@@ -59,6 +60,7 @@ public:
         _humanFish.animate(deltaTime, window);
         _fish.animateAllFish(deltaTime, _obj, _obj.globalSprt[GlobalS::HFISH], fishs);
         _props.animate(deltaTime, window);
+
         _map.animation(deltaTime);
     }
 
@@ -86,6 +88,7 @@ public:
         _humanFish.handleObstacleCollision(window, MassS::WOODS);
         _humanFish.shrinkWithTime(deltaTime);
         _humanFish.handleFishsCollision(window);
+
         _ath.clock(deltaTime, window, cameraView);
         _power.update(window, deltaTime);
         animate(deltaTime, window);

@@ -19,7 +19,6 @@ class HumanFish {
     bool cloaked;
 
     // move
-    std::vector<sf::Vector2f> points;
     sf::Vector2f targetPosition;
     float speed;
     bool isPushing;
@@ -61,7 +60,6 @@ public:
         textureSetters(window);
         cameraView.setSize(static_cast<float>(window.getWindow().getSize().x), static_cast<float>(window.getWindow().getSize().y));
         cameraView.setCenter(_obj.globalSprt[GlobalS::HFISH].getPosition().x, _obj.globalSprt[GlobalS::HFISH].getPosition().y);
-        points = loadCollisionPoints(_obj.globalSprt[GlobalS::HFISH]);
     }
 
     void textureSetters(Window_s& window) {
@@ -192,98 +190,7 @@ public:
         speed = _speed;
     }
 
-    std::vector<sf::Vector2f> loadCollisionPoints(const sf::Sprite& sprite) {
-        std::vector<sf::Vector2f> collisionPoints;
-        sf::Image image = sprite.getTexture()->copyToImage();
-        sf::IntRect rect = sprite.getTextureRect();
-
-        // Parcourir le bord supérieur
-        for (int x = 0; x < rect.width; ++x) {
-            for (int y = 0; y < rect.height; ++y) {
-                sf::Color color = image.getPixel(x + rect.left, y + rect.top);
-                if (color.a != 0) {
-                    collisionPoints.push_back(sprite.getTransform().transformPoint(static_cast<float>(x), static_cast<float>(y)));
-                    break; // Passer au prochain x après avoir trouvé un pixel non transparent
-                }
-            }
-        }
-
-        // Parcourir le bord inférieur
-        for (int x = 0; x < rect.width; ++x) {
-            for (int y = rect.height - 1; y >= 0; --y) {
-                sf::Color color = image.getPixel(x + rect.left, y + rect.top);
-                if (color.a != 0) {
-                    collisionPoints.push_back(sprite.getTransform().transformPoint(static_cast<float>(x), static_cast<float>(y)));
-                    break; // Passer au prochain x après avoir trouvé un pixel non transparent
-                }
-            }
-        }
-
-        // Parcourir le bord gauche
-        for (int y = 0; y < rect.height; ++y) {
-            for (int x = 0; x < rect.width; ++x) {
-                sf::Color color = image.getPixel(x + rect.left, y + rect.top);
-                if (color.a != 0) {
-                    collisionPoints.push_back(sprite.getTransform().transformPoint(static_cast<float>(x), static_cast<float>(y)));
-                    break; // Passer au prochain y après avoir trouvé un pixel non transparent
-                }
-            }
-        }
-
-        // Parcourir le bord droit
-        for (int y = 0; y < rect.height; ++y) {
-            for (int x = rect.width - 1; x >= 0; --x) {
-                sf::Color color = image.getPixel(x + rect.left, y + rect.top);
-                if (color.a != 0) {
-                    collisionPoints.push_back(sprite.getTransform().transformPoint(static_cast<float>(x), static_cast<float>(y)));
-                    break; // Passer au prochain y après avoir trouvé un pixel non transparent
-                }
-            }
-        }
-
-        return collisionPoints;
-    }
-
-    bool checkPixelCollision(const sf::Sprite& tracker, const sf::Sprite& target, const std::vector<sf::Vector2f>& points) {
-        // Assurez-vous que les rectangles englobants se croisent
-        if (!tracker.getGlobalBounds().intersects(target.getGlobalBounds())) {
-            return false;
-        }
-
-        // Convertir les textures des sprites en images pour l'accès aux pixels
-        sf::Image targetImage = target.getTexture()->copyToImage();
-        sf::IntRect targetRect = target.getTextureRect();
-
-        for (const auto& point : points) {
-            // Transformer le point dans le système de coordonnées du tracker au monde
-            sf::Vector2f worldPoint = tracker.getTransform().transformPoint(point);
-
-            // Prendre en compte l'échelle du sprite cible
-            sf::Vector2f scaledTargetPoint = sf::Vector2f(worldPoint.x / target.getScale().x, worldPoint.y / target.getScale().y);
-
-            // Transformer le point du monde au système de coordonnées de la cible
-            sf::Vector2f targetPoint = target.getInverseTransform().transformPoint(worldPoint);
-            // std::cout << targetPoint.x << ":" << targetPoint.y << std::endl;
-
-             // Vérifier si le point est dans la zone de texture de la cible
-            if ((targetPoint.x > 0 && targetPoint.y > 0) && (targetPoint.x < targetRect.width) && (targetPoint.y < targetRect.height)) {
-                sf::Color color = targetImage.getPixel(static_cast<unsigned int>(targetPoint.x + targetRect.left), static_cast<unsigned int>(targetPoint.y + targetRect.top));
-
-
-                // Vérifier si le pixel n'est pas transparent
-                if (color.a != 0) {
-                    return true;  // Collision détectée
-                }
-            }
-        }
-
-        return false; // Aucune collision
-    }
-
-
     void animate(float deltaTime, Window_s& window) {
-        if (checkPixelCollision(_obj.globalSprt[GlobalS::HFISH], _obj.frontSprt[FrontS::MAPBORDER], points))
-            std::cout << "boom";
 
         sf::Vector2f spritePos = _obj.globalSprt[GlobalS::HFISH].getPosition();
         sf::Vector2i mousePixelPos = sf::Mouse::getPosition(window.getWindow());
@@ -326,7 +233,6 @@ public:
                 float proportion = static_cast<float>(_obj.globalTex[GlobalS::HFISH].getSize().x / _obj.globalTex[GlobalS::HFISH].getSize().y);
                 float reduction = 0.01f;
 
-                std::cout << proportion;
 
                 fishSprite.setScale(currentScale.x - (reduction * proportion), currentScale.y - reduction);
 
@@ -345,10 +251,10 @@ public:
             sf::Sprite& fishSprite = _obj.globalSprt[i];
             sf::FloatRect fishBounds = fishSprite.getGlobalBounds();
             if (humanFishBounds.intersects(fishBounds)) {
-                float scaleReduction = 0.01f;
                 sf::Vector2f currentScale = humanFishSprite.getScale();
                 if (currentScale.x > 0.5f && currentScale.y > 0.5f) {
-                    humanFishSprite.setScale(currentScale.x - scaleReduction, currentScale.y - scaleReduction);
+                    float proportion = static_cast<float>(_obj.globalTex[GlobalS::HFISH].getSize().x / _obj.globalTex[GlobalS::HFISH].getSize().y);
+                    humanFishSprite.setScale(currentScale.x - (0.01f * proportion), currentScale.y - 0.01f);
                 }
             }
         }
@@ -365,7 +271,7 @@ public:
                 window.removeFromRenderLayer(static_cast<int>(Scene::SPRITESMASS), algaeSprites[i]);
                 sf::Vector2f currentScale = fishSprite.getScale();
                 float proportion = static_cast<float>(_obj.globalTex[GlobalS::HFISH].getSize().x / _obj.globalTex[GlobalS::HFISH].getSize().y);
-                fishSprite.setScale(currentScale.x + 0.01f, currentScale.y + (0.01f * proportion));
+                fishSprite.setScale(currentScale.x + (0.01f * proportion), currentScale.y + 0.01f);
 
             }
         }

@@ -19,6 +19,9 @@ class Fish {
     int currentFrame;
     float elapsed;
 
+    std::map<size_t, std::vector<sf::Vector2i>> nonVoidPixelCoordinatesMap;
+
+
 
 public:
 
@@ -39,6 +42,45 @@ public:
             colided = false;
         }
         depthVec.resize(static_cast<size_t>(GlobalS::GEND - GlobalS::FISHA) + 1);
+    }
+
+    void computeNonVoidPixelCoordinates(const sf::Sprite& sprite, size_t fishIndex) {
+        std::vector<sf::Vector2i> coordinates;
+        const sf::Texture* texture = sprite.getTexture();
+        const sf::IntRect& rect = sprite.getTextureRect();
+        const sf::Image& image = texture->copyToImage();
+
+        for (int x = rect.left; x < rect.left + rect.width; ++x) {
+            for (int y = rect.top; y < rect.top + rect.height; ++y) {
+                if (image.getPixel(x, y).a != 0) {
+                    coordinates.push_back(sf::Vector2i(x, y));
+                }
+            }
+        }
+        nonVoidPixelCoordinatesMap[fishIndex] = coordinates;
+    }
+
+    bool checkCollision(const sf::Sprite& target, const sf::Sprite& targetter, size_t fishIndex) {
+        
+        const auto& targetterCoordinates = nonVoidPixelCoordinatesMap[fishIndex];
+
+        const sf::Texture* targetTexture = target.getTexture();
+        const sf::Image& targetImage = targetTexture->copyToImage();
+        sf::Transform targetInverseTransform = target.getInverseTransform();
+        sf::Transform targetterTransform = targetter.getTransform();
+
+        for (const auto& coord : targetterCoordinates) {
+            sf::Vector2f transformedCoord = targetterTransform.transformPoint(static_cast<float>(coord.x), static_cast<float>(coord.y));
+            sf::Vector2i targetImageCoord = static_cast<sf::Vector2i>(targetInverseTransform.transformPoint(transformedCoord));
+
+            if (targetImageCoord.x >= 0 && targetImageCoord.x < static_cast<int>(targetTexture->getSize().x) &&
+                targetImageCoord.y >= 0 && targetImageCoord.y < static_cast<int>(targetTexture->getSize().y)) {
+                if (targetImage.getPixel(targetImageCoord.x, targetImageCoord.y).a != 0) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 
@@ -91,7 +133,13 @@ public:
 
             depthVec[idx] = Y * (idx + 1);
             _obj.globalSprt[i].setPosition(sf::Vector2f(X, depthVec[idx]));
+
+            // load collision points
+            computeNonVoidPixelCoordinates(_obj.globalSprt[i], i);
         }
+
+
+
 
     }
 
@@ -112,11 +160,11 @@ public:
          // gerer les collisions avec les bords de la carte
         
         float directionX = 0.f;
-        /*
-        if (_obj.checkPixelCollision(fishSprite, _obj.frontSprt[FrontS::MAPBORDER])) {
-            colidedVec[fishsIdx] = (colidedVec[fishsIdx] ? false : true);
+        
+        if (checkCollision(_obj.frontSprt[FrontS::MAPBORDER], _obj.globalSprt[fishIndex], fishIndex)) {
+            colidedVec[fishsIdx] = !colidedVec[fishsIdx];
         }
-        */
+        
         if (colidedVec[fishsIdx]) {
             directionX = (fishIndex % 2 == 0) ? -1.0f : 1.0f; // Alternance des directions
         }
@@ -125,18 +173,21 @@ public:
         }
 
         // distance pour suivre le poisson humain
-        const float followDistance = 2000.0f;
+        const float followDistance = 1500.0f;
         float distanceToHumanFish = std::hypot(humanFishPos.x - fishPos.x, humanFishPos.y - fishPos.y);
         // movement total du poisson
         sf::Vector2f movement;
 
         if (distanceToHumanFish < followDistance && humanFishPos != fishPos) {
             // suivre le poisson humain
+            humanFishPos.y -= 50.f;
             sf::Vector2f direction = humanFishPos - fishPos;
             float length = std::hypot(direction.x, direction.y);
+
             direction /= length; // Normaliser
             // deplacement
-            movement = direction * ms * deltaTime;
+            movement.x = direction.x * ms * deltaTime;
+            movement.y = direction.y * ms * deltaTime;
         }
         else {
             // mouvement normal

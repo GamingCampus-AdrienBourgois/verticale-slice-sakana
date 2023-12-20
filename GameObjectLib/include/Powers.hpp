@@ -23,7 +23,7 @@ class Power {
     bool vision;
     bool killer;
 
-    bool onceF;
+
 
 public:
     Power(PlayObject& obj, HumanFish& _humanFish, Map &_map, Props &_props, Fish& _fish) :

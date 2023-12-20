@@ -23,7 +23,7 @@ enum GlobalS {
     TRASH1,
     CAN,
     WOOD,
-
+    HOOK,
     HFISH,
     FISHA,
     FISHB,
@@ -68,6 +68,7 @@ enum TextS {
 
 enum RectS {
     FRAME,
+    FISHLINE,
     REEND
 };
 
