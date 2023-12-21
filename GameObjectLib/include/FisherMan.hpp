@@ -38,7 +38,7 @@ public:
 		caughtFishIndex = 0;
 		frameFishing = 0;
 		elapsedFishing = 0.f;
-		count = 0;
+		count = 2;
 
 	}
 
@@ -106,11 +106,57 @@ public:
 		}
 	}
 
+	void animateFall(float deltaTime, Window_s& window) {
+		static float elapsed = 0.0f;
+		static int frame = 0;
+		static bool transformed = false;
+		static float angle = 0.0f;
+
+		elapsed += deltaTime;
+
+		// Animation de chute du pêcheur
+		if (!transformed) {
+			if (elapsed >= 0.5f && frame < 4) {
+				float width = _obj.globalTex[GlobalS::FISHERMANS].getSize().x / 4.f;
+				float height = _obj.globalTex[GlobalS::FISHERMANS].getSize().y;
+				_obj.globalSprt[GlobalS::FISHERMANS].setTextureRect(sf::IntRect(frame * static_cast<int>(width), 0, static_cast<int>(width), static_cast<int>(height)));
+
+				frame++;
+				elapsed = 0.0f;
+			}
+			if (frame == 4) {
+				transformed = true;
+				_obj.globalSprt[GlobalS::FISHERMAN].setTexture(_obj.globalTex[GlobalS::FISHERMANF]);
+				frame = 0;
+			}
+		}
+		else {
+			// Mouvement en arc de cercle dans l'eau
+			sf::Vector2f center = sf::Vector2f(window.getWindow().getSize().x / 2.0f, window.getWindow().getSize().y / 2.0f);
+			float radius = 200.0f; // Rayon de l'arc, ajustable
+			float speed = 1.0f; // Vitesse de mouvement, ajustable
+
+			angle += speed * deltaTime;
+			if (angle > 2 * M_PI) {
+				angle -= 2 * M_PI;
+			}
+
+			sf::Vector2f newPos = center + sf::Vector2f(radius * cos(angle), radius * sin(angle));
+			_obj.globalSprt[GlobalS::FISHERMAN].setPosition(newPos);
+		}
+	}
+
+
+
 	void animate(float deltaTime, Window_s& window) {
 		// implement scene
 
-		if (!isFishing)
+		if (!isFishing) {
+			animateFall(deltaTime, window);
 			return;
+		}
+
+
 		animateFishing(deltaTime);
 	}
 
@@ -206,8 +252,9 @@ public:
 				window.removeFromRenderLayer(static_cast<int>(Scene::SPRITESGB), _obj.globalSprt[caughtFishIndex]);
 				power.push_back(caughtFishIndex);
 				count++;
+				std::cout << count;
 				if (count == 3)
-					!isFishing;
+					isFishing = false;
 
 				
 				hook.setPosition(hookPos);
