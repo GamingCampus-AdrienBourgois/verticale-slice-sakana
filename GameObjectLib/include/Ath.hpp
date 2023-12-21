@@ -17,6 +17,8 @@ public:
 	}
 
 	void load(Window_s& window) {
+		totalTime = 0.f;
+
 		window.removeFromRenderLayer(static_cast<int>(Scene::FRONT), _obj.frontSprt[FrontS::BLUR]);
 		// Load Map
 		if (!_obj.frontTex[FrontS::BLUR].loadFromFile("asset/sprite/fishgame/Blur.png")) {

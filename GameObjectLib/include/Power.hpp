@@ -2,6 +2,11 @@
 #include "GameStatistics.hpp"
 #include "PlayObject.hpp"
 
+#include "HumanFish.hpp"
+#include "Map.hpp"
+#include "Props.hpp"
+#include "Fish.hpp"
+
 class Power {
     PlayObject& _obj;
 
@@ -23,18 +28,16 @@ class Power {
     bool vision;
     bool killer;
 
-
-
 public:
-    Power(PlayObject& obj, HumanFish& _humanFish, Map &_map, Props &_props, Fish& _fish) :
-    _obj(obj),
-    humanFish(_humanFish),
-    map(_map),
-    props(_props),
-    fish(_fish)
-
+    Power(PlayObject& obj, HumanFish& _humanFish, Map& _map, Props& _prop, Fish& _fish) :
+        _obj(obj),
+        humanFish(_humanFish),
+        map(_map),
+        props(_prop),
+        fish(_fish)
     {
         elapsed = 0.f;
+
         dash = false;
         cloak = false;
         size = false;
@@ -55,8 +58,6 @@ public:
         //vision = true;
         killer = true;
     }
-
-
 
     ~Power() = default;
 
@@ -82,39 +83,40 @@ public:
     void handleEvent(const sf::Event& event, Window_s& window, Music& music) {}
 
 
-    void Dash(Window_s& window, float deltaTime) 
+    void Dash(Window_s& window, float deltaTime)
     {
         humanFish.pusher(window, deltaTime, false);
     }
 
-    void Cloak(Window_s& window, float deltaTime) 
+    void Cloak(Window_s& window, float deltaTime)
     {
         humanFish.setCloack();
     }
 
-    void Size(Window_s& window) 
+    void Size(Window_s& window)
     {
         _obj.globalSprt[GlobalS::HFISH].setScale(sf::Vector2f(7.f, 7.f));
     }
 
-    void Food(Window_s& window) 
+    void Food(Window_s& window)
     {
         props.setAlgae(props.getAlgae() * 1.5f);
-
-
     }
 
-    void Speed(Window_s& window) 
+    void Speed(Window_s& window)
     {
         humanFish.setSpeed(1.5f);
     }
 
-    void Jump(Window_s& window, float deltaTime) 
+    void Jump(Window_s& window, float deltaTime)
     {
         humanFish.pusher(window, deltaTime, true);
     }
 
-    void Impress(Window_s& window) {}
+    void Impress(Window_s& window) 
+    {
+        fish.setFocus(fish.getFocus() / 2.f);
+    }
 
     void Vision(Window_s& window, float deltaTime)
     {

@@ -82,7 +82,7 @@ public:
 
 		_obj.globalSprt[GlobalS::HOOK].setTexture(_obj.globalTex[GlobalS::HOOK]);
 		_obj.globalSprt[GlobalS::HOOK].setScale(sf::Vector2f(2.f, 2.f));
-		sf::Vector2f spriteSize = sf::Vector2f(_obj.globalSprt[GlobalS::HOOK].getLocalBounds().width, _obj.globalSprt[GlobalS::HOOK].getLocalBounds().height);
+		sf::Vector2f spriteSize = sf::Vector2f(_obj.globalSprt[GlobalS::HOOK].getLocalBounds().width, 0);
 		_obj.globalSprt[GlobalS::HOOK].setOrigin(spriteSize * 0.5f);
 
 

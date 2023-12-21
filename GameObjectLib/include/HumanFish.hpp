@@ -58,8 +58,7 @@ public:
 
     void load(Window_s& window) {
         textureSetters(window);
-        cameraView.setSize(static_cast<float>(window.getWindow().getSize().x), static_cast<float>(window.getWindow().getSize().y));
-        cameraView.setCenter(_obj.globalSprt[GlobalS::HFISH].getPosition().x, _obj.globalSprt[GlobalS::HFISH].getPosition().y);
+
     }
 
     void textureSetters(Window_s& window) {
@@ -288,6 +287,17 @@ public:
         }
     }
 
+    void killer(Window_s &window) {
+        for (size_t i = GlobalS::FISHA; i < GlobalS::GEND; ++i) {
+            if (_obj.globalSprt[GlobalS::HFISH].getGlobalBounds().intersects(sf::FloatRect(_obj.globalSprt[i].getGlobalBounds()))) {
+                window.removeFromRenderLayer(static_cast<int>(Scene::SPRITESGB), _obj.globalSprt[i]);
+                float proportion = static_cast<float>(_obj.globalTex[GlobalS::HFISH].getSize().x / _obj.globalTex[GlobalS::HFISH].getSize().y);
+                sf::Vector2f currentScale = _obj.globalSprt[GlobalS::HFISH].getScale();
+                _obj.globalSprt[GlobalS::HFISH].setScale(currentScale.x + (0.03f * proportion), currentScale.y + 0.03f);
+            }
+        }
+    }
+
     void applyAuraEffect(Window_s& window) {
         if (!shaderLoaded) {
             if (!Rshader.loadFromFile("erase.frag", sf::Shader::Fragment)) {
@@ -307,5 +317,8 @@ public:
 
     void setCloack() {
         cloak = true;
+    }
+    const bool getCloak() const {
+        return cloaked;
     }
 };  

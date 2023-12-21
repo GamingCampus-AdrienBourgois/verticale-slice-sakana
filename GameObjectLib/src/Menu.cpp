@@ -40,7 +40,7 @@ void Menu::textureSetters(Window_s& window)
 	float Y = static_cast<float>(windowSize.y);
 
 	// load texture and create de sprite 
-	std::vector<std::string> globaleFile = {"asset/sprite/menu/background.png"};
+	std::vector<std::string> globaleFile = {"asset/sprite/menu/background.png", "asset/sprite/menu/logo.png" };
 
 	bgTex.resize(globaleFile.size());
 	bgSprt.resize(globaleFile.size());
@@ -58,6 +58,10 @@ void Menu::textureSetters(Window_s& window)
 	}
 	// here we set scale/position/origin
 	bgSprt[0].setScale(X / bgTex[0].getSize().x, Y / bgTex[0].getSize().y); // attapt pos to screen size
+
+	bgSprt[1].setScale(sf::Vector2f(0.5f, 0.5f));
+	bgSprt[1].setOrigin(sf::Vector2f((bgTex[1].getSize().x) / 2.f, (bgTex[1].getSize().y) / 2.f));
+	bgSprt[1].setPosition(X - (X * 0.4f), Y - (Y * 0.75f));
 
 	// load texture on buttons
 	buttonTex.resize(buttons.size());

@@ -37,7 +37,7 @@
     <ClInclude Include="include\Window.hpp" />
     <ClInclude Include="include\Map.hpp" />
     <ClInclude Include="include\Props.hpp" />
-    <ClInclude Include="include\Powers.hpp" />
+    <ClInclude Include="include\Power.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\HumanFish.hpp" />

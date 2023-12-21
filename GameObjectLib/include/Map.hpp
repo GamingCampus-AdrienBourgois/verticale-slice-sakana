@@ -25,7 +25,7 @@ public:
 
         // load texture and create de sprite 
         std::vector<std::string> globaleFile = { "asset/sprite/fishgame/map.jpg", "asset/sprite/fishgame/sky.png" };
-        std::vector<std::string> frontFile = { "asset/sprite/fishgame/map-cover.png",  "asset/sprite/fishgame/borderN.png"};
+        std::vector<std::string> frontFile = { "asset/sprite/fishgame/map-cover.png",  "asset/sprite/fishgame/borderN.png", "asset/sprite/fishgame/cover.png"};
 
 
 
@@ -70,9 +70,14 @@ public:
         
         // sky
         float scaleX3 = scaleX * (_obj.bgTex[BackS::MAP].getSize().x / static_cast<float>(_obj.bgTex[BackS::SKY].getSize().x)); // scale to map x
-        float scaleY3 = 1;
+        float scaleY3 = 1.f;
         _obj.bgSprt[BackS::SKY].setScale(scaleX3 * mult, scaleY3 * 3.f);
         _obj.bgSprt[BackS::SKY].setPosition(sf::Vector2f(0, -1.f * (static_cast<float>(_obj.bgTex[BackS::SKY].getSize().y) * 3.f)));
+
+        float scaleX5 = 2.f;
+        float scaleY5 = 10000.f;
+        _obj.frontSprt[FrontS::COVER].setScale(scaleX5, scaleY5);
+        _obj.frontSprt[FrontS::COVER].setPosition(sf::Vector2f(_obj.bgSprt[BackS::MAP].getScale().x * _obj.bgTex[BackS::MAP].getSize().x, 0 + _obj.bgSprt[BackS::SKY].getPosition().y));
 
         // waves
         float waveSectionWidth = static_cast<float>(_obj.bgTex[BackS::WAVE].getSize().x) / 4.f;

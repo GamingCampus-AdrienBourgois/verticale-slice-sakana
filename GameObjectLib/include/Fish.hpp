@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include "HumanFish.hpp"
 
 class Fish {
     std::string name;
@@ -13,6 +14,9 @@ class Fish {
     std::string power;
     std::string path;
 
+    float focus;
+
+    std::vector<float> timeSinceLastDirectionChange;
     std::vector<bool> colidedVec;
     std::vector<float> depthVec;
 
@@ -22,26 +26,31 @@ class Fish {
     std::map<size_t, std::vector<sf::Vector2i>> nonVoidPixelCoordinatesMap;
 
 
-
 public:
 
-    Fish() : currentFrame(0), elapsed(0), speed(0), scale(0)
+    Fish() : currentFrame(0), elapsed(0), speed(0), scale(0), focus(1500)
     {
         colidedVec.resize(static_cast<size_t>(GlobalS::GEND - GlobalS::FISHA) + 1);
         for (auto colided : colidedVec) {
             colided = false;
         }
         depthVec.resize(static_cast<size_t>(GlobalS::GEND - GlobalS::FISHA) + 1);
+
+        timeSinceLastDirectionChange.resize(static_cast<size_t>(GlobalS::GEND - GlobalS::FISHA) + 1, 0.0f);
+
     }
 
     Fish(const std::string& _name, float _speed, float _scale, const std::string& _power, const std::string& _path)
-        : name(_name), speed(_speed), scale(_scale), power(_power), path(_path), elapsed(0), currentFrame(0)
+        : name(_name), speed(_speed), scale(_scale), power(_power), path(_path), elapsed(0), currentFrame(0), focus(1500)
     {
         colidedVec.resize(static_cast<size_t>(GlobalS::GEND - GlobalS::FISHA) + 1);
         for (auto colided : colidedVec) {
             colided = false;
         }
         depthVec.resize(static_cast<size_t>(GlobalS::GEND - GlobalS::FISHA) + 1);
+
+        timeSinceLastDirectionChange.resize(static_cast<size_t>(GlobalS::GEND - GlobalS::FISHA) + 1, 0.0f);
+
     }
 
     void computeNonVoidPixelCoordinates(const sf::Sprite& sprite, size_t fishIndex) {
@@ -146,22 +155,28 @@ public:
 
 
 
-    void moveAI(float deltaTime, PlayObject& _obj, size_t fishIndex, const sf::Sprite& humanFishSprite, std::vector<Fish> fishs) {
+    void moveAI(float deltaTime, PlayObject& _obj, size_t fishIndex, const sf::Sprite& humanFishSprite, std::vector<Fish> fishs, HumanFish &humanFish) {
+        sf::Sprite& fishSprite = _obj.globalSprt[fishIndex];
+        if (_obj.globalSprt[GlobalS::HOOK].getGlobalBounds().intersects(fishSprite.getGlobalBounds()))
+            return;
         int fishsIdx = fishIndex - GlobalS::FISHA;
         float ms = fishs[fishsIdx].getSpeed();
-        sf::Sprite& fishSprite = _obj.globalSprt[fishIndex];
         sf::Vector2f fishPos = fishSprite.getPosition();
         sf::Vector2f humanFishPos = humanFishSprite.getPosition();
-        // limite de profondeur
         float depthLimit = 500.0f;
-        float depthBase = depthVec[fishsIdx]; // Chaque poisson a sa propre profondeur de base
-        // determiner la direction du mouvement en X
-
-         // gerer les collisions avec les bords de la carte
-        
+        float depthBase = depthVec[fishsIdx];        
         float directionX = 0.f;
-        
-        if (checkCollision(_obj.frontSprt[FrontS::MAPBORDER], _obj.globalSprt[fishIndex], fishIndex)) {
+
+        timeSinceLastDirectionChange[fishsIdx] += deltaTime;
+
+        // changer la position
+        if (timeSinceLastDirectionChange[fishsIdx] >= 5.0f) {
+            if (rand() % 3 == 0) { // 1 chance sur 3 de changer de direction
+                colidedVec[fishsIdx] = !colidedVec[fishsIdx];
+            }
+            timeSinceLastDirectionChange[fishsIdx] = 0.0f; // Réinitialiser le compteur
+        }
+        if (fishSprite.getPosition().x < 5400.f || fishSprite.getPosition().x > 28000.f) {
             colidedVec[fishsIdx] = !colidedVec[fishsIdx];
         }
         
@@ -169,16 +184,15 @@ public:
             directionX = (fishIndex % 2 == 0) ? -1.0f : 1.0f; // Alternance des directions
         }
         else {
-            directionX = (fishIndex % 2 == 0) ? 1.0f : -1.0f; // Alternance des directions
+            directionX = (fishIndex % 2 == 0) ? 1.0f : -1.0f;
         }
 
         // distance pour suivre le poisson humain
-        const float followDistance = 1500.0f;
         float distanceToHumanFish = std::hypot(humanFishPos.x - fishPos.x, humanFishPos.y - fishPos.y);
         // movement total du poisson
         sf::Vector2f movement;
 
-        if (distanceToHumanFish < followDistance && humanFishPos != fishPos) {
+        if (distanceToHumanFish < focus && humanFishPos != fishPos && !humanFish.getCloak()) {
             // suivre le poisson humain
             humanFishPos.y -= 50.f;
             sf::Vector2f direction = humanFishPos - fishPos;
@@ -236,13 +250,15 @@ public:
 
         }
     }
-    void animateAllFish(float deltaTime, PlayObject& _obj, const sf::Sprite& humanFishSprite, std::vector<Fish>& fishes) {
+    void animateAllFish(float deltaTime, PlayObject& _obj, const sf::Sprite& humanFishSprite, std::vector<Fish>& fishes, HumanFish &humanFish) {
         for (size_t i = GlobalS::FISHA; i < GlobalS::GEND; i++) {
             int fishIdx = i - GlobalS::FISHA;
-            moveAI(deltaTime, _obj, i, humanFishSprite, fishes);
+            moveAI(deltaTime, _obj, i, humanFishSprite, fishes, humanFish);
             fishes[fishIdx].animate(deltaTime, _obj, i);
         }
     }
+
+
 
     const std::string getName() const {
         return name;
@@ -258,6 +274,12 @@ public:
     }
     const std::string getPath() const {
         return path;
+    }
+    const float getFocus() const {
+        return focus;
+    }
+    void setFocus(float _focus) {
+        focus = _focus;
     }
 
 };

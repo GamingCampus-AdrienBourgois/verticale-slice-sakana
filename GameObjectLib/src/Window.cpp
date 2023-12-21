@@ -62,13 +62,30 @@ void Window_s::addToRenderLayer(int layer, const sf::Drawable& drawable, const s
 }
 
 
-
-    void Window_s::removeFromRenderLayer(int layer, const sf::Drawable& drawable) {
-        auto& pairs = _renderLayers[layer];
-        pairs.erase(std::remove_if(pairs.begin(), pairs.end(), [&drawable](const auto& pair) {
-            return pair.first == &drawable;
-            }), pairs.end());
+void Window_s::removeFromRenderLayer(int layer, const sf::Drawable& drawable) {
+    auto& pairs = _renderLayers[layer];
+    for (size_t i = 0; i < pairs.size(); ++i) {
+        if (pairs[i].first == &drawable) {
+            _deletedIndices[layer].insert(i);
+            pairs.erase(pairs.begin() + i);
+            break;
+        }
     }
+}
+
+int Window_s::countDeletionsInRange(int layer, size_t startIndex, size_t endIndex) {
+    int count = 0;
+    if (_deletedIndices.find(layer) != _deletedIndices.end()) {
+        for (size_t i = startIndex; i <= endIndex; ++i) {
+            if (_deletedIndices[layer].find(i) != _deletedIndices[layer].end()) {
+                count++;
+            }
+        }
+    }
+    return count;
+}
+
+
     void Window_s::renderLayers() {
         for (const auto& [layer, pairs] : _renderLayers) {
             for (const auto& [drawable, optionalState] : pairs) {

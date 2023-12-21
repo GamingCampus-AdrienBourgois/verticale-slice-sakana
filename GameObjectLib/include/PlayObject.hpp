@@ -18,12 +18,18 @@ enum class Scene {
 };
 
 enum GlobalS {
+    HOUSE,
+    FISHERMANS,
+    FISHERMANH,
+    FISHERMANF,
+    FISHERMAN,
     ALGAE,
     TRASH2,
     TRASH1,
     CAN,
     WOOD,
     HOOK,
+    FISHERHOOK,
     HFISH,
     FISHA,
     FISHB,
@@ -40,7 +46,9 @@ enum GlobalS {
 enum FrontS {
     MAPGRAD,
     MAPBORDER,
+    COVER,
     BLUR,
+    
     FEND
 };
 
@@ -63,10 +71,13 @@ enum MassS {
 
 enum TextS {
     TIMER,
+    FISHCNT,
     TEND
 };
 
 enum RectS {
+    TRANS,
+    BAR,
     FRAME,
     FISHLINE,
     REEND

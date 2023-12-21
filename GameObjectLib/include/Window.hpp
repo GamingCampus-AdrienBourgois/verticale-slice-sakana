@@ -3,6 +3,7 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 #include <optional>
+#include <set>
 
 class Window_s {
 public:
@@ -17,6 +18,7 @@ public:
     void clearLayer(int layer);
     void replaceFromRenderLayer(int layer, const sf::Drawable& oldDrawable, const sf::Drawable& newDrawable, const sf::RenderStates& state = sf::RenderStates::Default);
     void placeInLayerAt(int layer, const sf::Drawable& drawable, size_t position);
+    int countDeletionsInRange(int layer, size_t startIndex, size_t endIndex);
 
 
 
@@ -38,6 +40,10 @@ public:
 
 private:
     std::map<int, std::vector<std::pair<const sf::Drawable*, std::optional<sf::RenderStates>>>> _renderLayers;
+
+    std::map<int, std::set<size_t>> _deletedIndices;
+
+
 
     sf::RenderWindow window;
     unsigned int _fps;

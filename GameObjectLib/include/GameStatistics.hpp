@@ -25,5 +25,6 @@ private:
     unsigned int gameStarts = 0;
     unsigned int clicks = 0;
     float totalTime = 0.0f;
+    float bestTime = 0.f;
     std::string _file;
 };
