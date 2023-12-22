@@ -77,6 +77,7 @@ enum TextS {
 
 enum RectS {
     TRANS,
+    FLASH,
     BAR,
     FRAME,
     FISHLINE,
@@ -88,52 +89,9 @@ public:
 
 
 
-    PlayObject() {
-        globalSprt.resize(GlobalS::GEND);
-        globalTex.resize(GlobalS::GEND);
-        bgSprt.resize(BackS::BEND);
-        bgTex.resize(BackS::BEND);
-        frontTex.resize(FrontS::FEND);
-        frontSprt.resize(FrontS::FEND);
+    PlayObject();
 
-        globalTexts.resize(TextS::TEND);
-        globalRec.resize(RectS::REEND);
-        
-
-
-
-    }
-    bool checkPixelCollision(const sf::Sprite& sprite1, const sf::Sprite& sprite2) {
-        sf::FloatRect intersection;
-        if (sprite1.getGlobalBounds().intersects(sprite2.getGlobalBounds(), intersection)) {
-            sf::IntRect rect1 = sprite1.getTextureRect();
-            sf::IntRect rect2 = sprite2.getTextureRect();
-
-            sf::Image image1 = sprite1.getTexture()->copyToImage();
-            sf::Image image2 = sprite2.getTexture()->copyToImage();
-
-            for (size_t i = intersection.left; i < intersection.left + intersection.width; ++i) {
-                for (size_t j = intersection.top; j < intersection.top + intersection.height; ++j) {
-                    
-                    sf::Vector2f sprite1Pos = sprite1.getInverseTransform().transformPoint(static_cast<float>(i), static_cast<float>(j));
-                    sf::Vector2f sprite2Pos = sprite2.getInverseTransform().transformPoint(static_cast<float>(i), static_cast<float>(j));
-
-                    if (sprite1Pos.x > 0 && sprite1Pos.y > 0 && sprite1Pos.x < rect1.width && sprite1Pos.y < rect1.height &&
-                        sprite2Pos.x > 0 && sprite2Pos.y > 0 && sprite2Pos.x < rect2.width && sprite2Pos.y < rect2.height) {
-
-                        sf::Color color1 = image1.getPixel(static_cast<unsigned int>(sprite1Pos.x + rect1.left), static_cast<unsigned int>(sprite1Pos.y + rect1.top));
-                        sf::Color color2 = image2.getPixel(static_cast<unsigned int>(sprite2Pos.x + rect2.left), static_cast<unsigned int>(sprite2Pos.y + rect2.top));
-
-                        if (color1.a != 0 && color2.a != 0) {
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-
-        return false;
-    }
+    bool checkPixelCollision(const sf::Sprite& sprite1, const sf::Sprite& sprite2);
     virtual ~PlayObject() = default;
 
     sf::Text createText(const std::string& text, const sf::Vector2f& position, unsigned int size, sf::Color color);

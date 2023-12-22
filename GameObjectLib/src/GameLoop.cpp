@@ -53,10 +53,12 @@ void GameLoop::loader()
 		
 		_play.load(_window);
 		_play.draw(_window);
+
 	}
-
-
 	loadOnce &= false; // bitwise operation (if its true [1] its set to false [0] and if its true do nothing)
+
+	
+	_play.resetStates(_window);
 }
 
 void GameLoop::run()

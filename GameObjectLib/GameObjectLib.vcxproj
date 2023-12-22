@@ -20,7 +20,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Ath.hpp" />
-    <ClInclude Include="include\FisherMan.hpp" />
     <ClInclude Include="include\Fish.hpp" />
     <ClInclude Include="include\Credit.hpp" />
     <ClInclude Include="include\GameLoop.hpp" />
@@ -41,6 +40,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\HumanFish.hpp" />
+    <ClInclude Include="include\FisherMan.hpp" />
+    <ClCompile Include="src\Ath.cpp" />
+    <ClCompile Include="src\Fish.cpp" />
+    <ClCompile Include="src\FisherMan.cpp" />
+    <ClCompile Include="src\HumanFish.cpp" />
+    <ClCompile Include="src\Map.cpp" />
+    <ClCompile Include="src\Power.cpp" />
+    <ClCompile Include="src\Props.cpp" />
     <ClCompile Include="src\PlayObject.cpp" />
     <ClCompile Include="src\Credit.cpp" />
     <ClCompile Include="src\GameLoop.cpp" />

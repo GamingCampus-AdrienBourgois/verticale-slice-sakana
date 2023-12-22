@@ -124,7 +124,7 @@ int Window_s::countDeletionsInRange(int layer, size_t startIndex, size_t endInde
 
 
 void Window_s::resetView() {
-    sf::FloatRect visibleArea(0, 0, this->getWindow().getSize().x, this->getWindow().getSize().y);
+    sf::FloatRect visibleArea(0, 0, static_cast<float>(this->getWindow().getSize().x), static_cast<float>(this->getWindow().getSize().y));
     this->getWindow().setView(sf::View(visibleArea));
 }
 
